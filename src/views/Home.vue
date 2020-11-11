@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div class="todo-block">  
-      <div class="addtodo">  
+    <div class="todo-block">
+      <div class="addtodo">
         <AddTodo v-on:add-todo="addTodo" />
       </div>
-      <div class="todo">  
+      <div class="todo">
         <Todos v-bind:todos="todos" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
       </div>
     </div>
@@ -21,7 +21,7 @@ export default {
   components: {
     Todos,
     AddTodo
-  }, 
+  },
   data() {
     return {
       todos: []
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     toggleTodo(id) {
-      let itemIndex = this.todos.findIndex(todo => todo.id === id); 
+      let itemIndex = this.todos.findIndex(todo => todo.id === id);
       let todoItem = this.todos[itemIndex];
       todoItem.completed = !todoItem.completed;
       this.todos[itemIndex] = todoItem;
@@ -55,6 +55,7 @@ export default {
       .catch(err => console.log(err));
   }
 }
+
 </script>
 
 <style>
@@ -86,7 +87,7 @@ body {
   margin-right: auto;
 }
 .addtodo {
-  padding-top: 25px;  
+  padding-top: 25px;
 }
 
 .todo {
