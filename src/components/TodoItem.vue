@@ -38,7 +38,7 @@ export default {
     flex-direction: row;
   }
   .todo-flex > p {
-    width: fill;
+    width: stretch;
     text-align: left;
   }
   .todo-flex > button, p, input {
