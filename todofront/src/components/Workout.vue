@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .workout-item {
     background: #f4f4f4;
     padding: 10px;
