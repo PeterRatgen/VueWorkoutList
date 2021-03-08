@@ -32,10 +32,12 @@ app.post("/adduser", function(req, res) {
       db.close();
     });
   });
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.send("document inserted: " + req.body);
 });
 
 app.get("/getUser/:userId", function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   mongo.MongoClient.connect (url, function(err, db) {
     if (err) throw err;
     let dbase = db.db("workout_db");
@@ -51,19 +53,36 @@ app.get("/getUser/:userId", function(req, res) {
 
 app.post("/addWorkout/:userId", function(req, res) {
   if ('workout' in req.body === false) { 
+    res.status(400);
     res.send("Include 'workout' to log.")
   }
+  //check if user exists
+  let workout_log = req.body.workout;
+
+  if ('title' in workout_log === false) {
+    res.status(400);
+    res.send("Include title in workout object")
+  }
+
+  if ('dueDate' in workout_log === false) {
+    res.status(400);
+    res.send("Include dueDate in workout object")
+  }
+
+  let date = new Date();
+  workout_log["dateCreated"] = date.valueOf();
 
   mongo.MongoClient.connect (url, function(err, db) {
     if (err) throw err;
     let dbase = db.db("workout_db");
-    dbase.collection("workouts").updateOne(req.params.userId, {"$push" : {"workout" : req.body.workout }} , function(err, result) {
+    dbase.collection("workouts").updateOne({userId: req.params.userId}, {"$push" : {"workout" : workout_log }} , function(err, result) {
       if (err) throw err;
         console.log("1 document inserted");
         console.log(result.body)
       db.close();
     });
   });
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.send("document inserted: " + req.body);
 });
 
