@@ -2,29 +2,30 @@
   <div id="app">
     <div class="todo-block">
       <div class="addtodo">
-        <AddTodo v-on:add-todo="addTodo" />
+        <AddWorkout v-on:add-todo="addTodo" />
       </div>
       <div class="todo">
-        <Todos v-bind:todos="todos" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
+        <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
+        <p>lol</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Todos from '../components/Todos';
-import AddTodo from '../components/AddTodo.vue';
+import WorkoutList from '../components/WorkoutList';
+import AddWorkout from '../components/AddWorkout.vue';
 import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
-    Todos,
-    AddTodo
+    WorkoutList,
+    AddWorkout
   },
   data() {
     return {
-      todos: []
+      user: {}
     }
   },
   methods: {
@@ -50,8 +51,11 @@ export default {
     }
   },
   created() {
-    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=15')
-      .then(res => this.todos = res.data)
+    fetch('https://pratgen.dk/todo/getUser/peter12')
+      .then(response => response.json())
+      .then(data => {
+        this.user = data[0]
+      })
       .catch(err => console.log(err));
   }
 }
