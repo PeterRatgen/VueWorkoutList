@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <div class="todo-block">
-      <div class="addtodo">
-        <AddWorkout v-on:add-todo="addTodo" />
-      </div>
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
-        <p>lol</p>
       </div>
     </div>
   </div>
@@ -14,14 +10,12 @@
 
 <script>
 import WorkoutList from '../components/WorkoutList';
-import AddWorkout from '../components/AddWorkout.vue';
 import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
     WorkoutList,
-    AddWorkout
   },
   data() {
     return {
@@ -72,7 +66,6 @@ padding: 0;
 body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.4;
-  padding: 30px;
 }
 .btn {
   display: inline-block;
@@ -85,17 +78,28 @@ body {
 .btn:hover {
   background: #666;
 }
-.todo-block {
-  margin-left: auto;
-  width: 60%;
-  margin-right: auto;
-}
 .addtodo {
   padding-top: 25px;
 }
 
 .todo {
   padding-top: 25px;
+
+}
+.todo-block {
+  width: 30%;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 1000px) {
+  .todo-block {
+    width: 60%;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .todo-block {
+   width: 95%;
+  }
 }
 
 </style>
