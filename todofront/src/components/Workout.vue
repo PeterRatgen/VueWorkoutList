@@ -14,7 +14,7 @@
         <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
           <ExerciseItem v-bind:exerciseItem="exercise"/> 
         </div>
-    </div>
+      </div>
     </transition>
   </div>
 </template>
@@ -63,7 +63,9 @@ export default {
     margin: 10px auto;
     box-sizing: border-box;
     width: 100%;
+    overflow: hidden;
   }
+
   .due-date {
     font-size: 0.8rem;
     display: inline-block;
@@ -91,22 +93,23 @@ export default {
     font-size: 1.3rem;
   }
 
-.fade-enter-active, .fade-leave-active {
-    transition: all 0.4s;
-    overflow: hidden;
-    max-height: 2000px;
+.fade-enter-active {
+  animation: move-list 0.8s;
 }
 
-.fade-leave-to {
-    transform: translateY(-20px);
-    max-height: 0px;
-    opacity: 0;
-
+.fade-leave-active {
+  animation: move-list 0.4s reverse;
 }
-.fade-enter {
-    transform: translateY(30px);
+
+@keyframes move-list {
+  0% {
     max-height: 0px;
     opacity: 0;
+  }
+  100% {
+    max-height: 600px;
+    opacity: 1;
+  }
 }
 
 @media only screen and (max-width: 600px) {

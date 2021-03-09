@@ -87,7 +87,7 @@ body {
 
 }
 .todo-block {
-  width: 30%;
+  width: 40%;
   margin: 0 auto;
 }
 
