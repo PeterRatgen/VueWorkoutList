@@ -2,7 +2,7 @@
   <div class="workout-item" @click="expand_card">
     <div class="flex-container">
       <h3>{{ workout.title }}</h3>
-      <p class="due-date"> {{ workout.dueDate }}</p>
+      <p class="due-date"> {{ ret_Date(workout.dueDate) }}</p>
     </div>
     <transition name="fade" mode="out-in">
       <div class="description" v-if="expand == false">
@@ -50,6 +50,11 @@ export default {
       } else {
         this.expand = true
       }
+    }, ret_Date(dateString) {
+      let dat = new Date(0)
+      dat.setTime(dateString)
+      const options = { weekday: 'long', year : 'numeric', month: 'long', day: 'numeric'}
+      return dat.toLocaleDateString('en-UK', options)
     }
   }
 }
