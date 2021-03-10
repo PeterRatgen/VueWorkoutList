@@ -1,29 +1,110 @@
 <template> 
-  <div class="name">
-    <p> Reps:{{ repetition.repetitions }}  <span v-show="showWeight"> Weight {{ repetition.weight }}</span></p>  
+  <div class="rep">
+    <div class="reps"> 
+      <span class="item-header">Repetitions: 
+      </span> 
+      <span class="item-content" v-bind:style="{textAlign: alignment}">
+          <input class="input-content"   type="number" 
+          v-bind:value="repItem.repetitions" @input="update_repetitions"
+          />
+      </span> 
+    </div>  
+    <div class="reps" v-show="showWeight"> 
+        <span class="item-header" > Weight: 
+        </span> 
+        <span class="item-content">
+          <input class="input-content" type="number"  step="0.01"
+          v-model="repItem.weight" @input="check" @blur="printWeight"/>
+          kg
+        </span> 
+      </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "Repetition",
   props: ["repetition"],
   data () {
     return {
-      showWeight: false
+      showWeight: false,
+      alignment: 'left',
+      repItem: ''
     }
   }, 
   created() {
     if (this.repetition.weight) {
       this.showWeight = true;
     }
+    if (!this.showWeight) {
+      this.alignment = 'right'
+    }
+    this.repItem = this.repetition
+  },
+  methods: {
+    check (e) {
+      console.log(e)
+      if (this.repItem.weight > 100) {
+        e.originalTarget.style.color = 'red'
+      }
+      if ( this.repItem.weight < 100) {
+        e.originalTarget.style.color = 'black'
+      }
+      console.log(this.repItem.weight)
+    },
+    printWeight() {
+      console.log(this.repItem.weight)
+    }
   }
 }
+
   
 </script>
 
 
 <style scoped>
+  .input-content {
+    width: 2.7rem;
+    font-family: 'Open Sans';
+    font-size: 1rem;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 2px solid white;
+    padding: 0.4rem 0.4rem;
+    background-color: rgba(255,255,255, 0.8);
+    text-align: center;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  .item-header {
+    font-weight: 600;
+    flex: 5;
+  }
+  .item-content {
+    flex: 2;
+    white-space: nowrap;
+  }
+  .reps {
+    display: flex;
+    margin: 0.6rem 0;
+    text-align: left;
+    align-items: center;
+  }
+  .rep { 
+    margin: 1rem 0.5rem;
+    padding: 0.1rem 1.0rem;
+    color: black;
+  }
   
 </style>
 
