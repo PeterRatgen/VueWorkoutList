@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <HelloHeader v-bind:header="headerItem"/>
+    <HelloHeader class="hello-header" v-bind:header="headerItem"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
@@ -101,14 +101,25 @@ body {
   margin: 0 auto;
 }
 
+.hello-header {
+  width: 40%;
+  margin: 0 auto;
+}
+
 @media only screen and (max-width: 1350px) {
   .todo-block {
+    width: 60%;
+  }
+  .hello-header {
     width: 60%;
   }
 }
 @media only screen and (max-width: 600px) {
   .todo-block {
    width: 95%;
+  }
+  .hello-header {
+    width: 95%;
   }
 }
 
