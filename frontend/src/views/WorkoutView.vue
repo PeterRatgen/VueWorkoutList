@@ -1,15 +1,17 @@
 <template>
-  <div id="app">
+  <div>
     <HelloHeader class="hello-header" v-bind:header="headerItem"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
+        <AddWorkout/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AddWorkout from '../components/AddWorkout'
 import HelloHeader from '../components/HelloHeader.vue'
 import WorkoutList from '../components/WorkoutList';
 import axios from 'axios'
@@ -18,7 +20,8 @@ export default {
   name: 'Home',
   components: {
     WorkoutList,
-    HelloHeader
+    HelloHeader,
+    AddWorkout
   },
   data() {
     return {
@@ -69,9 +72,6 @@ margin: 0;
 padding: 0;
 }
 
-#app {
-  padding: 5vh 5vw
-}
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -93,7 +93,7 @@ body {
 }
 
 .todo {
-  padding-top: 25px;
+  padding-top: 1rem;
 
 }
 .todo-block {
@@ -102,7 +102,7 @@ body {
 }
 
 .hello-header {
-  width: 40%;
+  width: 38%;
   margin: 0 auto;
 }
 
