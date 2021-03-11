@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <HelloHeader v-bind:header="headerItem"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+import HelloHeader from '../components/HelloHeader.vue'
 import WorkoutList from '../components/WorkoutList';
 import axios from 'axios'
 
@@ -16,10 +18,12 @@ export default {
   name: 'Home',
   components: {
     WorkoutList,
+    HelloHeader
   },
   data() {
     return {
-      user: {}
+      user: {},
+      headerItem : ''
     }
   },
   methods: {
@@ -49,6 +53,8 @@ export default {
       .then(response => response.json())
       .then(data => {
         this.user = data[0]
+        this.headerItem = data[0].name
+        console.log(this.headerItem)
       })
       .catch(err => console.log(err));
   }
@@ -61,6 +67,10 @@ export default {
   box-sizing: border-box;
 margin: 0;
 padding: 0;
+}
+
+#app {
+  padding: 5vh 5vw
 }
 
 body {
@@ -91,7 +101,7 @@ body {
   margin: 0 auto;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1350px) {
   .todo-block {
     width: 60%;
   }

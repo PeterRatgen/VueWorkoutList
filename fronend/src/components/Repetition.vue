@@ -105,6 +105,20 @@ export default {
     padding: 0.1rem 1.0rem;
     color: black;
   }
+
+@media only screen and (max-width: 1350px) {
+  .item-header{
+    flex: 4
+  }
+  .item-content{
+    
+  }
+}
+@media only screen and (max-width: 600px) {
+  .todo-block {
+   width: 95%;
+  }
+}
   
 </style>
 

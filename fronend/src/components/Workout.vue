@@ -99,11 +99,11 @@ export default {
   }
 
 .fade-enter-active {
-  animation: move-list 0.8s;
+  animation: move-list 0.8s linear;
 }
 
 .fade-leave-active {
-  animation: move-list 0.4s reverse;
+  animation: move-list 0.6s linear reverse;
 }
 
 @keyframes move-list {
