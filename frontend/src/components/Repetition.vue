@@ -63,7 +63,8 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
+
   .input-content {
     width: 2.4rem;
     font-family: 'Open Sans';

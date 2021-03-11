@@ -1,9 +1,5 @@
 <template>
-  <div >  
-    <form @submit="addTodo">
-      <input type="text" v-model="title" placeholder="Add Todo">
-      <input type="submit" value="Submit" class="btn">
-    </form>	
+  <div class="add-card">  
   </div>
 </template>
 
@@ -16,30 +12,17 @@ export default {
     }
   },
   methods: {
-    addTodo(e) {
-      e.preventDefault()
-      const newTodo = {
-        title: this.title,
-        completed: false
-      }
-      this.$emit('add-todo', newTodo);
-    }
   }
 }
 </script>
 
-<style scoped>
-form {
-  display: flex;
-}
-input[type="text"] {
-  flex: 10;
-  padding: 5px 12px;
-  margin-right: 20px;
-  border-radius: 20px;
-}
-input[type="submit"] {
-  flex: 2;
-  border-radius: 20px;
-}
+<style lang="scss" scoped>
+  @import '../assets/variables.scss';
+
+  .add-card {
+    @include workout-card;
+    background-color: rgba(0,0,0, 0.02);
+    border: 4px solid rgba(200,200,200, 0.5);
+  }
+
 </style>

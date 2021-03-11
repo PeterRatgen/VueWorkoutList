@@ -65,11 +65,13 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss" >
+@import "../assets/variables.scss";
+
 * {
   box-sizing: border-box;
-margin: 0;
-padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -97,12 +99,12 @@ body {
 
 }
 .todo-block {
-  width: 40%;
+  width: $content-width;
   margin: 0 auto;
 }
 
 .hello-header {
-  width: 38%;
+  width: calc(#{$content-width} - 2%);
   margin: 0 auto;
 }
 
@@ -114,6 +116,16 @@ body {
     width: 60%;
   }
 }
+
+@media only screen and (max-width: 1000px) {
+  .todo-block {
+    width: 80%;
+  }
+  .hello-header {
+    width: 80%;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .todo-block {
    width: 95%;

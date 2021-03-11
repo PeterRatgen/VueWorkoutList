@@ -60,21 +60,12 @@ export default {
 }
 </script>
 
-<style scoped>
-  .workout-item {
-    background: #fff;
-    padding: 1rem 1.5rem;
-    border-radius: 10px;
-    margin: 10px auto;
-    box-sizing: border-box;
-    width: 100%;
-    overflow: hidden;
-  }
+<style lang="scss" scoped>
+@import '../assets/variables.scss';
 
-  .due-date {
-    font-size: 0.8rem;
-    display: inline-block;
-  }
+.workout-item {
+  @include workout-card;
+
   .flex-container {
     display: flex;
     flex-direction: row;  
@@ -82,21 +73,31 @@ export default {
     align-items: center;
     margin-bottom: 1rem;
     width: 100%;
+
+    h3 {
+      font-weight: 700; 
+      text-align: left;
+      font-size: 1.3rem;
+    }
+
+    .due-date {
+      font-size: 0.8rem;
+      display: inline-block;
+    }
   }
+
   .description {
     text-align: left;
     margin-top: 0.5rem;
     font-size: 0.8rem;
+
+    .exercise-desc {
+      text-align: left;
+      display: inline;
+    }
   }
-  .exercise-desc {
-    text-align: left;
-    display: inline;
-  }
-  h3 {
-    font-weight: 700; 
-    text-align: left;
-    font-size: 1.3rem;
-  }
+}
+
 
 .fade-enter-active {
   animation: move-list 0.4s linear;
