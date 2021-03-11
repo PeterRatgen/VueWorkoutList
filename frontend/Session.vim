@@ -2,27 +2,22 @@ let SessionLoad = 1
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
-cd ~/documents/todo
+cd ~/documents/workout_todo/frontend
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +4 src/components/HelloWorld.vue
-badd +9 src/App.vue
-badd +6 src/components/Todos.vue
-badd +6 src/components/TodoItem.vue
-badd +0 src/components/layout/Header.vue
-badd +2 src/components/layout/Header.vue
-badd +1 src/components/AddTodo.vue
+badd +24 src/views/WorkoutView.vue
+badd +0 src/components/HelloHeader.vue
+badd +26 src/App.vue
+badd +68 src/components/Repetition.vue
+badd +0 src/components/Workout.vue
+badd +0 src/components/AddWorkout.vue
 argglobal
 %argdel
 set stal=2
-edit src/components/TodoItem.vue
+edit src/views/WorkoutView.vue
 set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
@@ -30,8 +25,6 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 97 + 97) / 195)
-exe 'vert 2resize ' . ((&columns * 97 + 97) / 195)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -42,40 +35,14 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 21) / 43)
+let s:l = 19 - ((18 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-6
-normal! 051|
-wincmd w
-argglobal
-if bufexists("src/components/Todos.vue") | buffer src/components/Todos.vue | else | edit src/components/Todos.vue | endif
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 21) / 43)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-6
-normal! 08|
-lcd ~/documents/todo
-wincmd w
-exe 'vert 1resize ' . ((&columns * 97 + 97) / 195)
-exe 'vert 2resize ' . ((&columns * 97 + 97) / 195)
-tabedit ~/documents/todo/src/components/AddTodo.vue
+19
+normal! 014|
+tabedit src/components/AddWorkout.vue
 set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
@@ -83,8 +50,6 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 97 + 97) / 195)
-exe 'vert 2resize ' . ((&columns * 97 + 97) / 195)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -95,34 +60,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 21) / 43)
+let s:l = 20 - ((19 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
+20
 normal! 0
-wincmd w
-argglobal
-if bufexists("~/documents/todo/src/App.vue") | buffer ~/documents/todo/src/App.vue | else | edit ~/documents/todo/src/App.vue | endif
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 15 - ((14 * winheight(0) + 21) / 43)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-15
-normal! 05|
-wincmd w
-exe 'vert 1resize ' . ((&columns * 97 + 97) / 195)
-exe 'vert 2resize ' . ((&columns * 97 + 97) / 195)
-tabedit ~/documents/todo/src/components/layout/Header.vue
+tabedit src/components/Repetition.vue
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -141,13 +85,64 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 21 - ((20 * winheight(0) + 21) / 43)
+let s:l = 68 - ((10 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-21
-normal! 05|
-tabnext 2
+68
+normal! 014|
+lcd ~/documents/workout_todo/frontend
+tabedit ~/documents/workout_todo/frontend/src/components/Workout.vue
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 106 - ((33 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+106
+normal! 026|
+tabedit ~/documents/workout_todo/frontend/src/components/HelloHeader.vue
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 29 - ((28 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+29
+normal! 019|
+tabnext 1
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

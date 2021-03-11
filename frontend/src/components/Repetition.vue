@@ -65,13 +65,13 @@ export default {
 
 <style scoped>
   .input-content {
-    width: 2.7rem;
+    width: 2.4rem;
     font-family: 'Open Sans';
     font-size: 1rem;
     box-sizing: border-box;
     border-radius: 4px;
     border: 2px solid white;
-    padding: 0.4rem 0.4rem;
+    padding: 0.1rem 0.4rem;
     background-color: rgba(255,255,255, 0.8);
     text-align: center;
   }
@@ -88,7 +88,7 @@ export default {
   }
   .item-header {
     font-weight: 600;
-    flex: 5;
+    flex: 4;
   }
   .item-content {
     flex: 2;
@@ -108,7 +108,6 @@ export default {
 
 @media only screen and (max-width: 1350px) {
   .item-header{
-    flex: 4
   }
   .item-content{
     
