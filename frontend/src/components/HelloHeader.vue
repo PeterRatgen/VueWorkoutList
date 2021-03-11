@@ -26,6 +26,7 @@ export default {
 <style scoped>
 
 h1 {
+  text-align: left;
   font-weight: 800;
 }
 
