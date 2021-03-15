@@ -1,10 +1,12 @@
 <template> 
-  <div class="divder"></div>
-  <div class="name">
-    <h4> {{ exerciseItem.name }}</h4>    
-    <div class="repetition-container">
-      <div @click.stop class="repetition" v-for="rep in exerciseItem.set" v-bind:key="rep">
-        <Repetition  v-bind:repetition="rep"/>
+  <div>
+    <div class="divder"></div>
+    <div class="name">
+      <h4> {{ exerciseItem.name }}</h4>    
+      <div class="repetition-container">
+        <div @click.stop class="repetition" v-for="rep in exerciseItem.set" v-bind:key="rep">
+          <Repetition  v-bind:repetition="rep"/>
+        </div>
       </div>
     </div>
   </div>
