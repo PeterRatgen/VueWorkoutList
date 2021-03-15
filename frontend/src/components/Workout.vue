@@ -11,7 +11,7 @@
         </p>
       </div>
       <div v-else class="description-expand">
-        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
+        <div v-bind:key="exercise.dateCreated" v-for="exercise in workout.exerciseList">
           <ExerciseItem v-bind:exerciseItem="exercise"/> 
         </div>
       </div>
