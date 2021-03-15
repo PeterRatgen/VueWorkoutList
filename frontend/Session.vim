@@ -7,11 +7,12 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +1 src/components/Workout.vue
+badd +9 src/components/Workout.vue
 badd +8 src/components/Repetition.vue
 badd +7 src/components/ExerciseItem.vue
 badd +1 src/components/WorkoutList.vue
-badd +0 src/views/WorkoutView.vue
+badd +1 src/views/WorkoutView.vue
+badd +0 src/components/AddWorkout.vue
 argglobal
 %argdel
 set stal=2
@@ -90,7 +91,33 @@ exe s:l
 normal! zt
 9
 normal! 050|
-tabedit src/components/WorkoutList.vue
+lcd ~/documents/workout_todo/frontend
+tabedit ~/documents/workout_todo/frontend/src/components/AddWorkout.vue
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 27) / 54)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
+tabedit ~/documents/workout_todo/frontend/src/components/WorkoutList.vue
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -141,7 +168,8 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 3
+lcd ~/documents/workout_todo/frontend
+tabnext 4
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

@@ -4,7 +4,7 @@
       <h3>{{ workout.title }}</h3>
       <p class="due-date"> {{ ret_Date(workout.dueDate) }}</p>
     </div>
-    <transition name="fade" mode="out-in">
+    <transition  name="fade" >
       <div class="description" v-if="expand == false">
         <p class="exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
         {{ nameWithComma(index) }}
@@ -100,14 +100,14 @@ export default {
 
 
 .fade-enter-active {
-  animation: move-list 0.4s linear;
+  animation: moveList 0.4s linear;
 }
 
 .fade-leave-active {
-  animation: move-list 0.2s linear reverse;
+  animation: moveList 0.2s linear reverse;
 }
 
-@keyframes move-list {
+@keyframes moveList {
   0% {
     max-height: 0px;
     opacity: 0;
