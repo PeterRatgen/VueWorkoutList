@@ -1,13 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import WorkoutView from '../views/WorkoutView.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Workout',
+    name: 'Workouts',
     component: WorkoutView
   },
   {
@@ -20,9 +17,8 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 

@@ -4,14 +4,14 @@
       <h3>{{ workout.title }}</h3>
       <p class="due-date"> {{ ret_Date(workout.dueDate) }}</p>
     </div>
-    <transition name="card-height" mode="out-in">
+    <transition name="fade" mode="out-in">
       <div class="description" v-if="expand == false">
         <p class="exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
         {{ nameWithComma(index) }}
         </p>
       </div>
       <div v-else class="description-expand">
-        <div v-bind:key="exercise.dateCreated" v-for="exercise in workout.exerciseList">
+        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
           <ExerciseItem v-bind:exerciseItem="exercise"/> 
         </div>
       </div>
@@ -99,11 +99,11 @@ export default {
 }
 
 
-.card-height-enter-active {
+.fade-enter-active {
   animation: move-list 0.4s linear;
 }
 
-.card-height-leave-active {
+.fade-leave-active {
   animation: move-list 0.2s linear reverse;
 }
 

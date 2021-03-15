@@ -1,10 +1,8 @@
 <template>
-  <div id="app">
-    <div id="nav">
-  <!---    <Header /> -->
-    </div>
-    <router-view/>
+  <div id="nav">
+<!---    <Header /> -->
   </div>
+  <router-view/>
 </template>
 
 <script>

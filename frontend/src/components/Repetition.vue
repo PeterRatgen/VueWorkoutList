@@ -5,7 +5,7 @@
       </span> 
       <span class="item-content" v-bind:style="{textAlign: alignment}">
           <input class="input-content"   type="number" 
-          v-model="repItem.repetitions" @blur="printRepetitions"
+          v-bind:value="repItem.repetitions" @input="update_repetitions"
           />
       </span> 
     </div>  
@@ -55,9 +55,6 @@ export default {
     },
     printWeight() {
       console.log(this.repItem.weight)
-    },
-    printRepetitions() {
-      console.log(this.repItem.repetitions)
     }
   }
 }

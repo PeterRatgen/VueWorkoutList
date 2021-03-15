@@ -79,13 +79,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.4;
 }
-
-.accent {
-  width: 4rem;
-  height: 0.5rem;
-  background-color: $accent-color;
-}
-
 .btn {
   display: inline-block;
   border: none;
@@ -102,7 +95,7 @@ body {
 }
 
 .todo {
-  padding-top: 0.2rem;
+  padding-top: 1rem;
 
 }
 .todo-block {
