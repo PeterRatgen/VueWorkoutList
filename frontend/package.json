@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "chokidar": "^2.1.5",
     "core-js": "^3.6.5",
     "node-sass": "^5.0.0",
     "uuid": "^8.3.1",
