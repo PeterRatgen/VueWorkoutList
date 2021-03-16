@@ -95,7 +95,7 @@ body {
 }
 
 .todo {
-  padding-top: 1rem;
+  padding-top: 0.3rem;
 
 }
 .todo-block {
@@ -107,6 +107,7 @@ body {
   width: calc(#{$content-width} - 2%);
   margin: 0 auto;
 }
+
 
 @media only screen and (max-width: 1350px) {
   .todo-block {
