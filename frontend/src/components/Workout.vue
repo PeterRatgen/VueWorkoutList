@@ -5,7 +5,7 @@
       <p class="due-date"> {{ ret_Date(workout.dueDate) }}</p>
     </div>
     <transition name="fade" mode="out-in">
-      <div class="description" v-if="expand == false">
+      <div class="description" v-if="contracted">
         <p class="exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
         {{ nameWithComma(index) }}
         </p>
@@ -30,11 +30,10 @@ export default {
   },
   data () {
     return {
-      expand: false
+      contracted: true
     }
   },
   created() {
-    console.log("created workout");
   },
   methods : {
     nameWithComma(index) {
@@ -45,10 +44,10 @@ export default {
       }
     },
     expand_card() {
-      if (this.expand) {
-        this.expand = false
+      if (this.contracted) {
+        this.contracted = false
       } else {
-        this.expand = true
+        this.contracted = true
       }
     }, ret_Date(dateString) {
       let dat = new Date(0)
