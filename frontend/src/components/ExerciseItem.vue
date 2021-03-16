@@ -34,14 +34,15 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets/variables.scss';
 
 .repetition {
     flex: 1;
     margin: 0.5rem 0.5rem;
     box-sizing: border-box;
     padding: auto auto;
-    background-color: #F0F0FA;
+    background-color: lighten($accent-color, 50%);
     border-radius: 6px;
     min-width: 45%;
     max-width: 45%;

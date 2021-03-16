@@ -22,8 +22,7 @@ export default {
 
   .add-card {
     @include workout-card;
-    background-color: rgba(255,255,255, 1);
-    border: 2.5px dotted rgba(200,200,200, 0.5);
+    background-color: rgba(255,255,255, 0.6);
   }
 
   .plus-icon {

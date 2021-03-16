@@ -1,5 +1,5 @@
 $content-width: 40%;
-$accent-color: #1d47f0;
+$accent-color: #1b6ec6;
 
 @mixin workout-card {
   padding: 1.5rem 1.5rem;
@@ -9,4 +9,5 @@ $accent-color: #1d47f0;
   box-sizing: border-box;
   width: 100%;
   overflow: hidden;
+  box-shadow: 4px 2px 8px #b2b2b2;
 }
