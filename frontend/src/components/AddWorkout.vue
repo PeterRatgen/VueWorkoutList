@@ -1,5 +1,7 @@
 <template>
-  <div class="add-card" v-bind:style="{backgroundColor: addCardColor}" @click="createCard">  
+  <div class="add-card" 
+    v-bind:style="{backgroundColor: addCardColor}" 
+    @click="createCard">  
     <div v-if="createButton">
       <fa class="plus-icon" icon="plus"></fa>
     </div>

@@ -1,6 +1,10 @@
 <template>
   <div class="flex-box">
-    <input class="header-input" type="text" v-model="workoutHeader" placeholder="Titel" @blur="checkHeader"/>
+    <input class="header-input" 
+    type="text" 
+    v-model="workoutHeader" 
+    placeholder="Titel" 
+    @blur="checkHeader"/>
     <datepicker class="datepicker" v-model="picked"/>
   </div>
 </template>
