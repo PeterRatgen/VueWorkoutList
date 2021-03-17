@@ -4,35 +4,26 @@
       <fa class="plus-icon" icon="plus"></fa>
     </div>
     <div class="add-form" @click.stop v-else>
-      <div class="flex-box">
-        <input class="header-input" type="text" v-model="workoutHeader" placeholder="Titel" @blur="checkHeader"/>
-        <datepicker class="datepicker" v-model="picked"/>
-      </div>
+      <WorkoutFormAdder/>
       <button @click="createCard" >Cancel</button>
     </div>
   </div>
 </template>
 
 <script>
-import Datepicker from 'vue3-datepicker' 
-import { ref } from 'vue'
+import WorkoutFormAdder from './WorkoutFormAdder'
 
 export default {
   name: "AddTodo",
   components : {
-    Datepicker   
+    WorkoutFormAdder
   },
   data() {
     return {
       title: '',
       createButton: true,
-      workoutHeader : '',
       addCardColor : '#efefef',
-      picked : ''
     }
-  },
-  created() {
-    this.picked = ref(new Date())
   },
   methods: {
     createCard() {
@@ -45,39 +36,12 @@ export default {
         this.addCardColor = "#efefef"
       }
     },
-    checkHeader() {
-      console.log(this.workoutHeader)
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   @import '../assets/variables.scss';
-
-  .flex-box {
-    display: flex;
-    justify-content: space-between;
-
-    .header-input {
-      font-weight: 700; 
-      text-align: left;
-      font-size: 1.3rem;
-      border: 2px solid #d1d1d1;
-      padding: 0.5rem 0.5rem;
-      border-radius: 6px;
-      background-color: #fff;
-      box-sizing: border-box;
-      outline: none;
-
-      &:focus {
-        outline: none;
-        border: 2px solid lighten($accent-color, 20%);
-        background-color: #fff;
-      }
-    }
-
-  }
 
   .add-card {
     @include workout-card;
@@ -89,10 +53,4 @@ export default {
     transform: scale(2);
     color: lighten($accent-color, 5%);
   }
-
-  .datepicker {
-    z-index: 1;
-  }
-
-
 </style>
