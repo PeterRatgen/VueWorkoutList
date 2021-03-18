@@ -60,8 +60,7 @@ export default {
 }
 
 .divder {
-  height: 80%;
-  border-top: 1px solid #ebebeb;
+  @include divider;
 }
 
 .name {

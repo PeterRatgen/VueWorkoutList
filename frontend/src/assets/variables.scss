@@ -1,4 +1,4 @@
-$content-width: 40%;
+$content-width: 45%;
 $accent-color: #1b6ec6;
 
 @mixin workout-card {
@@ -17,3 +17,35 @@ $accent-color: #1b6ec6;
     font-size: 1.3rem;
   }
 }
+
+@mixin input-field { 
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid #d1d1d1;
+  outline: none;
+
+  &:focus {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid lighten($accent-color, 20%);
+    background-color: #fff;
+    }
+}
+
+@mixin divider { 
+  height: 80%;
+  border-top: 1.5px solid #ebebeb;
+}
+
+
+.v3dp__popout {
+  position: fixed !important; 
+}
+
+input.datepicker {
+  @include input-field
+  text-align: right;
+  max-width: 4.5rem;
+}
+
+

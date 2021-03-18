@@ -109,14 +109,6 @@ body {
 }
 
 
-@media only screen and (max-width: 1350px) {
-  .todo-block {
-    width: 60%;
-  }
-  .hello-header {
-    width: 60%;
-  }
-}
 
 @media only screen and (max-width: 1000px) {
   .todo-block {

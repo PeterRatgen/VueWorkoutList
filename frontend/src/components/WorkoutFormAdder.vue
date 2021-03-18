@@ -7,6 +7,10 @@
     @blur="checkHeader"/>
     <datepicker class="datepicker" v-model="picked"/>
   </div>
+  <div class="divider"></div>
+  <div class="add-exercise-button">
+    <fa class="plus-icon" icon="plus"></fa>
+  </div>
 </template>
 
 
@@ -44,26 +48,43 @@ export default {
   .flex-box {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+    
 
     .header-input {
       font-weight: 700; 
       text-align: left;
       font-size: 1.3rem;
-      border: none;
-      border-bottom: 2px solid #d1d1d1;
-      padding: 0.25rem 0.25rem;
+      padding: 0.0rem 0.25rem;
       background-color: #fff;
-      box-sizing: border-box;
-      outline: none;
-
-      &:focus {
-        outline: none;
-        border: none;
-        border-bottom: 2px solid lighten($accent-color, 20%);
-        background-color: #fff;
-      }
+      @include input-field;
     }
+  }
+  
+  .add-exercise-button {
+    background-color: lighten($accent-color, 5%); 
+    width: 2.5rem;
+    height: 1.8rem;
+    margin: auto;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
 
+    &:hover {
+      background-color: lighten($accent-color, 20%); 
+    }
+  }
+
+  .plus-icon {
+    transform: scale(1.2);
+    color: white;
+  }
+
+  .divider {
+    @include divider;
+    margin: 1rem 0;
   }
 
 </style>

@@ -2,13 +2,17 @@
   <div class="add-card" 
     v-bind:style="{backgroundColor: addCardColor}" 
     @click="createCard">  
-    <div v-if="createButton">
-      <fa class="plus-icon" icon="plus"></fa>
-    </div>
-    <div class="add-form" @click.stop v-else>
-      <WorkoutFormAdder/>
-      <button @click="createCard" >Cancel</button>
-    </div>
+    <transition name="cardTransition" mode="out-in">
+      <div v-if="createButton">
+        <fa class="plus-icon" icon="plus"></fa>
+      </div>
+      <div class="add-form" @click.stop v-else>
+        <WorkoutFormAdder/>
+        <div class="divider"></div>
+        <button @click="collapseCard" >Cancel</button>
+        <button @click="collapseCard" >Save</button>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -33,11 +37,13 @@ export default {
         this.createButton = false;
         this.addCardColor = "#fff"
       }
-      else {
-        this.createButton = true
-        this.addCardColor = "#efefef"
-      }
     },
+    collapseCard() {
+      if(!this.createButton) {
+        this.createButton = true;
+        this.addCardColor = "#fff"
+      }
+    }
   }
 }
 </script>
@@ -54,5 +60,29 @@ export default {
   .plus-icon {
     transform: scale(2);
     color: lighten($accent-color, 5%);
+  }
+
+  .divider {
+    @include divider;
+    margin: 1rem 0;
+  }
+    
+  .cardTransition-enter-active {
+    animation: move-list 0.6s linear;
+  }
+
+  .cardTransition-leave-active {
+    animation: move-list 0.6s linear reverse;
+  }
+
+  @keyframes move-list {
+    0% {
+      max-height: 0px;
+      opacity: 0;
+    }
+    100% {
+      max-height: 600px;
+      opacity: 1;
+    }
   }
 </style>
