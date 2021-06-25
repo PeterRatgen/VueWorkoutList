@@ -52,7 +52,7 @@ export default {
     }
   },
   created() {
-    fetch('https://pratgen.dk/todo/getUser/peter123')
+    fetch('https://pratgen.dk/todo/getUser/peter12')
       .then(response => response.json())
       .then(data => {
         this.user = data[0]
