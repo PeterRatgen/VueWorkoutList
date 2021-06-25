@@ -2,6 +2,7 @@ const express = require('express');
 const serveStatic = require('serve-static');
 const bodyParser = require('body-parser');
 let mongo = require('mongodb');
+const {ObjectId} = require('mongodb');
 let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=workout_db";
 
 const app = express();
@@ -41,7 +42,7 @@ app.get("/getUser/:userId", function(req, res) {
   mongo.MongoClient.connect (url, function(err, db) {
     if (err) throw err;
     let dbase = db.db("workout_db");
-    dbase.collection("workouts").find({userId : req.params.userId}, {limit: 10}).toArray(function(err, result) {
+    dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, {limit: 10}).toArray(function(err, result) {
       if (err) throw err;
       console.log("1 document found");
       console.log(result);
