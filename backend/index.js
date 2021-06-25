@@ -3,7 +3,7 @@ const serveStatic = require('serve-static');
 const bodyParser = require('body-parser');
 let mongo = require('mongodb');
 const {ObjectId} = require('mongodb');
-let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=workout_db";
+let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=admin";
 
 const app = express();
 
@@ -42,23 +42,20 @@ app.get("/getUser/:userId", function(req, res) {
   mongo.MongoClient.connect (url, function(err, db) {
     if (err) throw err;
     let dbase = db.db("workout_db");
-    dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, {limit: 10}).toArray(function(err, result) {
-      if (err) throw err;
-      console.log("1 document found");
-      console.log(result);
-      res.send(result);
-      db.close();
-    }); 
+    dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
+
+	if (err) throw err;
+	console.log("1 document found");
+	console.log(result);
+	res.send(result);
+    	db.close();
+  	});
   });
 });
 
 app.post("/addWorkout/:userId", function(req, res) {
-  if ('workout' in req.body === false) { 
-    res.status(400);
-    res.send("Include 'workout' to log.")
-  }
   //check if user exists
-  let workout_log = req.body.workout;
+  let workout_log = req.body;
 
   if ('title' in workout_log === false) {
     res.status(400);
@@ -76,7 +73,7 @@ app.post("/addWorkout/:userId", function(req, res) {
   mongo.MongoClient.connect (url, function(err, db) {
     if (err) throw err;
     let dbase = db.db("workout_db");
-    dbase.collection("workouts").updateOne({userId: req.params.userId}, {"$push" : {"workout" : workout_log }} , function(err, result) {
+    dbase.collection("workouts").insert({userId: ObjectId(req.params.userId), workout_log}, function(err, result) {
       if (err) throw err;
         console.log("1 document inserted");
         console.log(result.body)
@@ -87,7 +84,7 @@ app.post("/addWorkout/:userId", function(req, res) {
   res.send("document inserted: " + req.body);
 });
 
-app.use(serveStatic("../todofront/dist"));
+app.use(serveStatic("../frontend/dist"));
 
 app.listen(3001, function () {
   console.log("Listening on port 3001")
