@@ -43,7 +43,7 @@ $accent-color: #1b6ec6;
 }
 
 input.datepicker {
-  @include input-field
+  @include input-field;
   text-align: right;
   max-width: 4.5rem;
 }
