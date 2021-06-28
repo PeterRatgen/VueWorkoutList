@@ -30,12 +30,6 @@ export default {
     }
   },
   methods: {
-    toggleTodo(id) {
-      let itemIndex = this.todos.findIndex(todo => todo.id === id);
-      let todoItem = this.todos[itemIndex];
-      todoItem.completed = !todoItem.completed;
-      this.todos[itemIndex] = todoItem;
-    },
     deleteTodo(id) {
       axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
         .then(this.todos = this.todos.filter(todo => todo.id !== id))
@@ -52,7 +46,7 @@ export default {
     }
   },
   created() {
-    fetch('https://pratgen.dk/todo/getUser/peter12')
+    fetch('https://pratgen.dk/todo/user/peter12')
       .then(response => response.json())
       .then(data => {
         this.user = data[0]
