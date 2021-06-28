@@ -68,7 +68,7 @@ app.post("/workout/:userId", function(req, res) {
 
 	let date = new Date();
 	workout_log["dateCreated"] = date.valueOf();
-    workout_log["userId"] = userId: ObjectId(req.params.userId);
+    workout_log["userId"] = ObjectId(req.params.userId);
 
 	mongo.MongoClient.connect (url, function(err, db) {
 		if (err) throw err;
