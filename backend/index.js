@@ -43,7 +43,6 @@ app.get("/user/:userId", function(req, res) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
-
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
@@ -93,7 +92,7 @@ app.get("/workout/:userId", function(req, res) {
 	mongo.MongoClient.connect (url, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10} , function(err, result) {
+		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
