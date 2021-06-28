@@ -30,12 +30,6 @@ export default {
     }
   },
   methods: {
-    toggleTodo(id) {
-      let itemIndex = this.todos.findIndex(todo => todo.id === id);
-      let todoItem = this.todos[itemIndex];
-      todoItem.completed = !todoItem.completed;
-      this.todos[itemIndex] = todoItem;
-    },
     deleteTodo(id) {
       axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
         .then(this.todos = this.todos.filter(todo => todo.id !== id))
