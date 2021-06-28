@@ -99,6 +99,21 @@ app.get("/workout/:userId", function(req, res) {
 	});
 });
 
+app.delete("/workout/:workoutId", function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+	mongo.MongoClient.connect (url, function(err, db) {
+		if (err) throw err;
+		let dbase = db.db("workout_db");
+		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId)}, function(err, result) {
+			if (err) throw err;
+			console.log("1 document found");
+			console.log(result);
+			res.send(result);
+			db.close();
+		});
+	});
+})
+
 app.use(serveStatic("../frontend/dist"));
 
 app.listen(3001, function () {
