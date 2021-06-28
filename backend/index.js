@@ -53,10 +53,6 @@ app.get("/user/:userId", function(req, res) {
 });
 
 app.post("/workout/:userId", function(req, res) {
-	if ('workout' in req.body === false) { 
-		res.status(400);
-		res.send("Include 'workout' to log.")
-	}
 	//check if user exists
 	let workout_log = req.body;
 
