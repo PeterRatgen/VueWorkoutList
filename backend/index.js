@@ -58,7 +58,7 @@ app.post("/workout/:userId", function(req, res) {
 		res.send("Include 'workout' to log.")
 	}
 	//check if user exists
-	let workout_log = req.body.workout;
+	let workout_log = req.body;
 
 	if ('title' in workout_log === false) {
 		res.status(400);
@@ -92,7 +92,7 @@ app.get("/workout/:userId", function(req, res) {
 	mongo.MongoClient.connect (url, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit: 10}).toArray( function(err, result) {
+		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10}).toArray( function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
