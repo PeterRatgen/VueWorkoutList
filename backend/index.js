@@ -95,7 +95,7 @@ app.get("/workout/:userId", function(req, res) {
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10} , function(err, result) {
 			if (err) throw err;
-			console.log("document getten");
+			console.log("1 document found");
 			console.log(result);
 			res.send(result);
 			db.close();
