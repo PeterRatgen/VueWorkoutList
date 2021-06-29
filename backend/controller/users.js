@@ -68,7 +68,7 @@ exports.generate_token = function(req, res) {
 }
 
 
-exports.validate_token = function(req, res, err) {
+exports.validate_token = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
     let jwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -81,11 +81,11 @@ exports.validate_token = function(req, res, err) {
             return res.send("Successfully Verified");
         } else{
             // Access Denied
-            return res.status(401).send(err);
+            return res.status(401).send('err');
         }
     } catch (err) {
         // Access Denied
-        return res.status(401).send(err);
+        return res.status(401).send('err');
     }
 
 }
