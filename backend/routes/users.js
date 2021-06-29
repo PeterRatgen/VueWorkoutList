@@ -6,20 +6,21 @@ require('dotenv').config();
 const user_controller = require('../controller/users.js')
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
 
-  if (token == null) return res.sendStatus(401)
+    if (token == null) return res.sendStatus(401)
+    console.log("using authentication middleware")
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    console.log(err)
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+        console.log(err)
 
-    if (err) return res.sendStatus(403)
+        if (err) return res.sendStatus(403)
 
-    req.user = user
+        req.user = user
 
-    next()
-  })
+        next()
+    })
 }
 
 router.post("/user", user_controller.user_post);
