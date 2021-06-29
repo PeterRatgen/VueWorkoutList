@@ -1,6 +1,7 @@
 let mongo = require('mongodb');
 const {ObjectId} = require('mongodb');
-let db = require('../db.js')
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.user_get = function(req, res) {
 	if ('userId' in req.body === false) {
@@ -9,7 +10,7 @@ exports.user_get = function(req, res) {
 	if ('name' in req.body === false) {
 		res.send("Include 'name' attribute")
 	}
-	mongo.MongoClient.connect (db.url, function(err, db) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").insertOne(req.body, function(err, result) {
@@ -25,12 +26,26 @@ exports.user_get = function(req, res) {
 
 exports.user_post = function(req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*')
-	mongo.MongoClient.connect (db.url, function(err, db) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
+			console.log(result);
+			res.send(result);
+			db.close();
+		});
+	});
+}
+
+exports.user_delete = function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+		if (err) throw err;
+		let dbase = db.db("workout_db");
+		dbase.collection("users").deleteOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
+			if (err) throw err;
 			console.log(result);
 			res.send(result);
 			db.close();

@@ -1,6 +1,7 @@
 let mongo = require('mongodb');
+const dotenv = require('dotenv');
 const {ObjectId} = require('mongodb');
-let db = require('../db.js')
+dotenv.config();
 
 exports.workout_post = function(req, res) {
 	//check if user exists
@@ -20,7 +21,7 @@ exports.workout_post = function(req, res) {
 	workout_log["dateCreated"] = date.valueOf();
     workout_log["userId"] = ObjectId(req.params.userId);
 
-	mongo.MongoClient.connect (db.url, function(err, db) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").insertOne(workout_log, function(err, result) {
@@ -36,7 +37,7 @@ exports.workout_post = function(req, res) {
 
 exports.workout_get = function(req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*')
-	mongo.MongoClient.connect (db.url, function(err, db) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10}).toArray( function(err, result) {
@@ -51,7 +52,7 @@ exports.workout_get = function(req, res) {
 
 exports.workout_delete = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*')
-	mongo.MongoClient.connect (db.url, function(err, db) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId)}, function(err, result) {
