@@ -3,7 +3,7 @@ const {ObjectId} = require('mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
 
-exports.user_get = function(req, res) {
+exports.user_post = function(req, res) {
 	if ('userId' in req.body === false) {
 		res.send("Include 'userId' attribute.")
 	}
@@ -24,7 +24,7 @@ exports.user_get = function(req, res) {
 	res.send("document inserted: " + req.body);
 }
 
-exports.user_post = function(req, res) {
+exports.user_get = function(req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*')
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
