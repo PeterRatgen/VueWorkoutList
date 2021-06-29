@@ -58,7 +58,7 @@ exports.user_delete = function(req, res) {
 	});
 }
 
-function validateEmailAndPassword(email, password){
+async function validateEmailAndPassword(email, password){
     findUserForEmail(email).then((user) => {
         console.log("user found " + user)
         if (user == undefined)
@@ -90,18 +90,19 @@ exports.login = async function(req, res) {
     const email = req.body.email,
         password = req.body.password;
 
-    let pass_check = await validateEmailAndPassword(email, password)
-    if (pass_check) {
-        const user = await findUserForEmail(email);
-        const token = authentication.generate_token({userId: user["userId"]})
+    validateEmailAndPassword(email, password).then((result) => {
+        if (result) {
+            findUserForEmail(email).then((user) => {
+                const token = authentication.generate_token({userId: user["userId"]})
 
-        res.send(token)
-    }
-    else {
-        // send status 401 Unauthorized
-        res.sendStatus(401); 
-    }
-
+                res.send(token)
+            })
+        }
+        else {
+            // send status 401 Unauthorized
+            res.sendStatus(401); 
+        }
+    })
 }
 
 
