@@ -2,7 +2,7 @@ let mongo = require('mongodb');
 const {ObjectId} = require('mongodb');
 let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=admin";
 
-export.workout_post = function(req, res) {
+exports.workout_post = function(req, res) {
 	//check if user exists
 	let workout_log = req.body;
 
