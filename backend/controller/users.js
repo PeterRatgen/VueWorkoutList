@@ -36,4 +36,4 @@ exports.user_post = function(req, res) {
 			db.close();
 		});
 	});
-
+}
