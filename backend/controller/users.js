@@ -58,7 +58,7 @@ exports.user_delete = function(req, res) {
 
 exports.generate_token = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    const token = authentication.generate_token({userId : req.params.userId})
+    const token = authentication.generate_token({userId : req.body.userId})
     res.json(token);
 }
 
