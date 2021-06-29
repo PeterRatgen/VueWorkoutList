@@ -19,5 +19,5 @@ app.use(workoutRoute)
 app.use(serveStatic("../frontend/dist"));
 
 app.listen(process.env.PORT, function () {
-	console.log("Listening on port 3001")
+	console.log("Listening on port " + process.env.PORT)
 })
