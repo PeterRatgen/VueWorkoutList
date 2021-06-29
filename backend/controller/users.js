@@ -18,7 +18,7 @@ exports.user_post = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").insertOne(req.body, function(err, result) {
+		dbase.collection("users").insertOne(req.body, function(err, result) {
 			if (err) throw err;
 			console.log("1 document inserted");
 			console.log(res.body)
