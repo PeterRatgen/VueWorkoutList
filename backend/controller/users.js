@@ -6,11 +6,14 @@ const authentication = require('../middleware/authentication.js')
 
 
 exports.user_post = function(req, res) {
-	if ('userId' in req.body === false) {
-		res.send("Include 'userId' attribute.")
-	}
 	if ('name' in req.body === false) {
 		res.send("Include 'name' attribute")
+	}
+	if ('email' in req.body === false) {
+		res.send("Include 'email' attribute")
+	}
+	if ('password' in req.body === false) {
+		res.send("Include 'password' attribute")
 	}
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
