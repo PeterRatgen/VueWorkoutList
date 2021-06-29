@@ -1,7 +1,6 @@
 const express = require('express');
 const serveStatic = require('serve-static');
 const bodyParser = require('body-parser');
-let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=admin";
 const app = express();
 
 app.set("trust proxy", 'loopback');

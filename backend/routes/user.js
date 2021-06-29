@@ -1,41 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+user_controller = require('../controller/users.js')
 
-router.post("/user", function(req, res) {
-	if ('userId' in req.body === false) {
-		res.send("Include 'userId' attribute.")
-	}
-	if ('name' in req.body === false) {
-		res.send("Include 'name' attribute")
-	}
-	mongo.MongoClient.connect (url, function(err, db) {
-		if (err) throw err;
-		let dbase = db.db("workout_db");
-		dbase.collection("workouts").insertOne(req.body, function(err, result) {
-			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(res.body)
-			db.close();
-		});
-	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document inserted: " + req.body);
-});
-
-router.get("/user/:userId", function(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	mongo.MongoClient.connect (url, function(err, db) {
-		if (err) throw err;
-		let dbase = db.db("workout_db");
-		dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
-			if (err) throw err;
-			console.log("1 document found");
-			console.log(result);
-			res.send(result);
-			db.close();
-		});
-	});
-});
+router.post("/user", user_controller.user_post);
+router.get("/user/:userId", user_controller.user_get);
 
 module.exports = router;
