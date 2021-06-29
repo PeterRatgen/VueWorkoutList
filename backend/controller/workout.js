@@ -32,7 +32,7 @@ exports.workout_post = function(req, res) {
 	});
 	res.setHeader('Access-Control-Allow-Origin', '*')
 	res.send("document inserted: " + req.body);
-})
+}
 
 exports.workout_get = function(req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*')
