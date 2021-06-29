@@ -58,15 +58,16 @@ exports.user_delete = function(req, res) {
 	});
 }
 
-async function validateEmailAndPassword(email, password){
-    const user = await findUserForEmail(email);
-    console.log("user found " + user)
-    if (user == undefined)
-        return false
-    if (user["password"] == password)
-        return true
-    else
-        return false
+function validateEmailAndPassword(email, password){
+    findUserForEmail(email).then((user) => {
+        console.log("user found " + user)
+        if (user == undefined)
+            return false
+        if (user["password"] == password)
+            return true
+        else
+            return false
+    })
 }
 
 async function findUserForEmail(email) {
