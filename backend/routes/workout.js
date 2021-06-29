@@ -1,56 +1,5 @@
 const express = require('express');
-const serveStatic = require('serve-static');
-const bodyParser = require('body-parser');
-let mongo = require('mongodb');
-const {ObjectId} = require('mongodb');
-let url = "mongodb://peter:Pepsi1609@localhost:27017/?authSource=admin";
-
-const app = express();
-
-app.set("trust proxy", 'loopback');
-
-app.use(bodyParser.json());
-
-mongo.MongoClient.connect(url, function(err, db) {
-	if (err) throw err;
-	let dbase = db.db("workout_db")
-});
-
-app.post("/user", function(req, res) {
-	if ('userId' in req.body === false) {
-		res.send("Include 'userId' attribute.")
-	}
-	if ('name' in req.body === false) {
-		res.send("Include 'name' attribute")
-	}
-	mongo.MongoClient.connect (url, function(err, db) {
-		if (err) throw err;
-		let dbase = db.db("workout_db");
-		dbase.collection("workouts").insertOne(req.body, function(err, result) {
-			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(res.body)
-			db.close();
-		});
-	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document inserted: " + req.body);
-});
-
-app.get("/user/:userId", function(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	mongo.MongoClient.connect (url, function(err, db) {
-		if (err) throw err;
-		let dbase = db.db("workout_db");
-		dbase.collection("users").findOne({_id :  ObjectId(req.params.userId)}, function(err, result) {
-			if (err) throw err;
-			console.log("1 document found");
-			console.log(result);
-			res.send(result);
-			db.close();
-		});
-	});
-});
+const router = express.Router();
 
 app.post("/workout/:userId", function(req, res) {
 	//check if user exists
@@ -114,8 +63,4 @@ app.delete("/workout/:workoutId", function(req, res) {
 	});
 })
 
-app.use(serveStatic("../frontend/dist"));
-
-app.listen(3001, function () {
-	console.log("Listening on port 3001")
-})
+module.exports = router
