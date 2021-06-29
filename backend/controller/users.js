@@ -60,6 +60,8 @@ exports.user_delete = function(req, res) {
 
 function validateEmailAndPassword(email, password){
     const user = findUserForEmail(email);
+    if (!user)
+        return false
     if (user["password"] == password)
         return true
     else
