@@ -83,14 +83,15 @@ async function findUserForEmail(email) {
     });
 }
 
-exports.login = function(req, res) {
+exports.login = async function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     const email = req.body.email,
         password = req.body.password;
 
-    if (validateEmailAndPassword(email, password)) {
-        const user = findUserForEmail(email);
+    let pass_check = await validateEmailAndPassword(email, password)
+    if (pass_check) {
+        const user = await findUserForEmail(email);
         const token = authentication.generate_token({userId: user["userId"]})
 
         res.send(token)
