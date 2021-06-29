@@ -17,3 +17,12 @@ exports.authenticate_token = function authenticateToken(req, res, next) {
         next()
     })
 }
+
+exports.generate_token = function generateToken(username) {
+    let data = {
+        userId: username
+    }
+  
+    return jwt.sign(data, process.env.JWT_SECRET_KEY, {expiresIn: '90d'});
+
+}

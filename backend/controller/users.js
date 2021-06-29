@@ -1,7 +1,9 @@
 let mongo = require('mongodb');
 const {ObjectId} = require('mongodb');
 require('dotenv').config();
-const jwt = require('jsonwebtoken');
+const authentication = require('../middleware/authentication.js')
+
+
 
 exports.user_post = function(req, res) {
 	if ('userId' in req.body === false) {
@@ -56,14 +58,8 @@ exports.user_delete = function(req, res) {
 
 exports.generate_token = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let jwtSecretKey = process.env.JWT_SECRET_KEY;
-
-    let data = {
-        userId: "peter12"
-    }
-  
-    const token = jwt.sign(data, jwtSecretKey);
-    res.send(token);
+    const token = authentication.generateToken({userId : req.params.userId})
+    res.json(token);
 }
 
 
