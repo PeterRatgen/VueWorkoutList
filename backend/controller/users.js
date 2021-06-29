@@ -58,8 +58,8 @@ exports.user_delete = function(req, res) {
 	});
 }
 
-function validateEmailAndPassword(email, password){
-    const user = findUserForEmail(email);
+async function validateEmailAndPassword(email, password){
+    const user = await findUserForEmail(email);
     console.log("user found " + user)
     if (user == undefined)
         return false
@@ -69,7 +69,7 @@ function validateEmailAndPassword(email, password){
         return false
 }
 
-function findUserForEmail(email) {
+async function findUserForEmail(email) {
     console.log("finding for " + email)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
