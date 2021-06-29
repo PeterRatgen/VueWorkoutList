@@ -7,12 +7,12 @@ exports.authenticate_token = function authenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401)
     console.log("using authentication middleware")
 
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, userId) => {
         console.log(err)
 
         if (err) return res.sendStatus(403)
 
-        req.user = user
+        req.userId = userId
 
         next()
     })
@@ -24,5 +24,4 @@ exports.generate_token = function generateToken(username) {
     }
   
     return jwt.sign(data, process.env.JWT_SECRET_KEY, {expiresIn: '90d'});
-
 }
