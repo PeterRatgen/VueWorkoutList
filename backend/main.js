@@ -7,8 +7,8 @@ app.set("trust proxy", 'loopback');
 
 app.use(bodyParser.json());
 
-const userRoute = require(./routes/user.js)
-const workoutRoute = require(./routes/workout.js)
+const userRoute = require('./routes/user.js')
+const workoutRoute = require('./routes/workout.js')
 app.use(userRoute)
 app.use(workoutRoute)
 
