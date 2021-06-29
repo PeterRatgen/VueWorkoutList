@@ -12,7 +12,7 @@ jobs:
       - name: Pull changes
         run: git pull
       - name: Stop process 
-        run: pm2 stop index.js
+        run: pm2 stop main.js
       - name: Start process
-        run: pm2 start index.js
+        run: pm2 start main.js
 
