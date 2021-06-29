@@ -67,11 +67,13 @@ function validateEmailAndPassword(email, password){
 }
 
 function findUserForEmail(email) {
+    console.log("finding for " + email)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
         dbase.collection("users").findOne({email : email}, function(err, result) {
             if (err) throw err;
+            console.log("result of user by email")
             console.log(result)
             return result
         });
