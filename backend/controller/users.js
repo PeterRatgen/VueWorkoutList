@@ -55,12 +55,45 @@ exports.user_delete = function(req, res) {
 	});
 }
 
-
-exports.generate_token = function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    const token = authentication.generate_token( req.body.userId)
-    res.json(token);
+function validateEmailAndPassword(email, password){
+    const user = findUserForEmail(email);
+    if (user["password"] == password)
+        return true
+    else
+        return false
 }
+
+function findUserForEmail(email) {
+    mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        if (err) throw err;
+        let dbase = db.db("workout_db");
+        dbase.collection("users").findOne({email : email}, function(err, result) {
+            if (err) throw err;
+            console.log(result)
+            return result
+        });
+    });
+}
+
+exports.login = function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const email = req.body.email,
+        password = req.body.password;
+
+    if (validateEmailAndPassword(email, password)) {
+        const user = findUserForEmail(email);
+        const token = authentication.generate_token({userId: user["userId"]})
+
+        res.send(token)
+    }
+    else {
+        // send status 401 Unauthorized
+        res.sendStatus(401); 
+    }
+
+}
+
 
 
 exports.validate_token = function(req, res) {
