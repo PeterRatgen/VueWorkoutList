@@ -75,6 +75,7 @@ exports.validate_token = function(req, res) {
   
     try {
         const token = req.header(tokenHeaderKey);
+        console.log(token)
   
         const verified = jwt.verify(token, jwtSecretKey);
         if(verified){
