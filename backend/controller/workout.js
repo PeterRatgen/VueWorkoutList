@@ -55,7 +55,7 @@ exports.workout_delete = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId)}, function(err, result) {
+		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId), userId: req.user["userId"]}, function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
