@@ -58,7 +58,7 @@ export default {
         },
         async getWorkout() {
             const response = await this.apiInstance.get('/workout')
-            console.log(response)
+            console.log(JSON.parse(response.request.response))
         },
         addTodo(newTodo) {
             const { title, completed } = newTodo;
