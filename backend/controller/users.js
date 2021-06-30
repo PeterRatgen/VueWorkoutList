@@ -63,10 +63,15 @@ async function validateEmailAndPassword(email, password){
         console.log("user found " + user)
         if (user == undefined)
             return false
-        if (user["password"] == password)
+
+        if (user["password"] == password) {
+            console.log("retrning true")
             return true
-        else
+        }
+        else {
+            console.log("returning false")
             return false
+        }
     })
 }
 
