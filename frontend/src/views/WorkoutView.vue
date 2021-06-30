@@ -3,7 +3,7 @@
     <HelloHeader class="hello-header" v-bind:header="headerItem" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
-        <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
+        <WorkoutList v-bind:workouts="workouts" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
         <AddWorkout/>
       </div>
     </div>
@@ -29,10 +29,16 @@ export default {
                 headerItem : '',
                 email : 'peter@pratgen.dk',
                 password : 'safe',
-                apiInstance : ''
+                apiInstance : '',
+                workouts : ''
             }
     },
     methods: {
+        async init() {
+            await this.login()
+            this.apiInstance = this.createInstance();  
+            await this.getWorkout();
+        },
         async login() {
             try {
                 let response = await axios.post("https://pratgen.dk/todo/login",
@@ -42,7 +48,6 @@ export default {
                 })
                 let token = response.data
                 localStorage.setItem("user", token)
-                this.apiInstance = this.createInstance();  
             } catch (err) {
                 console.log(err)
             }
@@ -58,7 +63,7 @@ export default {
         },
         async getWorkout() {
             const response = await this.apiInstance.get('/workout')
-            console.log(JSON.parse(response.request.response))
+            this.workouts = JSON.parse(response.request.response)
         },
         addTodo(newTodo) {
             const { title, completed } = newTodo;
@@ -71,7 +76,7 @@ export default {
         }
     },
     created() {
-        this.login()
+        this.init()
     }
 }
 
