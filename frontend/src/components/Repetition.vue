@@ -97,7 +97,6 @@ export default {
   }
 
   .repetition {
-    width: 33%;
     background-color: lighten($accent-color, 50%);
   }
 
