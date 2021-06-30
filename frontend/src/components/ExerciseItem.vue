@@ -1,6 +1,6 @@
 <template> 
   <div class="divder"></div>
-  <div class="name">
+  <div class="name" @click="expand_card">
     <transition name="fade" mode="out-in">
       <div class="description" v-if="contracted">
         <h4> {{ exerciseItem.name }}</h4>    
