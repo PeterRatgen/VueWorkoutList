@@ -40,7 +40,7 @@ export default {
                     password: this.password
                 })
                 console.log("response " + JSON.stringify(response))
-                let token = response.body
+                let token = response.data
                 localStorage.setItem("user", token)
                 console.log("received token " + token)
             } catch (err) {
