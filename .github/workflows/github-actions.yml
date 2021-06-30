@@ -1,6 +1,6 @@
 name: Backend CI Deployment
 on: 
-  path:
+  push:
     paths:
       - 'backend/**.js'
 jobs:

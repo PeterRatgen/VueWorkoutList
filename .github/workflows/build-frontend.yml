@@ -1,6 +1,6 @@
 name: Frontend CI Deployment
 on: 
-  path:
+  push:
     paths:
       - 'frontend/**.vue'
 jobs:
