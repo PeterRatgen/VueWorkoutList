@@ -7,11 +7,9 @@
         </div>
         <div v-else class="description-expand">
             <h4> {{ exerciseItem.name }}</h4>    
-            <div class="repetition-container">
-                <div  @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
+                <div class="repetition-container"  @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
                     <Repetition  v-bind:repetition="rep"/>
                 </div>
-            </div>
         </div>
     </transition>
     </div>
@@ -62,6 +60,8 @@ export default {
     margin: 0.5rem 0;
     flex-wrap: wrap;
     padding: 0 2.5%;
+    box-sizing: border-box;
+    width: 33.3%;
 }
 
 

@@ -60,7 +60,7 @@ export default {
 @import '../assets/variables.scss';
 
   .input-content {
-    width: 2.4rem;
+    width: 1.8rem;
     font-family: 'Open Sans';
     font-size: 1rem;
     box-sizing: border-box;
