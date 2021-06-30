@@ -25,6 +25,9 @@ exports.user_post = function(req, res) {
         }, function(err, result) {
 			if (err) {
                 console.log(err)
+                if (err["code"] == 11000) {
+                    res.send("Already exists in the system")
+                }
                 throw err;
             }
 			console.log(result)
