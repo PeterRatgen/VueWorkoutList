@@ -89,20 +89,20 @@ exports.login = async function(req, res) {
     const email = req.body.email,
         password = req.body.password;
 
-    validateEmailAndPassword(email, password).then((result) => {
-        console.log("result of email and pass " + result)
-        if (result) {
-            findUserForEmail(email).then((user) => {
-                const token = authentication.generate_token({userId: user["_id"]})
+    let result = await validateEmailAndPassword(email, password)
 
-                res.send(token)
-            })
-        }
-        else {
-            // send status 401 Unauthorized
-            res.sendStatus(401); 
-        }
-    })
+    console.log("result of email and pass " + result)
+
+    if (result){
+        let user = await findUserForEmail(email)
+        const token = authentication.generate_token({userId: user["_id"]})
+
+        res.send(token)
+    }
+    else {
+        // send status 401 Unauthorized
+        res.sendStatus(401); 
+    }
 }
 
 
