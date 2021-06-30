@@ -80,6 +80,15 @@ export default {
     padding: 0.35rem;
 }
 
+.item-header {
+    display: flex;
+    justify-content: space-between;
+
+    h4 {
+        display: inline;
+    }
+}
+
 
 .divder {
   @include divider;
