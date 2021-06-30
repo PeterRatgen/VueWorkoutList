@@ -88,10 +88,12 @@ export default {
   }
 
   .repetition {
-    background-color: lighten($accent-color, 50%);
     width: 10vw;
     display: flex;
     justify-content: space-between;
+    padding: 0.5rem; 
+    margin: 0.25rem;
+    border: black;
   }
 
 @media only screen and (max-width: 1350px) {

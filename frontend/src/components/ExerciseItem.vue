@@ -59,9 +59,9 @@ export default {
 
 .repetition-container {
     display: flex;
-    justify-content: space-between;
     margin: 0.5rem 0;
     flex-wrap: wrap;
+    padding: 0 2.5%;
 }
 
 
