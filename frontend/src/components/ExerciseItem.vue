@@ -3,10 +3,15 @@
     <div class="name" @click="expand_card">
     <transition name="fade" mode="out-in">
         <div class="description" v-if="contracted">
-            <h4> {{ exerciseItem.name }}</h4>    
+            <div class="item-header">
+                <h4> {{ exerciseItem.name }}</h4>    
+                <span> {{ exerciseItem.set.length }} sets </span>
+            </div>
         </div>
         <div v-else class="description-expand">
-            <h4> {{ exerciseItem.name }}</h4>    
+            <div class="item-header">
+                <h4> {{ exerciseItem.name }}</h4>    
+            </div>
             <div class="repetition-container">
                 <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
                     <Repetition  v-bind:repetition="rep"/>
