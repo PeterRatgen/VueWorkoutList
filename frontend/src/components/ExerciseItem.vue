@@ -101,6 +101,17 @@ h4 {
 .fade-leave-active {
   animation: move-list 0.2s linear reverse;
 }
+
+@keyframes move-list {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 600px;
+    opacity: 1;
+  }
+}
   
 </style>
 
