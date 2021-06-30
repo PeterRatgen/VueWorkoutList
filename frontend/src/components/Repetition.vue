@@ -58,6 +58,7 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
 
   .input-content {
     width: 2.4rem;
