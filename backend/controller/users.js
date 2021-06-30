@@ -64,6 +64,7 @@ async function validateEmailAndPassword(email, password){
         if (user == undefined)
             return false
         console.log("user passsl " + user["password"])
+        console.log("submitted " + password)
         if (user["password"] == password)
             return true
         else
