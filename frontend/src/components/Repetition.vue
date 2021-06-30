@@ -1,9 +1,9 @@
 <template> 
     <span v-show="showWeight"> 
-        {{ repItem.weight }} kg
+        {{ repItem.weight }} kg x
     </span>
     <span class="item">
-      x {{ repItem.repetitions }}
+        {{ repItem.repetitions }}
     </span> 
 </template>
 
