@@ -72,16 +72,10 @@ async function validateEmailAndPassword(email, password){
 
 async function findUserForEmail(email) {
     console.log("finding for " + email)
-    await mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
-        if (err) throw err;
-        let dbase = db.db("workout_db");
-        dbase.collection("users").findOne({email : email}, function(err, result) {
-            if (err) throw err;
-            console.log("result of user by email")
-            console.log(result)
-            return result
-        });
-    });
+    const db = await mongo.MongoClient.connect (process.env.DB_URL);
+    let dbase = db.db("workout_db");
+    const result = await dbase.collection("users").findOne({email : email});
+    return result
 }
 
 exports.login = async function(req, res) {
