@@ -60,22 +60,18 @@ exports.user_delete = function(req, res) {
 
 async function validateEmailAndPassword(email, password){
     let user = await findUserForEmail(email)
-    console.log("user found " + user)
     if (user == undefined)
         return false
 
     if (user["password"] == password) {
-        console.log("retrning true")
         return true
     }
     else {
-        console.log("returning false")
         return false
     }
 }
 
 async function findUserForEmail(email) {
-    console.log("finding for " + email)
     const db = await mongo.MongoClient.connect (process.env.DB_URL);
     let dbase = db.db("workout_db");
     const result = await dbase.collection("users").findOne({email : email});
@@ -84,14 +80,9 @@ async function findUserForEmail(email) {
 
 exports.login = async function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-
     const email = req.body.email,
         password = req.body.password;
-
     let result = await validateEmailAndPassword(email, password)
-
-    console.log("result of email and pass " + result)
-
     if (result){
         let user = await findUserForEmail(email)
         const token = authentication.generate_token({userId: user["_id"]})
