@@ -1,5 +1,8 @@
 name: Backend CI Deployment
-on: [push]
+on: 
+  path:
+    paths:
+      - 'backend/**.js'
 jobs:
   Build-Backend:
     runs-on: self-hosted

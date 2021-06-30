@@ -25,11 +25,26 @@ export default {
   },
   data() {
     return {
-      user: {},
-      headerItem : ''
+        user: {},
+        headerItem : '',
+        email : 'peter@pratgen.dk',
+        password : 'safe'
     }
   },
   methods: {
+        async login() {
+            try {
+                let response = await axios.post("https://pratgen.dk/todo/login",
+                {
+                    email : this.email, 
+                    password: this.password
+                })
+                let token = response.body
+                localStorage.setItem("user", token)
+            } catch (err) {
+                console.log(err)
+            }
+        },
     deleteTodo(id) {
       axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
         .then(this.todos = this.todos.filter(todo => todo.id !== id))
@@ -54,6 +69,8 @@ export default {
         console.log(this.headerItem)
       })
       .catch(err => console.log(err));
+      console.log("logging in")
+      this.login()
   }
 }
 
