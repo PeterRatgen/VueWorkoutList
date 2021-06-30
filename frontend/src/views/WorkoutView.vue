@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HelloHeader class="hello-header" v-bind:header="headerItem" v-on:onclick="getWorkout"/>
+    <HelloHeader class="hello-header" v-bind:header="headerItem" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
