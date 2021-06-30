@@ -107,6 +107,16 @@ h4 {
     opacity: 1;
   }
 }
+
+@media only screen and (max-width: 600px) {
+    .repetition-container {
+        margin: 0;
+    }
+
+    .repetition {
+        width: calc(50% - 0.3rem * 2)
+    }
+}
   
 </style>
 
