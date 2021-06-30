@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HelloHeader class="hello-header" v-bind:header="headerItem"/>
+    <HelloHeader class="hello-header" v-bind:header="headerItem" v-on:onclick="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="user.workout" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
@@ -50,14 +50,15 @@ export default {
         createInstance() {
             const token = localStorage.getItem("user")
             return axios.create({
-                baseURL: "https://pratgen.dk/todo/",
+                baseURL: "https://pratgen.dk/todo",
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
             })
         },
-        getWorkout(id) {
-            return id
+        async getWorkout() {
+            const response = await this.apiInstance.get('/workout')
+            console.log(response)
         },
         addTodo(newTodo) {
             const { title, completed } = newTodo;
