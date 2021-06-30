@@ -81,17 +81,6 @@ export default {
 }
 
 
-.description {
-    text-align: left;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-
-    .exercise-desc {
-      text-align: left;
-      display: inline;
-    }
-}
-
 .divder {
   @include divider;
 }
