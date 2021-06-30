@@ -41,12 +41,14 @@ export default {
     }
   }, 
   methods : {
-    expand_card() {
+    expand_card(e) {
       if (this.contracted) {
             console.log("expanding card")
             this.contracted = false
+            e.stopPropagation();
       } else {
             this.contracted = true
+            e.stopPropagation();
       }
     }
   },
