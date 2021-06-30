@@ -110,7 +110,7 @@ h4 {
 
 @media only screen and (max-width: 600px) {
     .repetition-container {
-        margin: 0;
+        padding: 0;
     }
 
     .repetition {
