@@ -10,7 +10,7 @@ exports.authenticate_token = function authenticateToken(req, res, next) {
 
         if (err) return res.sendStatus(403)
 
-        console.log("Logging the userId: " + userId)
+        console.log("Logging the userId: " + JSON.stringify(userId))
 
         req.userId = userId
 
