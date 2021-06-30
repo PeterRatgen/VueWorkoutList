@@ -43,9 +43,10 @@ export default {
   methods : {
     expand_card() {
       if (this.contracted) {
-        this.contracted = false
+            console.log("expanding card")
+            this.contracted = false
       } else {
-        this.contracted = true
+            this.contracted = true
       }
     }
   },
