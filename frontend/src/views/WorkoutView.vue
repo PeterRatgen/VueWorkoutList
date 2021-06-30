@@ -32,7 +32,8 @@ export default {
     }
   },
   methods: {
-        async login() { try {
+        async login() {
+            try {
                 let response = await axios.post("https://pratgen.dk/todo/login",
                 {
                     email : this.email, 
@@ -40,6 +41,7 @@ export default {
                 })
                 let token = response.body
                 localStorage.setItem("user", token)
+                console.log("received token " + token)
             } catch (err) {
                 console.log(err)
             }
@@ -60,16 +62,7 @@ export default {
     }
   },
   created() {
-    fetch('https://pratgen.dk/todo/user/peter12')
-      .then(response => response.json())
-      .then(data => {
-        this.user = data[0]
-        this.headerItem = data[0].name
-        console.log(this.headerItem)
-      })
-      .catch(err => console.log(err));
-      console.log("logging in")
-      this.login()
+    this.login()
   }
 }
 
