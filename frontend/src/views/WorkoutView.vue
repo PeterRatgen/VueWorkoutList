@@ -48,7 +48,7 @@ export default {
             }
         },
         createInstance() {
-            const token = JSON.parse(localStorage.getItem("user")) 
+            const token = localStorage.getItem("user")
             return axios.create({
                 baseURL: "https://pratgen.dk/todo/",
                 headers : {
