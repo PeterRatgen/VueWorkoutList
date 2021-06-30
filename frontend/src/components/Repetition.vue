@@ -88,12 +88,13 @@ export default {
   }
 
   .repetition {
-    width: 10vw;
     display: flex;
     justify-content: space-between;
     padding: 0.5rem; 
     margin: 0.25rem;
-    border: black;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 4px;
   }
 
 @media only screen and (max-width: 1350px) {
