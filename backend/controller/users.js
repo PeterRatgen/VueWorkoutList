@@ -103,7 +103,7 @@ exports.login = async function(req, res) {
 
     if (result){
         let user = await findUserForEmail(email)
-        const token = authentication.generate_token({userId: user["_id"]})
+        const token = authentication.generate_token({userId: user["_id"], name : user["name"]})
 
         res.send(token)
     }
