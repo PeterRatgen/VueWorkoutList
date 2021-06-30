@@ -58,8 +58,9 @@ export default {
 @import '../assets/variables.scss';
 
 .repetition-container {
-    margin: 0.5rem 0;
     display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
     flex-wrap: wrap;
 }
 
