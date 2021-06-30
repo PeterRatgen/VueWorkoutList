@@ -23,7 +23,10 @@ exports.user_post = function(req, res) {
             email: req.body.email,
             password : req.body.password
         }, function(err, result) {
-			if (err) throw err;
+			if (err) {
+                console.log(err)
+                throw err;
+            }
 			console.log(result)
             res.send("document inserted: " + req.body);
 			db.close();
