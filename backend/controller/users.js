@@ -63,6 +63,7 @@ async function validateEmailAndPassword(email, password){
         console.log("user found " + user)
         if (user == undefined)
             return false
+        console.log("user passsl " + user["password"])
         if (user["password"] == password)
             return true
         else
@@ -87,7 +88,7 @@ exports.login = async function(req, res) {
     validateEmailAndPassword(email, password).then((result) => {
         if (result) {
             findUserForEmail(email).then((user) => {
-                const token = authentication.generate_token({userId: user["userId"]})
+                const token = authentication.generate_token({userId: user["_id"]})
 
                 res.send(token)
             })
