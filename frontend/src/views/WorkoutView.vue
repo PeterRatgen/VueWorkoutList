@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HelloHeader class="hello-header" v-bind:header="headerItem" v-on:click="getWorkout"/>
+    <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
         <WorkoutList v-bind:workouts="workouts" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
@@ -73,6 +73,17 @@ export default {
             })
             .then(res => this.todos = [...this.todos, res.data])
             .catch(err => console.log(err));
+        }
+    },
+    computed : {
+        jwtData() {
+            const token = localStorage.getItem("user")
+            if (token) {
+                return JSON.parse(atob(this.token.split('.')[1]))
+            }
+            else {
+                return {};
+            }
         }
     },
     created() {
