@@ -57,7 +57,7 @@ export default {
             })
         },
         getWorkout(id) {
-            return 0
+            return id
         },
         addTodo(newTodo) {
             const { title, completed } = newTodo;
