@@ -11,7 +11,6 @@
         <div v-else class="description-expand">
             <div class="item-header">
                 <h4> {{ exerciseItem.name }}</h4>    
-                <span> {{ exerciseItem.set.length }} sæt</span>
             </div>
             <div class="repetition-container">
                 <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
