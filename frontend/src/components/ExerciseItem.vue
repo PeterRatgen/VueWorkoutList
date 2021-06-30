@@ -1,6 +1,11 @@
 <template> 
   <div class="divder"></div>
   <div class="name">
+    <transition name="fade" mode="out-in">
+      <div class="description" v-if="contracted">
+        <h4> {{ exerciseItem.name }}</h4>    
+      </div>
+      <div v-else class="description-expand">
     <h4> {{ exerciseItem.name }}</h4>    
     <div class="repetition-container">
       <div class="repetition" 
@@ -10,8 +15,14 @@
         <Repetition  v-bind:repetition="rep"/>
       </div>
     </div>
+      </div>
+    </transition>
   </div>
 </template>
+
+
+
+
 
 <script>
 import Repetition from './Repetition'
@@ -25,9 +36,19 @@ export default {
   data () {
     return {
       ex: '',
-      showWeight: false
+      showWeight: false,
+      contracted: true
     }
   }, 
+  methods : {
+    expand_card() {
+      if (this.contracted) {
+        this.contracted = false
+      } else {
+        this.contracted = true
+      }
+    }
+  },
   created() {
     this.ex = this.exerciseItem;
   }
@@ -70,6 +91,14 @@ export default {
 h4 {
   font-weight: 700;
   text-align: left;
+}
+
+.fade-enter-active {
+  animation: move-list 0.4s linear;
+}
+
+.fade-leave-active {
+  animation: move-list 0.2s linear reverse;
 }
   
 </style>
