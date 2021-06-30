@@ -3,7 +3,7 @@
         {{ repItem.weight }} kg
     </span>
     <span class="item">
-        {{ repItem.repititions }} reps
+        {{ repItem.repetitions }} reps
     </span> 
 </template>
 
