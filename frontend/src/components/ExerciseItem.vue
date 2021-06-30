@@ -67,6 +67,8 @@ export default {
 .repetition {
     width: 33.3%;
     box-sizing: border-box;
+    border: 1px solid black;
+    margin-top: 0.5rem;
 }
 
 
