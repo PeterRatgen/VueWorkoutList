@@ -17,21 +17,22 @@ import WorkoutList from '../components/WorkoutList';
 import axios from 'axios'
 
 export default {
-  name: 'Home',
-  components: {
-    WorkoutList,
-    HelloHeader,
-    AddWorkout
-  },
-  data() {
-    return {
-        user: {},
-        headerItem : '',
-        email : 'peter@pratgen.dk',
-        password : 'safe'
-    }
-  },
-  methods: {
+    name: 'Home',
+        components: {
+        WorkoutList,
+        HelloHeader,
+        AddWorkout
+        },
+        data() {
+            return {
+                user: {},
+                headerItem : '',
+                email : 'peter@pratgen.dk',
+                password : 'safe',
+                apiInstance : ''
+            }
+    },
+    methods: {
         async login() {
             try {
                 let response = await axios.post("https://pratgen.dk/todo/login",
@@ -39,32 +40,38 @@ export default {
                     email : this.email, 
                     password: this.password
                 })
-                console.log("response " + JSON.stringify(response))
                 let token = response.data
                 localStorage.setItem("user", token)
-                console.log("received token " + token)
+                this.apiInstance = this.createInstance();  
             } catch (err) {
                 console.log(err)
             }
         },
-    deleteTodo(id) {
-      axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-        .then(this.todos = this.todos.filter(todo => todo.id !== id))
-        .catch((err) => console.log(err));
+        createInstance() {
+            const token = JSON.parse(localStorage.getItem("user")) 
+            return axios.create({
+                baseURL: "https://pratgen.dk/todo/",
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            })
+        },
+        getWorkout(id) {
+            return 0
+        },
+        addTodo(newTodo) {
+            const { title, completed } = newTodo;
+                axios.post('https://jsonplaceholder.typicode.com/todos', {
+                title,
+                completed
+            })
+            .then(res => this.todos = [...this.todos, res.data])
+            .catch(err => console.log(err));
+        }
     },
-    addTodo(newTodo) {
-      const { title, completed } = newTodo;
-      axios.post('https://jsonplaceholder.typicode.com/todos', {
-        title,
-        completed
-      })
-        .then(res => this.todos = [...this.todos, res.data])
-        .catch(err => console.log(err));
+    created() {
+        this.login()
     }
-  },
-  created() {
-    this.login()
-  }
 }
 
 </script>
