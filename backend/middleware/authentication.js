@@ -17,6 +17,5 @@ exports.authenticate_token = function authenticateToken(req, res, next) {
 }
 
 exports.generate_token = function generateToken(data) {
-  
     return jwt.sign(data, process.env.JWT_SECRET_KEY, {expiresIn: '90d'});
 }

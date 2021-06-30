@@ -18,15 +18,18 @@ exports.user_post = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("users").insertOne(req.body, function(err, result) {
+		dbase.collection("users").insertOne({
+            name: req.body.name,
+            email: req.body.email,
+            password : req.body.password
+        }, function(err, result) {
 			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(res.body)
+			console.log(result)
+            res.send("document inserted: " + req.body);
 			db.close();
 		});
 	});
 	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document inserted: " + req.body);
 }
 
 exports.user_get = function(req, res) {
