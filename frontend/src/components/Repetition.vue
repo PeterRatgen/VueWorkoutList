@@ -1,11 +1,9 @@
 <template> 
     <div class="repetition">
-        <div class="reps" > 
           <span class="item" v-bind:style="{textAlign: alignment}">
               <input class="input-content"   type="number" 
               v-bind:value="repItem.repetitions" @input="update_repetitions"
               />reps</span> 
-        </div>  
         <span class="reps" v-show="showWeight"> 
             <span class="item">
               <input class="input-content" type="number"  step="0.01"
@@ -13,8 +11,7 @@
               kg
             </span> 
           </span>
-        
-    </div>
+        </div>  
 </template>
 
 <script>
@@ -84,12 +81,6 @@ export default {
   input[type=number] {
     -moz-appearance: textfield;
   }
-  .item {
-
-  }
-  .reps {
-  }
-
   .rep { 
     margin: 1rem 0.5rem;
     padding: 0.1rem 1.0rem;
