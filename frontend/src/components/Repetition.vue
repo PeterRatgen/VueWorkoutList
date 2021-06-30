@@ -92,8 +92,7 @@ export default {
     justify-content: space-between;
     padding: 0.5rem; 
     margin: 0.25rem;
-    border-color: black;
-    border-width: 2px;
+    border: 4px solid black;
     border-radius: 4px;
   }
 
