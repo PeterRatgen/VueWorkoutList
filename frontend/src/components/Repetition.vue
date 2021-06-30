@@ -90,8 +90,9 @@ export default {
     display: flex;
     justify-content: space-between;
     margin: 0.25rem;
-    border: 4px solid black;
+    border: 1.5px solid black;
     border-radius: 4px;
+    padding-right: 0.8rem;
   }
 
 @media only screen and (max-width: 1350px) {
