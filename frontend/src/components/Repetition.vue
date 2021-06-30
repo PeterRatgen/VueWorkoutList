@@ -66,9 +66,6 @@ export default {
     box-sizing: border-box;
     border-radius: 4px;
     border: 2px solid white;
-    padding-right: 0.1rem;
-    padding-bottom: 0.4rem;
-    padding-top: 0.4rem;
     background-color: rgba(255,255,255, 0.8);
     text-align: center;
   }
@@ -92,7 +89,6 @@ export default {
   .repetition {
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem; 
     margin: 0.25rem;
     border: 4px solid black;
     border-radius: 4px;
