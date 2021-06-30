@@ -1,18 +1,14 @@
 <template> 
   <div class="rep">
     <div class="reps"> 
-      <span class="item-header">Repetitions: 
-      </span> 
-      <span class="item-content" v-bind:style="{textAlign: alignment}">
+      <span class="item" v-bind:style="{textAlign: alignment}">
           <input class="input-content"   type="number" 
           v-bind:value="repItem.repetitions" @input="update_repetitions"
           />
-      </span> 
+      reps</span> 
     </div>  
     <div class="reps" v-show="showWeight"> 
-        <span class="item-header" > Weight: 
-        </span> 
-        <span class="item-content">
+        <span class="item">
           <input class="input-content" type="number"  step="0.01"
           v-model="repItem.weight" @input="check" @blur="printWeight"/>
           kg
@@ -87,13 +83,7 @@ export default {
   input[type=number] {
     -moz-appearance: textfield;
   }
-  .item-header {
-    font-weight: 600;
-    flex: 4;
-  }
-  .item-content {
-    flex: 2;
-    white-space: nowrap;
+  .item {
   }
   .reps {
     display: flex;

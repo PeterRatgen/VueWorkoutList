@@ -17,10 +17,6 @@
     </div>
 </template>
 
-
-
-
-
 <script>
 import Repetition from './Repetition'
 
@@ -74,10 +70,9 @@ export default {
 }
 
 .repetition-container {
-  margin: 0.5rem 0;
-  display: flex;
-  flex-wrap: wrap;
-
+    margin: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
