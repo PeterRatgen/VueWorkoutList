@@ -6,13 +6,13 @@ exports.authenticate_token = function authenticateToken(req, res, next) {
 
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, userId) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
 
         if (err) return res.sendStatus(403)
 
-        console.log("Logging the userId: " + JSON.stringify(userId))
+        console.log("Logging the userId: " + JSON.stringify(user))
 
-        req.userId = userId
+        req.user = user
 
         next()
     })
