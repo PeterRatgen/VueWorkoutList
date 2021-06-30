@@ -1,23 +1,20 @@
 <template> 
-  <div class="divder"></div>
-  <div class="name" @click="expand_card">
+    <div class="divder"></div>
+    <div class="name" @click="expand_card">
     <transition name="fade" mode="out-in">
-      <div class="description" v-if="contracted">
-        <h4> {{ exerciseItem.name }}</h4>    
-      </div>
-      <div v-else class="description-expand">
-    <h4> {{ exerciseItem.name }}</h4>    
-    <div class="repetition-container">
-      <div class="repetition" 
-        @click.stop 
-        v-for="rep in exerciseItem.set" 
-        v-bind:key="rep">
-        <Repetition  v-bind:repetition="rep"/>
-      </div>
-    </div>
-      </div>
+        <div class="description" v-if="contracted">
+            <h4> {{ exerciseItem.name }}</h4>    
+        </div>
+        <div v-else class="description-expand">
+            <h4> {{ exerciseItem.name }}</h4>    
+            <div class="repetition-container">
+                <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
+                    <Repetition  v-bind:repetition="rep"/>
+                </div>
+            </div>
+        </div>
     </transition>
-  </div>
+    </div>
 </template>
 
 
@@ -81,6 +78,18 @@ export default {
   display: flex;
   flex-wrap: wrap;
 
+}
+
+
+.description {
+    text-align: left;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+
+    .exercise-desc {
+      text-align: left;
+      display: inline;
+    }
 }
 
 .divder {
