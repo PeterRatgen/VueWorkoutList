@@ -1,17 +1,15 @@
 <template> 
-    <div class="repetition">
-          <span class="item" v-bind:style="{textAlign: alignment}">
-              <input class="input-content"   type="number" 
-              v-bind:value="repItem.repetitions" @input="update_repetitions"
-              />reps</span> 
-        <span class="reps" v-show="showWeight"> 
-            <span class="item">
-              <input class="input-content" type="number"  step="0.01"
-              v-model="repItem.weight" @input="check" @blur="printWeight"/>
-              kg
-            </span> 
-          </span>
-        </div>  
+      <span class="item" v-bind:style="{textAlign: alignment}">
+          <input class="input-content"   type="number" 
+          v-bind:value="repItem.repetitions" @input="update_repetitions"
+          />reps</span> 
+    <span class="reps" v-show="showWeight"> 
+        <span class="item">
+          <input class="input-content" type="number"  step="0.01"
+          v-model="repItem.weight" @input="check" @blur="printWeight"/>
+          kg
+        </span> 
+      </span>
 </template>
 
 <script>
