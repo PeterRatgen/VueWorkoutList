@@ -1,17 +1,20 @@
 <template> 
-    <div class="reps" > 
-      <span class="item" v-bind:style="{textAlign: alignment}">
-          <input class="input-content"   type="number" 
-          v-bind:value="repItem.repetitions" @input="update_repetitions"
-          />reps</span> 
-    </div>  
-    <span class="reps" v-show="showWeight"> 
-        <span class="item">
-          <input class="input-content" type="number"  step="0.01"
-          v-model="repItem.weight" @input="check" @blur="printWeight"/>
-          kg
-        </span> 
-      </span>
+    <div class="repetition">
+        <div class="reps" > 
+          <span class="item" v-bind:style="{textAlign: alignment}">
+              <input class="input-content"   type="number" 
+              v-bind:value="repItem.repetitions" @input="update_repetitions"
+              />reps</span> 
+        </div>  
+        <span class="reps" v-show="showWeight"> 
+            <span class="item">
+              <input class="input-content" type="number"  step="0.01"
+              v-model="repItem.weight" @input="check" @blur="printWeight"/>
+              kg
+            </span> 
+          </span>
+        
+    </div>
 </template>
 
 <script>
@@ -85,23 +88,17 @@ export default {
 
   }
   .reps {
-    flex: 1;
-    margin: 0.5rem 0.5rem;
-    box-sizing: border-box;
-    padding: auto auto;
-    background-color: lighten($accent-color, 50%);
-    border-radius: 6px;
-    min-width: 45%;
-    max-width: 45%;
-    display: flex;
-    margin: 0.6rem 0;
-    text-align: left;
-    align-items: center;
   }
+
   .rep { 
     margin: 1rem 0.5rem;
     padding: 0.1rem 1.0rem;
     color: black;
+  }
+
+  .repetition {
+    width: 33%;
+    background-color: lighten($accent-color, 50%);
   }
 
 @media only screen and (max-width: 1350px) {
