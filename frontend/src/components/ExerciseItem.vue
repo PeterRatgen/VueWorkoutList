@@ -61,14 +61,17 @@ export default {
     display: flex;
     margin: 0.5rem 0;
     flex-wrap: wrap;
-    padding: 0 2.5%
+    padding: 0 12.5%
 }
 
 .repetition {
-    width: 33.3%;
+    width: calc(33.3% - 0.3rem * 2);
     box-sizing: border-box;
     border: 1px solid black;
+    border-radius: 4px;
     margin-top: 0.5rem;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
 }
 
 
