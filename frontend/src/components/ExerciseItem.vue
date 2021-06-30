@@ -61,7 +61,7 @@ export default {
     display: flex;
     margin: 0.5rem 0;
     flex-wrap: wrap;
-    padding: 0 12.5%
+    padding: 0 15%
 }
 
 .repetition {
@@ -72,6 +72,7 @@ export default {
     margin-top: 0.5rem;
     margin-left: 0.3rem;
     margin-right: 0.3rem;
+    padding: 0.35rem;
 }
 
 
