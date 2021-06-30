@@ -32,8 +32,7 @@ export default {
     }
   },
   methods: {
-        async login() {
-            try {
+        async login() { try {
                 let response = await axios.post("https://pratgen.dk/todo/login",
                 {
                     email : this.email, 
