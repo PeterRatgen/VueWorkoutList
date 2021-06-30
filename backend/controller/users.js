@@ -31,7 +31,7 @@ exports.user_post = function(req, res) {
                 throw err;
             }
 			console.log(result)
-            res.send("document inserted: " + req.body);
+            res.send("Inserted a user: " + JSON.stringify(req.body));
 			db.close();
 		});
 	});

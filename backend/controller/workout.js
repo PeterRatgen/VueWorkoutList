@@ -19,7 +19,7 @@ exports.workout_post = function(req, res) {
 
 	let date = new Date();
 	workout_log["dateCreated"] = date.valueOf();
-    workout_log["userId"] = ObjectId(req.params.userId);
+    workout_log["userId"] = ObjectId(req.userId);
 
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
@@ -40,7 +40,7 @@ exports.workout_get = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10}).toArray( function(err, result) {
+		dbase.collection("workouts").find({userId: ObjectId(req.userId)}, {limit : 10}).toArray( function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
