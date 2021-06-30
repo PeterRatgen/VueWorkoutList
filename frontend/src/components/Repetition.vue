@@ -1,6 +1,5 @@
 <template> 
-  <div class="rep">
-    <div class="reps"> 
+    <div class="reps" > 
       <span class="item" v-bind:style="{textAlign: alignment}">
           <input class="input-content"   type="number" 
           v-bind:value="repItem.repetitions" @input="update_repetitions"
@@ -14,7 +13,6 @@
           kg
         </span> 
       </div>
-  </div>
 </template>
 
 <script>
@@ -84,8 +82,17 @@ export default {
     -moz-appearance: textfield;
   }
   .item {
+
   }
   .reps {
+    flex: 1;
+    margin: 0.5rem 0.5rem;
+    box-sizing: border-box;
+    padding: auto auto;
+    background-color: lighten($accent-color, 50%);
+    border-radius: 6px;
+    min-width: 45%;
+    max-width: 45%;
     display: flex;
     margin: 0.6rem 0;
     text-align: left;
