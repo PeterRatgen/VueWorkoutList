@@ -1,5 +1,6 @@
 $content-width: 45%;
 $accent-color: #1b6ec6;
+$divider-color: #ebebeb;
 
 @mixin workout-card {
   padding: 1.5rem 1.5rem;
@@ -34,7 +35,7 @@ $accent-color: #1b6ec6;
 
 @mixin divider { 
   height: 80%;
-  border-top: 1.5px solid #ebebeb;
+  border-top: 1.5px solid $divider-color;
 }
 
 

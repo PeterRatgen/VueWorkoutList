@@ -52,43 +52,6 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
 
-  .input-content {
-    width: 1.8rem;
-    font-family: 'Open Sans';
-    font-size: 1rem;
-    box-sizing: border-box;
-    border-radius: 4px;
-    border: 2px solid white;
-    background-color: rgba(255,255,255, 0.8);
-    text-align: center;
-  }
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  /* Firefox */
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
-  .rep { 
-    margin: 1rem 0.5rem;
-    padding: 0.1rem 1.0rem;
-    color: black;
-
-  }
-
-  .repetition {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.25rem;
-    border: 1.5px solid black;
-    border-radius: 4px;
-    padding-right: 0.8rem;
-  }
-
 @media only screen and (max-width: 1350px) {
   .item-header{
   }
