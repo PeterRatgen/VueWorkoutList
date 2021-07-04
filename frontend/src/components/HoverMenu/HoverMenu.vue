@@ -37,7 +37,7 @@ $menu-width: 13rem;
     background-color: #fff;
     width: $menu-width;
     z-index: 5;
-    top: 150px;
+    top: 9rem;
     right: calc(( #{$menu-width} + 1rem) / 2);
     box-shadow: 4px 2px 8px #b2b2b2;
     border-radius: 4px;
@@ -46,5 +46,13 @@ $menu-width: 13rem;
 .hoverVisible {
     display: block;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .hover-menu{
+        right: 1rem;
+    }
+}
+
 
 </style>
