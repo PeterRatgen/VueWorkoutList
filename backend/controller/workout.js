@@ -19,7 +19,7 @@ exports.workout_post = function(req, res) {
 
 	let date = new Date();
 	workout_log["dateCreated"] = date.valueOf();
-    workout_log["userId"] = ObjectId(req.params.userId);
+    workout_log["userId"] = ObjectId(req.user["userId"]);
 
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
@@ -40,7 +40,7 @@ exports.workout_get = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").find({userId: ObjectId(req.params.userId)}, {limit : 10}).toArray( function(err, result) {
+		dbase.collection("workouts").find({userId: ObjectId(req.user["userId"])}, {limit : 10}).toArray( function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
@@ -55,7 +55,7 @@ exports.workout_delete = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId)}, function(err, result) {
+		dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId), userId: ObjectId(req.user["userId"])}, function(err, result) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);

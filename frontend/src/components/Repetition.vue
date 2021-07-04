@@ -1,24 +1,10 @@
 <template> 
-  <div class="rep">
-    <div class="reps"> 
-      <span class="item-header">Repetitions: 
-      </span> 
-      <span class="item-content" v-bind:style="{textAlign: alignment}">
-          <input class="input-content"   type="number" 
-          v-bind:value="repItem.repetitions" @input="update_repetitions"
-          />
-      </span> 
-    </div>  
-    <div class="reps" v-show="showWeight"> 
-        <span class="item-header" > Weight: 
-        </span> 
-        <span class="item-content">
-          <input class="input-content" type="number"  step="0.01"
-          v-model="repItem.weight" @input="check" @blur="printWeight"/>
-          kg
-        </span> 
-      </div>
-  </div>
+    <span v-show="showWeight"> 
+        {{ repItem.weight }} kg x
+    </span>
+    <span class="item">
+        {{ repItem.repetitions }}
+    </span> 
 </template>
 
 <script>
@@ -64,15 +50,15 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '../assets/variables.scss';
 
   .input-content {
-    width: 2.4rem;
+    width: 1.8rem;
     font-family: 'Open Sans';
     font-size: 1rem;
     box-sizing: border-box;
     border-radius: 4px;
     border: 2px solid white;
-    padding: 0.1rem 0.4rem;
     background-color: rgba(255,255,255, 0.8);
     text-align: center;
   }
@@ -87,24 +73,20 @@ export default {
   input[type=number] {
     -moz-appearance: textfield;
   }
-  .item-header {
-    font-weight: 600;
-    flex: 4;
-  }
-  .item-content {
-    flex: 2;
-    white-space: nowrap;
-  }
-  .reps {
-    display: flex;
-    margin: 0.6rem 0;
-    text-align: left;
-    align-items: center;
-  }
   .rep { 
     margin: 1rem 0.5rem;
     padding: 0.1rem 1.0rem;
     color: black;
+
+  }
+
+  .repetition {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.25rem;
+    border: 1.5px solid black;
+    border-radius: 4px;
+    padding-right: 0.8rem;
   }
 
 @media only screen and (max-width: 1350px) {

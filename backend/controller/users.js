@@ -18,15 +18,24 @@ exports.user_post = function(req, res) {
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("users").insertOne(req.body, function(err, result) {
-			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(res.body)
+		dbase.collection("users").insertOne({
+            name: req.body.name,
+            email: req.body.email,
+            password : req.body.password
+        }, function(err, result) {
+			if (err) {
+                console.log(err)
+                if (err["code"] == 11000) {
+                    res.send("Already exists in the system")
+                }
+                throw err;
+            }
+			console.log(result)
+            res.send("Inserted a user: " + JSON.stringify(req.body));
 			db.close();
 		});
 	});
 	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document inserted: " + req.body);
 }
 
 exports.user_get = function(req, res) {
@@ -85,7 +94,7 @@ exports.login = async function(req, res) {
     let result = await validateEmailAndPassword(email, password)
     if (result){
         let user = await findUserForEmail(email)
-        const token = authentication.generate_token({userId: user["_id"]})
+        const token = authentication.generate_token({userId: user["_id"], name : user["name"]})
 
         res.send(token)
     }
@@ -99,5 +108,5 @@ exports.login = async function(req, res) {
 
 exports.validate_token = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send("authenticated " + JSON.stringify(req.userId));
+    res.send("authenticated " + JSON.stringify(req.user));
 }
