@@ -79,6 +79,8 @@ export default {
 
 .workout-item {
   @include workout-card;
+  position: relative;
+  overflow: visible;
 
   .flex-container {
     display: flex;

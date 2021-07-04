@@ -37,10 +37,11 @@ $menu-width: 13rem;
     background-color: #fff;
     width: $menu-width;
     z-index: 5;
-    top: 9rem;
-    right: calc(( #{$menu-width} + 1rem) / 2);
+    top: 3.5rem;
+    right: 0.5rem;
     box-shadow: 4px 2px 8px #b2b2b2;
     border-radius: 4px;
+    overflow: visible;
 }
 
 .hoverVisible {
