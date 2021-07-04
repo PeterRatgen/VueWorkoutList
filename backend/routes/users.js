@@ -3,6 +3,7 @@ const router = express.Router();
 require('dotenv').config();
 
 const authentication = require('../middleware/authentication.js')
+const cors = require('../middleware/cors_allow_all.js')
 const user_controller = require('../controller/users.js')
 
 
