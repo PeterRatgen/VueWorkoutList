@@ -1,12 +1,15 @@
 <template>
   <div class="workout-item" @click="expand_card">
+    <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
     <div class="flex-container">
         <h3>{{ workout.title }}</h3>
         <fa class="dots" id="dots" icon="ellipsis-v" 
-            @click="toggleMenu"></fa>
+            @click.stop="displayHover = true"></fa>
         <HoverMenu 
             :menuItems=hovMen 
             :display=displayHover  
+            @option="handleOption"
+            @click.prevent
         />
     </div>
     <transition name="fade" mode="out-in">
@@ -29,35 +32,27 @@ import ExerciseItem from "./ExerciseItem"
 import HoverMenu from "./HoverMenu/HoverMenu.vue"
 
 export default {
-  name: "Workout",
-  props: ["workout"],
-  components: {
-    ExerciseItem,
-    HoverMenu
-  },
-  data () {
+    name: "Workout",
+    props: ["workout"],
+    components: {
+        ExerciseItem,
+        HoverMenu
+    },
+    data () {
     return {
         contracted: true,
-        hovMen: ["this", "is", "great"],
+        hovMen: ["Change title", "Delete workout"],
         displayHover: false,
     }
-  },
-  methods : {
-      toggleMenu(e) {
-            if(this.displayHover) {
-                this.displayHover = false
-            } else {
-                this.displayHover = true
-            }
-            e.stopPropagation();
-      },
-    nameWithComma(index) {
-      if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
-        return `${this.workout.exerciseList[index].name}, `
-      } else{
-        return this.workout.exerciseList[index].name
-      }
     },
+    methods : {
+        nameWithComma(index) {
+            if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
+                return `${this.workout.exerciseList[index].name}, `
+            } else{
+                return this.workout.exerciseList[index].name
+            }
+        },
     expand_card() {
       if (this.contracted) {
         this.contracted = false
@@ -69,6 +64,9 @@ export default {
       dat.setTime(dateString)
       const options = { weekday: 'long', year : 'numeric', month: 'long', day: 'numeric'}
       return dat.toLocaleDateString('en-UK', options)
+    },
+    handleOption(item){
+        console.log("this item is " + item)
     }
   }
 }
@@ -115,6 +113,14 @@ export default {
       display: inline;
     }
   }
+}
+
+.outside {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
 }
 
 

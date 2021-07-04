@@ -1,6 +1,6 @@
 <template> 
     <div class="divder"></div>
-    <div class="name" @click="expand_card">
+    <div class="name" @click.stop="expand_card">
         <div class="item-header">
             <h4> {{ exerciseItem.name }}</h4>    
             <span> {{ exerciseItem.set.length }} sæt</span>
@@ -36,14 +36,12 @@ export default {
     }
   }, 
   methods : {
-    expand_card(e) {
+    expand_card() {
       if (this.contracted) {
             console.log("expanding card")
             this.contracted = false
-            e.stopPropagation();
       } else {
             this.contracted = true
-            e.stopPropagation();
       }
     }
   },
