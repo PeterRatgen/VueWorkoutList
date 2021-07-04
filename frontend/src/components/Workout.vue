@@ -1,8 +1,13 @@
 <template>
   <div class="workout-item" @click="expand_card">
     <div class="flex-container">
-      <h3>{{ workout.title }}</h3>
-      <p class="due-date"> {{ ret_Date(workout.dueDate) }}</p>
+        <h3>{{ workout.title }}</h3>
+        <fa class="dots" id="dots" icon="ellipsis-v" 
+            @click="toggleMenu"></fa>
+        <HoverMenu 
+            :menuItems=hovMen 
+            :display=displayHover  
+        />
     </div>
     <transition name="fade" mode="out-in">
       <div class="description" v-if="contracted">
@@ -21,21 +26,31 @@
 
 <script>
 import ExerciseItem from "./ExerciseItem"
+import HoverMenu from "./HoverMenu/HoverMenu.vue"
 
 export default {
   name: "Workout",
   props: ["workout"],
   components: {
-    ExerciseItem
+    ExerciseItem,
+    HoverMenu
   },
   data () {
     return {
-      contracted: true
+        contracted: true,
+        hovMen: ["this", "is", "great"],
+        displayHover: false,
     }
   },
-  created() {
-  },
   methods : {
+      toggleMenu(e) {
+            if(this.displayHover) {
+                this.displayHover = false
+            } else {
+                this.displayHover = true
+            }
+            e.stopPropagation();
+      },
     nameWithComma(index) {
       if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
         return `${this.workout.exerciseList[index].name}, `
@@ -78,10 +93,13 @@ export default {
       text-align: left;
       font-size: 1.3rem;
     }
+    
+    .dots {
+        color: lighten($text-color, 30%);
 
-    .due-date {
-      font-size: 0.8rem;
-      display: inline-block;
+        &:hover {
+            color: $text-color; 
+        }
     }
   }
 

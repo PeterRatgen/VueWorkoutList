@@ -3,7 +3,7 @@
     <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
-        <WorkoutList v-bind:workouts="workouts" v-on:toggle-todo="toggleTodo" v-on:del-todo="deleteTodo"/>
+        <WorkoutList v-bind:workouts="workouts" />
         <AddWorkout/>
       </div>
     </div>
