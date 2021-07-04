@@ -2,12 +2,16 @@ require('dotenv').config();
 const express = require('express');
 const serveStatic = require('serve-static');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 const app = express();
 
 app.set("trust proxy", 'loopback');
 
 app.use(bodyParser.json());
+
+app.options('*', cors());
+
 
 const PORT = process.env.PORT;
 
