@@ -10,6 +10,7 @@ app.set("trust proxy", 'loopback');
 
 app.use(bodyParser.json());
 
+//Support preflight requests
 app.options('*', cors());
 
 
