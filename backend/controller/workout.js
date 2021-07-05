@@ -67,14 +67,15 @@ exports.workout_delete = function(req, res) {
 
 
 exports.workout_post_rename =  function(req, res) {
-    console.log(req.body)
+	const body = req.body
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").updateOne({ _id: ObjectId(req.body.id)}, {$set : { name : req.body.name}}, function(err, result) {
+		let query = { _id: ObjectId(body["id"])}
+		let newValues = {$set : { title : body["name"]}}
+		dbase.collection("workouts").updateOne(query, newValues, function(err, result) {
 			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(result.body)
+			console.log("Document updated");
 			db.close();
 		});
 	});
