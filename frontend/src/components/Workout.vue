@@ -5,8 +5,8 @@
         <h3 id="title">{{ workout.title }}</h3>
         <div class="title-editor" id="titleEditor">
             <input ref="titleInput" class="title-input" type="text">
-            <fa icon="check" @click.stop="acceptEdit"></fa>
-            <fa class="cross" icon="plus" @click.stop ="stopEditing"></fa>
+            <span class="icon" @click.stop="acceptEdit"><fa class="" icon="check" ></fa></span>
+            <span class="icon" @click.stop ="stopEditing"><fa class="cross" icon="plus" ></fa></span>
         </div>
         <fa class="dots" icon="ellipsis-v" 
             @click.stop="displayHover = true"></fa>
@@ -72,7 +72,7 @@ export default {
                 let title_element = this.$el.querySelector("#title")
                 title_element.style.display = "none"
                 let title_editor = this.$el.querySelector("#titleEditor")
-                title_editor.style.display = "block"
+                title_editor.style.display = "flex"
                 this.editingTitle = true
                 this.displayHover = false
                 this.$refs.titleInput.focus()
@@ -159,17 +159,26 @@ export default {
 
 .title-editor {
     display: none;
+    align-items: center;
+    width: 80%;
 
     .title-input {
         font-weight: 700;
         font-size: 1.3rem;
         border: none;
+        width: 80%;
     }
 
     .cross {
         transform: rotate(45deg);
     }
 
+}
+
+.icon {
+    display: inline-block;
+    width: 2.5rem;
+    transform: scale(1.2);
 }
 
 

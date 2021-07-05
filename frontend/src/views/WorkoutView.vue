@@ -80,7 +80,7 @@ export default {
             ele["title"] = newName
         },
         deleteWorkout(workoutId) {
-            this.apiInstance.post('/workout/' + workoutId )
+            this.apiInstance.delete('/workout/' + workoutId )
             let ele = this.workouts.find(element => element["_id"] == workoutId)
             let index = this.workouts.indexOf(ele)
             this.workouts.splice(index, 1)
