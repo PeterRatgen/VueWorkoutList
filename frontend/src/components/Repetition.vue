@@ -1,5 +1,5 @@
 <template> 
-    <div @click.stop="repetition_click">
+    <div @click.stop="repetition_click()">
         <div v-if="editing">
             <div class="item"> 
                 <span class="icon-container" @click.stop="dec('weight')">
@@ -53,6 +53,10 @@ export default {
             this.alignment = 'right'
         }
         this.repItem = this.repetition
+        this.emitter.on('pressed-repetition', () => {
+            this.editing = false
+            console.log("received repetition")
+        })
     },
     methods: {
         check (e) {
@@ -91,6 +95,8 @@ export default {
         repetition_click(){
             this.editing = !this.editing
             this.emitter.emit('pressed-repetition')
+            console.log("Pressed the repetition")
+            this.editing = true;
         }
     }
 }
