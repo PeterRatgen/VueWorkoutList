@@ -10,4 +10,6 @@ router.post("/workout", cors.allow_all,  authentication.authenticate_token, work
 router.get("/workout", cors.allow_all, authentication.authenticate_token, workout_controller.workout_get);
 router.delete("/workout/:workoutId", cors.allow_all, authentication.authenticate_token, workout_controller.workout_delete);
 
+router.post("/workout/rename", cors.allow_all, authentication.authenticate_token, workout_controller.workout_post_rename);
+
 module.exports = router
