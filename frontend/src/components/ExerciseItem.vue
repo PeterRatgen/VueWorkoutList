@@ -5,6 +5,8 @@
             <div v-if="nameEdit" >
                 <InputField
                     :startEdit="nameEdit"   
+                    :fontSize="'1rem'"
+                    :fontWeight="'700'"
                     v-on:result="titleSubmitEdit"
                     v-on:stop-edit="titleEditEnd"
                 />
@@ -22,6 +24,9 @@
                 <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
                     <Repetition  v-bind:repetition="rep"/>
                 </div>
+                <div class="repetition add-repetition"> 
+                    <NewRepetition/>
+                </div>
             </div>
         </div>
     </transition>
@@ -31,6 +36,7 @@
 <script>
 import Repetition from './Repetition'
 import InputField from "./input_field/InputField";
+import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
   name: "ExerciseItem",
@@ -38,7 +44,8 @@ export default {
   emits: ["exercise-item"],
   components: {
     Repetition,
-    InputField
+    InputField,
+    NewRepetition
   },
   data () {
     return {
@@ -96,6 +103,11 @@ export default {
     margin-left: 0.3rem;
     margin-right: 0.3rem;
     padding: 0.35rem;
+}
+
+.add-repetition {
+    padding: 0;
+    border: none;
 }
 
 .item-header {
