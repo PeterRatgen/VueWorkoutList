@@ -5,6 +5,8 @@
         <h3 id="title">{{ workout.title }}</h3>
         <InputField 
             :startEdit="editingTitle"   
+            :fontSize="'1.3rem'"
+            :fontWeight="'700'"
             v-on:result="submitEdit"
             v-on:stop-edit="editEnd"
         />

@@ -12,7 +12,7 @@
 
 export default {
     name : 'InputField',
-    props: ["startEdit"],
+    props: ["startEdit" , 'fontSize', 'fontWeight'],
     emits: ['result', 'stop-edit'],
     methods: {
         stopEditing() {
@@ -37,6 +37,9 @@ export default {
         if (this.startEdit){
             this.startEditing()
         }
+        let title_input = this.$refs.titleInput
+        title_input.style.fontSize = this.fontSize
+        title_input.style.fontWeight = this.fontWeight
     },
     updated() {
         console.log("state of start edit " + this.startEdit)
@@ -55,8 +58,6 @@ export default {
     width: 80%;
 
     .title-input {
-        font-weight: 700;
-        font-size: 1.3rem;
         border: none;
         width: 80%;
     }
