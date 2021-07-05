@@ -73,6 +73,7 @@ export default {
             } else {
                 this.contracted = true
             }
+            this.emitter.emit('pressed-workout')
         },
         renameTitle(){
             if (!this.editingTitle) {
