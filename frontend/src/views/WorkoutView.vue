@@ -93,6 +93,7 @@ export default {
             exercise["set"].push({repetitions : 0, weight : 0}) 
         },
         backgroundPressed() {
+            console.log("Pressed background")
             this.emitter.emit('pressed-background')
         }
     },

@@ -21,7 +21,6 @@ export default {
   props: ["workouts"],
   emit: ['title-change', 'delete-workout'],
   created() {
-    console.log("created List " + this.workouts);
   },
     methods: {
         emitTitleChange(id, name) {

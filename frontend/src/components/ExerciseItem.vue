@@ -65,6 +65,7 @@ export default {
       } else {
             this.contracted = true
       }
+      this.emitter.emit('pressed-exerciseItem')
     },
     titleSubmitEdit(result) {
         this.nameEdit = false
@@ -77,7 +78,6 @@ export default {
   created() {
     this.ex = this.exerciseItem;
     this.nameEdit = this.edit;
-    console.log("editing " + this.nameEdit)
   }
 }
   

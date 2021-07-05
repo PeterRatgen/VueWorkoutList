@@ -1,15 +1,23 @@
 <template> 
-    <div @click.stop="editing = !editing">
+    <div @click.stop="repetition_click">
         <div v-if="editing">
             <div class="item"> 
-                <fa icon=minus @click.stop="dec('weight')" ></fa>
+                <span class="icon-container">
+                    <fa class="icon" icon=minus @click.stop="dec('weight')" ></fa>
+                </span>
                 {{ repItem.weight }} kg 
-                <fa icon=plus @click.stop="inc('weight')" ></fa>
+                <span class="icon-container">
+                    <fa class="icon" icon=plus @click.stop="inc('weight')" ></fa>
+                </span>
             </div>
             <div class="item">
-                <fa icon=minus @click.stop="dec('reps')"></fa>
+                <span class="icon-container">
+                    <fa class="icon" icon=minus @click.stop="dec('reps')"></fa>
+                </span>
                 {{ repItem.repetitions }} reps
-                <fa icon=plus @click.stop="inc('reps')"></fa>
+                <span class="icon-container">
+                    <fa class="icon" icon=plus @click.stop="inc('reps')"></fa>
+                </span>
             </div> 
             
         </div>
@@ -27,60 +35,64 @@
 <script>
 
 export default {
-  name: "Repetition",
-  props: ["repetition"],
-  data () {
-    return {
-      showWeight: false,
-      alignment: 'left',
-      repItem: '',
-        editing: false
-    }
-  }, 
-  created() {
-    if (this.repetition.weight) {
-      this.showWeight = true;
-    }
-    if (!this.showWeight) {
-      this.alignment = 'right'
-    }
-    this.repItem = this.repetition
-  },
-  methods: {
-    check (e) {
-      console.log(e)
-      if (this.repItem.weight > 100) {
-        e.originalTarget.style.color = 'red'
-      }
-      if ( this.repItem.weight < 100) {
-        e.originalTarget.style.color = 'black'
-      }
-      console.log(this.repItem.weight)
-    },
-    printWeight() {
-      console.log(this.repItem.weight)
-    },
-    inc(target) {
-        switch(target){
-            case "weight":
-                this.repItem.weight = this.repItem.weight + 1.25
-                break;
-            case "reps":
-                this.repItem.repetitions = this.repItem.repetitions  + 1
-                break;
+    name: "Repetition",
+    props: ["repetition"],
+    data () {
+        return {
+            showWeight: false,
+            alignment: 'left',
+            repItem: '',
+            editing: false
         }
+    }, 
+    created() {
+        if (this.repetition.weight) {
+            this.showWeight = true;
+        }
+        if (!this.showWeight) {
+            this.alignment = 'right'
+        }
+        this.repItem = this.repetition
     },
-    dec(target){
-        switch(target){
-            case "weight":
-                this.repItem.weight = this.repItem.weight - 1.25
-                break;
-            case "reps":
-                this.repItem.repetitions = this.repItem.repetitions  - 1
-                break;
+    methods: {
+        check (e) {
+          console.log(e)
+          if (this.repItem.weight > 100) {
+            e.originalTarget.style.color = 'red'
+          }
+          if ( this.repItem.weight < 100) {
+            e.originalTarget.style.color = 'black'
+          }
+          console.log(this.repItem.weight)
+        },
+        printWeight() {
+          console.log(this.repItem.weight)
+        },
+        inc(target) {
+            switch(target){
+                case "weight":
+                    this.repItem.weight = this.repItem.weight + 1.25
+                    break;
+                case "reps":
+                    this.repItem.repetitions = this.repItem.repetitions  + 1
+                    break;
+            }
+        },
+        dec(target){
+            switch(target){
+                case "weight":
+                    this.repItem.weight = this.repItem.weight - 1.25
+                    break;
+                case "reps":
+                    this.repItem.repetitions = this.repItem.repetitions  - 1
+                    break;
+            }
+        },
+        repetition_click(){
+            this.editing = !this.editing
+            this.emitter.emit('pressed-repetition')
         }
     }
-  }
 }
 
   
@@ -93,8 +105,21 @@ export default {
 .item {
     display: flex;
     margin: auto;
-    width: 85%;
+    width: 90%;
     justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.icon {
+    color: lighten($text-color, 5%);
+}
+
+.icon-container {
+    display: flex;
+    width: 1rem;
+    height: 2rem;
+    justify-content: center;
     align-items: center;
 }
 
