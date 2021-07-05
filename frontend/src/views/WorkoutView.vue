@@ -84,6 +84,8 @@ export default {
                     name : newName
                 }
             )
+            let ele = this.workouts.find(element => element["_id"] == workoutId)
+            ele["title"] = newName
         }
     },
     computed : {

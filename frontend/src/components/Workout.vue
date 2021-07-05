@@ -90,6 +90,7 @@ export default {
                 const editValue = this.$refs.titleInput.value
                 console.log("Edit value " + editValue)
                 this.$emit('title-change', this.workout._id, editValue)
+                this.stopEditing();
         },
         handleOption(item){
             switch(item) {
