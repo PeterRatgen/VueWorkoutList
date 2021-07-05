@@ -84,6 +84,8 @@ export default {
             let ele = this.workouts.find(element => element["_id"] == workoutId)
             let index = this.workouts.indexOf(ele)
             this.workouts.splice(index, 1)
+        },
+        addRepetition(setName, id){
         }
     },
     computed : {

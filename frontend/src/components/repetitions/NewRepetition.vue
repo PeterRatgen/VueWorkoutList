@@ -1,5 +1,5 @@
 <template>
-    <div class="add-exercise-button">
+    <div class="add-exercise-button" @click.stop="this.$emit('new-repetition')">
         <fa class="plus-icon" icon="plus"></fa>
     </div>
 </template>
@@ -9,6 +9,7 @@
 
 export default {
     name: "NewRepetition",
+    emits: ["new-repetition"],
     components : {
     }
 }
