@@ -1,9 +1,14 @@
 <template>
-  <div class="workout-item" @click="expand_card">
+  <div class="workout-item" @click.stop="expand_card">
     <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
     <div class="flex-container">
-        <h3>{{ workout.title }}</h3>
-        <fa class="dots" id="dots" icon="ellipsis-v" 
+        <h3 id="title">{{ workout.title }}</h3>
+        <div class="title-editor" id="titleEditor">
+            <input ref="titleInput" class="title-input" type="text">
+            <fa icon="check" @click.stop="acceptEdit"></fa>
+            <fa class="cross" icon="plus" @click.stop ="stopEditing"></fa>
+        </div>
+        <fa class="dots" icon="ellipsis-v" 
             @click.stop="displayHover = true"></fa>
         <HoverMenu 
             :menuItems=hovMen 
@@ -34,6 +39,7 @@ import HoverMenu from "./HoverMenu/HoverMenu.vue"
 export default {
     name: "Workout",
     props: ["workout"],
+    emits: ["title-change"],
     components: {
         ExerciseItem,
         HoverMenu
@@ -43,6 +49,7 @@ export default {
         contracted: true,
         hovMen: ["Change title", "Delete workout"],
         displayHover: false,
+        editingTitle : false
     }
     },
     methods : {
@@ -53,22 +60,50 @@ export default {
                 return this.workout.exerciseList[index].name
             }
         },
-    expand_card() {
-      if (this.contracted) {
-        this.contracted = false
-      } else {
-        this.contracted = true
-      }
-    }, ret_Date(dateString) {
-      let dat = new Date(0)
-      dat.setTime(dateString)
-      const options = { weekday: 'long', year : 'numeric', month: 'long', day: 'numeric'}
-      return dat.toLocaleDateString('en-UK', options)
-    },
-    handleOption(item){
-        console.log("this item is " + item)
+        expand_card() {
+            if (this.contracted) {
+                this.contracted = false
+            } else {
+                this.contracted = true
+            }
+        },
+        renameTitle(){
+            if (!this.editingTitle) {
+                let title_element = this.$el.querySelector("#title")
+                title_element.style.display = "none"
+                let title_editor = this.$el.querySelector("#titleEditor")
+                title_editor.style.display = "block"
+                this.editingTitle = true
+                this.displayHover = false
+                this.$refs.titleInput.focus()
+            }
+            console.log("State of editingTtle " + this.editingTitle)
+        },
+        stopEditing() {
+            let title_element = this.$el.querySelector("#title")
+            title_element.style.display = "block"
+            let title_editor = this.$el.querySelector("#titleEditor")
+            title_editor.style.display = "none"
+            this.editingTitle = false
+        },
+        acceptEdit(){
+                const editValue = this.$refs.titleInput.value
+                console.log("Edit value " + editValue)
+                this.$emit('title-change', this.workout._id, editValue)
+        },
+        handleOption(item){
+            switch(item) {
+                case "Change title":
+                    console.log("changing the title")
+                    this.renameTitle()        
+                    break;
+                case "Delete workout":
+                    console.log("deleting the workout")
+                    break;
+            }
+            console.log("this item is " + item)
+        }
     }
-  }
 }
 </script>
 
@@ -121,6 +156,21 @@ export default {
   position: fixed;
   top: 0px;
   left: 0px;
+}
+
+.title-editor {
+    display: none;
+
+    .title-input {
+        font-weight: 700;
+        font-size: 1.3rem;
+        border: none;
+    }
+
+    .cross {
+        transform: rotate(45deg);
+    }
+
 }
 
 

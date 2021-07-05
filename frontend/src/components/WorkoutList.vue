@@ -1,7 +1,7 @@
 <template>
  <div class="list">
   <div v-bind:key="workout.dateCreated" v-for="workout in workouts" >
-    <Workout v-bind:workout="workout" v-on:toggle-todo="$emit('toggle-todo',todo.id)" v-on:del-todo="$emit('del-todo',todo.id)" />
+    <Workout v-bind:workout="workout" v-on:title-change="emitTitleChange" />
   </div>
  </div> 
 </template>
@@ -15,9 +15,15 @@ export default {
     Workout
   },
   props: ["workouts"],
+  emit: ['title-change'],
   created() {
     console.log("created List " + this.workouts);
-  }
+  },
+    methods: {
+        emitTitleChange(id, name) {
+            this.$emit('title-change', id, name)            
+        }
+    }
 }
 </script>
 

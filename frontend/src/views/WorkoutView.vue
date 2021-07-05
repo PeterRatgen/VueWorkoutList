@@ -3,7 +3,10 @@
     <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
-        <WorkoutList v-bind:workouts="workouts" />
+        <WorkoutList 
+            v-bind:workouts="workouts" 
+            v-on:title-change="titleChange"
+        />
         <AddWorkout/>
       </div>
     </div>
@@ -73,6 +76,14 @@ export default {
             })
             .then(res => this.todos = [...this.todos, res.data])
             .catch(err => console.log(err));
+        },
+        titleChange(workoutId, newName){
+            this.apiInstance.post('/workout/rename',
+                {
+                    id : workoutId,
+                    name : newName
+                }
+            )
         }
     },
     computed : {
