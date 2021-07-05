@@ -66,7 +66,7 @@ export default {
                 this.repItem.weight = this.repItem.weight + 1.25
                 break;
             case "reps":
-                this.repItem.repetitions = this.repItem.repetitions  + 1.25
+                this.repItem.repetitions = this.repItem.repetitions  + 1
                 break;
         }
     },
@@ -76,7 +76,7 @@ export default {
                 this.repItem.weight = this.repItem.weight - 1.25
                 break;
             case "reps":
-                this.repItem.repetitions = this.repItem.repetitions  - 1.25
+                this.repItem.repetitions = this.repItem.repetitions  - 1
                 break;
         }
     }
@@ -93,7 +93,7 @@ export default {
 .item {
     display: flex;
     margin: auto;
-    width: 75%;
+    width: 85%;
     justify-content: space-between;
     align-items: center;
 }

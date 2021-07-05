@@ -1,6 +1,6 @@
 <template>
     <div class="title-editor" id="titleEditor">
-        <input ref="titleInput" class="title-input" type="text">
+        <input ref="titleInput" class="header-input" type="text">
         <span class="icon" @click.stop="acceptEdit"><fa class="" icon="check" ></fa></span>
         <span class="icon" @click.stop ="stopEditing"><fa class="cross" icon="plus" ></fa></span>
     </div>
@@ -52,6 +52,8 @@ export default {
 
 
 <style lang="scss">
+@import '../../assets/variables.scss';
+
 .title-editor {
     display: none;
     align-items: center;
@@ -61,11 +63,29 @@ export default {
         border: none;
         width: 80%;
     }
+    
+    .header-input {
+        font-weight: 700; 
+        text-align: left;
+        font-size: 1.3rem;
+        padding: 0.0rem 0.25rem;
+        background-color: #fff;
+        box-sizing: border-box;
+        border: none;
+        border-bottom: 2px solid #d1d1d1;
+        outline: none;
+
+        &:focus {
+            outline: none;
+            border: none;
+            border-bottom: 2px solid lighten($accent-color, 20%);
+            background-color: #fff;
+            }
+        }
 
     .cross {
         transform: rotate(45deg);
     }
-
 }
 
 .icon {

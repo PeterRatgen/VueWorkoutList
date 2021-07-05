@@ -1,19 +1,19 @@
 <template>
-  <div class="add-card" 
-    v-bind:style="{backgroundColor: addCardColor}" 
-    @click="createCard">  
+    <div class="add-card" 
+        v-bind:style="{backgroundColor: addCardColor}" 
+        @click="createCard">  
     <transition name="cardTransition" mode="out-in">
-      <div v-if="createButton">
-        <fa class="plus-icon" icon="plus"></fa>
-      </div>
-      <div class="add-form" @click.stop v-else>
+        <div v-if="createButton">
+            <fa class="plus-icon" icon="plus"></fa>
+        </div>
+        <div class="add-form" @click.stop v-else>
         <WorkoutFormAdder/>
         <div class="divider"></div>
-        <button @click="collapseCard" >Cancel</button>
-        <button @click="collapseCard" >Save</button>
+        <button @click="collapseCard">Cancel</button>
+        <button @click="collapseCard">Save</button>
       </div>
     </transition>
-  </div>
+    </div>
 </template>
 
 <script>
