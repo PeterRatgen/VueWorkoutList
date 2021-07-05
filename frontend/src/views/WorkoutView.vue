@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="backgroundPressed()">
     <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
@@ -91,6 +91,9 @@ export default {
             console.log("workout" + workout)
             let exercise = workout["exerciseList"].find(ele => ele["name"] == data["name"])
             exercise["set"].push({repetitions : 0, weight : 0}) 
+        },
+        backgroundPressed() {
+            this.emitter.emit('pressed-background')
         }
     },
     computed : {
