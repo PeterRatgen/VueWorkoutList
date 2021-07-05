@@ -1,10 +1,27 @@
 <template> 
-    <span v-show="showWeight"> 
-        {{ repItem.weight }} kg x
-    </span>
-    <span class="item">
-        {{ repItem.repetitions }}
-    </span> 
+    <div @click.stop="editing = !editing">
+        <div v-if="editing">
+            <div class="item"> 
+                <fa icon=minus @click.stop="dec('weight')" ></fa>
+                {{ repItem.weight }} kg 
+                <fa icon=plus @click.stop="inc('weight')" ></fa>
+            </div>
+            <div class="item">
+                <fa icon=minus @click.stop="dec('reps')"></fa>
+                {{ repItem.repetitions }} reps
+                <fa icon=plus @click.stop="inc('reps')"></fa>
+            </div> 
+            
+        </div>
+        <div v-else>
+            <span v-show="showWeight"> 
+                {{ repItem.weight }} kg x
+            </span>
+            <span>
+                {{ repItem.repetitions }}
+            </span> 
+        </div>
+    </div>
 </template>
 
 <script>
@@ -42,6 +59,26 @@ export default {
     },
     printWeight() {
       console.log(this.repItem.weight)
+    },
+    inc(target) {
+        switch(target){
+            case "weight":
+                this.repItem.weight = this.repItem.weight + 1.25
+                break;
+            case "reps":
+                this.repItem.repetitions = this.repItem.repetitions  + 1.25
+                break;
+        }
+    },
+    dec(target){
+        switch(target){
+            case "weight":
+                this.repItem.weight = this.repItem.weight - 1.25
+                break;
+            case "reps":
+                this.repItem.repetitions = this.repItem.repetitions  - 1.25
+                break;
+        }
     }
   }
 }
@@ -52,6 +89,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
+
+.item {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    justify-content: space-between;
+    align-items: center;
+}
 
 @media only screen and (max-width: 1350px) {
   .item-header{
