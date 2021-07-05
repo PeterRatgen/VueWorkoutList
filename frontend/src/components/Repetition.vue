@@ -2,21 +2,21 @@
     <div @click.stop="repetition_click">
         <div v-if="editing">
             <div class="item"> 
-                <span class="icon-container">
-                    <fa class="icon" icon=minus @click.stop="dec('weight')" ></fa>
+                <span class="icon-container" @click.stop="dec('weight')">
+                    <fa class="icon" icon=minus  ></fa>
                 </span>
                 {{ repItem.weight }} kg 
-                <span class="icon-container">
-                    <fa class="icon" icon=plus @click.stop="inc('weight')" ></fa>
+                <span class="icon-container" @click.stop="inc('weight')">
+                    <fa class="icon" icon=plus  ></fa>
                 </span>
             </div>
             <div class="item">
-                <span class="icon-container">
-                    <fa class="icon" icon=minus @click.stop="dec('reps')"></fa>
+                <span class="icon-container" @click.stop="dec('reps')">
+                    <fa class="icon" icon=minus  ></fa>
                 </span>
                 {{ repItem.repetitions }} reps
-                <span class="icon-container">
-                    <fa class="icon" icon=plus @click.stop="inc('reps')"></fa>
+                <span class="icon-container" @click.stop="inc('reps')">
+                    <fa class="icon" icon=plus  ></fa>
                 </span>
             </div> 
             
@@ -105,7 +105,7 @@ export default {
 .item {
     display: flex;
     margin: auto;
-    width: 90%;
+    width: 95%;
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 0;
@@ -117,7 +117,7 @@ export default {
 
 .icon-container {
     display: flex;
-    width: 1rem;
+    width: 1.75rem;
     height: 2rem;
     justify-content: center;
     align-items: center;
