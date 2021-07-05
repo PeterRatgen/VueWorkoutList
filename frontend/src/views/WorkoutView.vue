@@ -90,7 +90,26 @@ export default {
             let workout = this.workouts.find(element => element["_id"] == data["id"])
             console.log("workout" + workout)
             let exercise = workout["exerciseList"].find(ele => ele["name"] == data["name"])
-            exercise["set"].push({repetitions : 0, weight : 0}) 
+            const length = exercise["set"].length
+            if (length > 1) {
+                const weight = exercise["set"][length - 1]["weight"];
+                const reps = exercise["set"][length - 1]["repetitions"];
+                exercise["set"].push({repetitions : reps, weight : weight}) 
+            } else {
+                exercise["set"].push({repetitions : 0, weight : 0}) 
+            }
+        },
+        changeRep(data){
+            console.log("chaning reps")
+            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
+            let exercise =  workout["exerciseList"][data["exerciseIndex"]]
+            let rep = exercise["set"][data["repIndex"]]
+            rep.repetitions = data["repItem"].repetitions
+            rep.weight = data["repItem"].weight
+            this.apiInstance.post('/workout/update', {
+                id: data["workoutId"],
+                exerciseList : this.workouts
+            })
         },
         backgroundPressed() {
             console.log("Pressed background")
@@ -113,6 +132,7 @@ export default {
     },
     mounted() {
         this.emitter.on('new-repetition', this.addRepetition)
+        this.emitter.on('completed-rep-edit', this.changeRep)
     }
 }
 

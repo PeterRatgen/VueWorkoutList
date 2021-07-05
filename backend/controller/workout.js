@@ -88,4 +88,19 @@ exports.workout_post_rename =  function(req, res) {
 
 }
 
+exports.workout_post_update_exercise = function(req, res) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+		if (err) throw err;
+		let dbase = db.db("workout_db");
+		dbase.collection("workouts").updateOne({ _id: ObjectId(req.body.id)}, {$set : { exerciseList : req.body.exerciseList}}, function(err, result) {
+			if (err) throw err;
+			console.log("1 document inserted");
+			console.log(result.body)
+			db.close();
+		});
+	});
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.send("document modified: " + req.body);
+}
+
 
