@@ -21,8 +21,12 @@
         </div>
         <div v-else class="description-expand">
             <div class="repetition-container">
-                <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
-                    <Repetition  v-bind:repetition="rep"/>
+                <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
+                    <Repetition  
+                        v-bind:repetition="rep"
+                        v-bind:index="index"
+                        v-on:completed-rep-edit="repChange"
+                    />
                 </div>
                 <div class="repetition add-repetition"> 
                     <NewRepetition
@@ -42,8 +46,8 @@ import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
   name: "ExerciseItem",
-  props: ["exerciseItem", "edit"],
-  emits: ["exercise-item", 'new-repetition'],
+  props: ["exerciseItem", "index"],
+  emits: ['new-repetition', 'completed-rep-edit'],
   components: {
     Repetition,
     InputField,
@@ -57,28 +61,33 @@ export default {
       nameEdit: ''
     }
   }, 
-  methods : {
-    expand_card() {
-      if (this.contracted) {
-            console.log("expanding card")
-            this.contracted = false
-      } else {
-            this.contracted = true
-      }
-      this.emitter.emit('pressed-exerciseItem')
+    methods : {
+        expand_card() {
+          if (this.contracted) {
+                console.log("expanding card")
+                this.contracted = false
+          } else {
+                this.contracted = true
+          }
+          this.emitter.emit('pressed-exerciseItem')
+        },
+        titleSubmitEdit(result) {
+            this.nameEdit = false
+            this.$emit('exercise-item', this.exerciseItem, result)
+        },
+        titleEditEnd() {
+            this.nameEdit = false 
+        },
+        repChange(repItem, index) {
+            this.$emit('completed-rep-edit', repItem, index, this.index)             
+        }
     },
-    titleSubmitEdit(result) {
-        this.nameEdit = false
-        this.$emit('exercise-item', this.exerciseItem, result)
+    created() {
+        this.ex = this.exerciseItem;
+        this.nameEdit = this.edit;
     },
-    titleEditEnd() {
-        this.nameEdit = false 
+    mounted() {
     }
-  },
-  created() {
-    this.ex = this.exerciseItem;
-    this.nameEdit = this.edit;
-  }
 }
   
 
@@ -90,6 +99,7 @@ export default {
 
 .repetition-container {
     display: flex;
+    align-items: center;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
@@ -108,6 +118,7 @@ export default {
     padding: 0.35rem;
     justify-content: center;
     align-items: center;
+    height: fit-content;
 }
 
 .add-repetition {

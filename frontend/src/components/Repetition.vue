@@ -1,5 +1,6 @@
 <template> 
     <div class="rep-container" @click.stop="repetition_click()">
+        <transition name="fade" mode="out-in">
         <div v-if="editing">
             <div class="item"> 
                 <span class="icon-container" @click.stop="dec('weight')">
@@ -29,6 +30,7 @@
                 {{ repItem.repetitions }}
             </span> 
         </div>
+        </transition>
     </div>
 </template>
 
@@ -36,7 +38,8 @@
 
 export default {
     name: "Repetition",
-    props: ["repetition"],
+    props: ["repetition", "index"],
+    emits : ["completed-rep-edit"],
     data () {
         return {
             showWeight: false,
@@ -102,6 +105,7 @@ export default {
             } else {
                 this.editing = false;
             }
+            this.$emit('completed-rep-edit', this.repItem, this.index)
         }
     }
 }
@@ -136,6 +140,24 @@ export default {
 
 .rep-container {
     width: 100%;
+}
+
+.fade-enter-active {
+    animation: move-list 0.4s linear;
+}
+
+.fade-leave-active {
+    animation: move-list 0.4s linear reverse;
+}
+@keyframes move-list {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 600px;
+    opacity: 1;
+  }
 }
 
 @media only screen and (max-width: 1350px) {

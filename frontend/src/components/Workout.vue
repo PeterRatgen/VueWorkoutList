@@ -26,10 +26,12 @@
         </p>
       </div>
       <div v-else class="description-expand">
-        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
+        <div v-bind:key="exercise" v-for="(exercise, index) in workout.exerciseList">
           <ExerciseItem 
-            v-bind:exerciseItem="exercise"
+            :exerciseItem="exercise"
+            :index="index"
             v-on:new-repetition="newRepetition"
+            v-on:completed-rep-edit="changeRep"
         /> 
         </div>
       </div>
@@ -105,6 +107,16 @@ export default {
         newRepetition(name){
             console.log(JSON.stringify(this.workout._id))
             this.emitter.emit('new-repetition', {name : name, id : this.workout._id}) 
+        },
+        changeRep(repItem, repIndex, exerciseIndex) {
+            this.emitter.emit('completed-rep-edit', 
+                {
+                    repItem : repItem, 
+                    repIndex : repIndex,
+                    exerciseIndex: exerciseIndex,
+                    workoutId: this.workout._id
+                }
+            )
         }
     },
     created() {
