@@ -85,7 +85,12 @@ export default {
             let index = this.workouts.indexOf(ele)
             this.workouts.splice(index, 1)
         },
-        addRepetition(setName, id){
+        addRepetition(data){
+            console.log("adding rep " + data["name"]+ " " + data["id"] )
+            let workout = this.workouts.find(element => element["_id"] == data["id"])
+            console.log("workout" + workout)
+            let exercise = workout["exerciseList"].find(ele => ele["name"] == data["name"])
+            exercise["set"].push({repetitions : 0, weight : 0}) 
         }
     },
     computed : {
@@ -101,6 +106,9 @@ export default {
     },
     created() {
         this.init()
+    },
+    mounted() {
+        this.emitter.on('new-repetition', this.addRepetition)
     }
 }
 

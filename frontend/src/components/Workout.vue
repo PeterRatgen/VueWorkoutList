@@ -29,7 +29,7 @@
         <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
           <ExerciseItem 
             v-bind:exerciseItem="exercise"
-            v-on:new-repetition="this.$emit('new-repetition', name, workout._id)"
+            v-on:new-repetition="newRepetition"
         /> 
         </div>
       </div>
@@ -99,6 +99,10 @@ export default {
         editEnd(){
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
+        },
+        newRepetition(name){
+            console.log(JSON.stringify(this.workout._id))
+            this.emitter.emit('new-repetition', {name : name, id : this.workout._id}) 
         }
     }
 }
