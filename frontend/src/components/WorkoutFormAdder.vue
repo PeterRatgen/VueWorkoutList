@@ -1,40 +1,55 @@
 <template>
-  <div class="flex-box">
-    <input class="header-input" 
-    type="text" 
-    v-model="workoutHeader" 
-    placeholder="Titel" 
-    @blur="checkHeader"/>
-    <datepicker class="datepicker" v-model="picked"/>
-  </div>
-  <div class="divider"></div>
-  <div class="add-exercise-button">
-    <fa class="plus-icon" icon="plus"></fa>
-  </div>
+    <div class="flex-box">
+        <input class="header-input" 
+        type="text" 
+        v-model="workoutHeader" 
+        placeholder="Titel" 
+        @blur="checkHeader"/>
+    </div>
+    <div class="divider"></div>
+    <div v-bind:key="exercise" v-for="exercise in exerciseList" >
+        <ExerciseItem 
+            v-bind:exerciseItem="exercise"
+            v-bind:edit="exercise.edit"
+            v-on:exercise-item="addName"
+        /> 
+    </div>
+    <div class="add-exercise-button" @click.stop="addItem">
+        <fa class="plus-icon" icon="plus"></fa>
+    </div>
 </template>
 
 
 <script>
-import Datepicker from 'vue3-datepicker' 
-import { ref } from 'vue'
+import ExerciseItem from './ExerciseItem.vue' ;
+
 
 export default {
-  name: "WorkoutFormAdder",
-  components : {
-    Datepicker   
-  },
-  created() {
-    this.picked = ref(new Date())
-  },
-  data() {
-    return {
-      workoutHeader : '',
-      picked : ''
-    }
-  },
+    name: "WorkoutFormAdder",
+    components : {
+        ExerciseItem
+    },
+    created() {
+    },
+    data() {
+        return {
+            workoutHeader : '',
+            picked : '',
+            exerciseList: []
+        }
+    },
   methods: {
     checkHeader() {
       console.log(this.workoutHeader)
+    },
+    addItem() {
+        console.log("pusing")
+        this.exerciseList.push({ edit: true, name: "", set: []})
+        console.log(this.exerciseList)
+    },
+    addName(item, newName) {
+        let ele = this.exerciseList.find(element => element == item) 
+        ele.name = newName
     }
   }
 }

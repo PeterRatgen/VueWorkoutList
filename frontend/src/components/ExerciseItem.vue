@@ -2,7 +2,16 @@
     <div class="divder"></div>
     <div class="name" @click.stop="expand_card">
         <div class="item-header">
-            <h4> {{ exerciseItem.name }}</h4>    
+            <div v-if="nameEdit" >
+                <InputField
+                    :startEdit="nameEdit"   
+                    v-on:result="titleSubmitEdit"
+                    v-on:stop-edit="titleEditEnd"
+                />
+            </div>
+            <div v-else>
+                <h4> {{ exerciseItem.name }}</h4>    
+            </div>
             <span> {{ exerciseItem.set.length }} sæt</span>
         </div>
     <transition name="fade" mode="out-in">
@@ -21,18 +30,22 @@
 
 <script>
 import Repetition from './Repetition'
+import InputField from "./input_field/InputField";
 
 export default {
   name: "ExerciseItem",
-  props: ["exerciseItem"],
+  props: ["exerciseItem", "edit"],
+  emits: ["exercise-item"],
   components: {
-    Repetition
+    Repetition,
+    InputField
   },
   data () {
     return {
       ex: '',
       showWeight: false,
-      contracted: true
+      contracted: true,
+      nameEdit: ''
     }
   }, 
   methods : {
@@ -43,10 +56,19 @@ export default {
       } else {
             this.contracted = true
       }
+    },
+    titleSubmitEdit(result) {
+        this.nameEdit = false
+        this.$emit('exercise-item', this.exerciseItem, result)
+    },
+    titleEditEnd() {
+        this.nameEdit = false 
     }
   },
   created() {
     this.ex = this.exerciseItem;
+    this.nameEdit = this.edit;
+    console.log("editing " + this.nameEdit)
   }
 }
   
