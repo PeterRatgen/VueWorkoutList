@@ -39,7 +39,7 @@ import HoverMenu from "./HoverMenu/HoverMenu.vue"
 export default {
     name: "Workout",
     props: ["workout"],
-    emits: ["title-change"],
+    emits: ["title-change", 'delete-workout'],
     components: {
         ExerciseItem,
         HoverMenu
@@ -95,14 +95,12 @@ export default {
         handleOption(item){
             switch(item) {
                 case "Change title":
-                    console.log("changing the title")
                     this.renameTitle()        
                     break;
                 case "Delete workout":
-                    console.log("deleting the workout")
+                    this.$emit('delete-workout', this.workout._id)
                     break;
             }
-            console.log("this item is " + item)
         }
     }
 }

@@ -67,7 +67,7 @@ exports.workout_delete = function(req, res) {
 
 
 exports.workout_post_rename =  function(req, res) {
-    console.log(req.body)
+    console.log(req)
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");

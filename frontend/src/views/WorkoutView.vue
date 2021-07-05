@@ -6,6 +6,7 @@
         <WorkoutList 
             v-bind:workouts="workouts" 
             v-on:title-change="titleChange"
+            v-on:delete-workout="deleteWorkout"
         />
         <AddWorkout/>
       </div>
@@ -68,15 +69,6 @@ export default {
             const response = await this.apiInstance.get('/workout')
             this.workouts = JSON.parse(response.request.response)
         },
-        addTodo(newTodo) {
-            const { title, completed } = newTodo;
-                axios.post('https://jsonplaceholder.typicode.com/todos', {
-                title,
-                completed
-            })
-            .then(res => this.todos = [...this.todos, res.data])
-            .catch(err => console.log(err));
-        },
         titleChange(workoutId, newName){
             this.apiInstance.post('/workout/rename',
                 {
@@ -86,6 +78,12 @@ export default {
             )
             let ele = this.workouts.find(element => element["_id"] == workoutId)
             ele["title"] = newName
+        },
+        deleteWorkout(workoutId) {
+            this.apiInstance.post('/workout/' + workoutId )
+            let ele = this.workouts.find(element => element["_id"] == workoutId)
+            let index = this.workouts.indexOf(ele)
+            this.workouts.splice(index, 1)
         }
     },
     computed : {
