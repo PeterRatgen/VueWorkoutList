@@ -25,7 +25,9 @@
                     <Repetition  v-bind:repetition="rep"/>
                 </div>
                 <div class="repetition add-repetition"> 
-                    <NewRepetition/>
+                    <NewRepetition
+                        v-on:new-repetition="this.$emit('new-repetition', exerciseItem.name)"
+                    />
                 </div>
             </div>
         </div>
@@ -41,7 +43,7 @@ import NewRepetition from "./repetitions/NewRepetition"
 export default {
   name: "ExerciseItem",
   props: ["exerciseItem", "edit"],
-  emits: ["exercise-item"],
+  emits: ["exercise-item", 'new-repetition'],
   components: {
     Repetition,
     InputField,

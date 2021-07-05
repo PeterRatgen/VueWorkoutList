@@ -16,7 +16,8 @@ export default {
     return {
       showWeight: false,
       alignment: 'left',
-      repItem: ''
+      repItem: '',
+        editing: false
     }
   }, 
   created() {
