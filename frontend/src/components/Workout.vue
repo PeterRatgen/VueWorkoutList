@@ -73,6 +73,7 @@ export default {
             } else {
                 this.contracted = true
             }
+            console.log("")
             this.emitter.emit('pressed-workout')
         },
         renameTitle(){
@@ -105,6 +106,11 @@ export default {
             console.log(JSON.stringify(this.workout._id))
             this.emitter.emit('new-repetition', {name : name, id : this.workout._id}) 
         }
+    },
+    created() {
+        this.emitter.on('pressed-background', () => {
+            this.contracted = true;
+        })
     }
 }
 </script>
