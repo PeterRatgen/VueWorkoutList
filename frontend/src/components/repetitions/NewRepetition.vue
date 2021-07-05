@@ -26,7 +26,7 @@ export default {
 
   .add-exercise-button {
     background-color: lighten($accent-color, 5%); 
-    margin: auto;
+    width: 100%;
     border-radius: 3px;
     display: block;
     height: 2.15rem;

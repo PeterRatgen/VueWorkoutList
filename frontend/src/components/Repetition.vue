@@ -1,5 +1,5 @@
 <template> 
-    <div @click.stop="repetition_click()">
+    <div class="rep-container" @click.stop="repetition_click()">
         <div v-if="editing">
             <div class="item"> 
                 <span class="icon-container" @click.stop="dec('weight')">
@@ -93,10 +93,15 @@ export default {
             }
         },
         repetition_click(){
+            let oldEdit = this.editing;
             this.editing = !this.editing
             this.emitter.emit('pressed-repetition')
             console.log("Pressed the repetition")
-            this.editing = true;
+            if (oldEdit == false) {
+                this.editing = true;
+            } else {
+                this.editing = false;
+            }
         }
     }
 }
@@ -127,6 +132,10 @@ export default {
     height: 2rem;
     justify-content: center;
     align-items: center;
+}
+
+.rep-container {
+    width: 100%;
 }
 
 @media only screen and (max-width: 1350px) {

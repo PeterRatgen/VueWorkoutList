@@ -97,6 +97,7 @@ export default {
 }
 
 .repetition {
+    display: flex;
     width: calc(33.3% - 0.3rem * 2);
     box-sizing: border-box;
     border: 1px solid darken($divider-color, 10%);
@@ -105,6 +106,8 @@ export default {
     margin-left: 0.3rem;
     margin-right: 0.3rem;
     padding: 0.35rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .add-repetition {
