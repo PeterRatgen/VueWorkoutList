@@ -3,11 +3,11 @@
     <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
     <div class="flex-container">
         <h3 id="title">{{ workout.title }}</h3>
-        <div class="title-editor" id="titleEditor">
-            <input ref="titleInput" class="title-input" type="text">
-            <span class="icon" @click.stop="acceptEdit"><fa class="" icon="check" ></fa></span>
-            <span class="icon" @click.stop ="stopEditing"><fa class="cross" icon="plus" ></fa></span>
-        </div>
+        <InputField 
+            :startEdit="editingTitle"   
+            v-on:result="submitEdit"
+            v-on:stop-edit="editEnd"
+        />
         <fa class="dots" icon="ellipsis-v" 
             @click.stop="displayHover = true"></fa>
         <HoverMenu 
@@ -35,6 +35,7 @@
 <script>
 import ExerciseItem from "./ExerciseItem"
 import HoverMenu from "./HoverMenu/HoverMenu.vue"
+import InputField from "./input_field/InputField.vue";
 
 export default {
     name: "Workout",
@@ -42,7 +43,8 @@ export default {
     emits: ["title-change", 'delete-workout'],
     components: {
         ExerciseItem,
-        HoverMenu
+        HoverMenu,
+        InputField
     },
     data () {
     return {
@@ -71,26 +73,10 @@ export default {
             if (!this.editingTitle) {
                 let title_element = this.$el.querySelector("#title")
                 title_element.style.display = "none"
-                let title_editor = this.$el.querySelector("#titleEditor")
-                title_editor.style.display = "flex"
                 this.editingTitle = true
                 this.displayHover = false
-                this.$refs.titleInput.focus()
             }
             console.log("State of editingTtle " + this.editingTitle)
-        },
-        stopEditing() {
-            let title_element = this.$el.querySelector("#title")
-            title_element.style.display = "block"
-            let title_editor = this.$el.querySelector("#titleEditor")
-            title_editor.style.display = "none"
-            this.editingTitle = false
-        },
-        acceptEdit(){
-                const editValue = this.$refs.titleInput.value
-                console.log("Edit value " + editValue)
-                this.$emit('title-change', this.workout._id, editValue)
-                this.stopEditing();
         },
         handleOption(item){
             switch(item) {
@@ -101,6 +87,13 @@ export default {
                     this.$emit('delete-workout', this.workout._id)
                     break;
             }
+        },
+        submitEdit(result) {
+            this.$emit('title-change', this.workout._id, result)
+        },
+        editEnd(){
+            let title_element = this.$el.querySelector("#title")
+            title_element.style.display = "block"
         }
     }
 }
@@ -156,31 +149,6 @@ export default {
   top: 0px;
   left: 0px;
 }
-
-.title-editor {
-    display: none;
-    align-items: center;
-    width: 80%;
-
-    .title-input {
-        font-weight: 700;
-        font-size: 1.3rem;
-        border: none;
-        width: 80%;
-    }
-
-    .cross {
-        transform: rotate(45deg);
-    }
-
-}
-
-.icon {
-    display: inline-block;
-    width: 2.5rem;
-    transform: scale(1.2);
-}
-
 
 .fade-enter-active {
   animation: move-list 0.4s linear;

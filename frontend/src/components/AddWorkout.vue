@@ -24,6 +24,7 @@ export default {
   components : {
     WorkoutFormAdder
   },
+  emits: ["new-workout"],
   data() {
     return {
       title: '',
