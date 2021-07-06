@@ -12,10 +12,10 @@ exports.workout_post = function(req, res) {
 		res.send("Include title in workout object")
 	}
 
-	if ('dueDate' in workout_log === false) {
-		res.status(400);
-		res.send("Include dueDate in workout object")
-	}
+    if ('exerciseList' in workout_log === false ) {
+        res.status(400);
+        res.send("Include sets in post")
+    }
 
 	let date = new Date();
 	workout_log["dateCreated"] = date.valueOf();
