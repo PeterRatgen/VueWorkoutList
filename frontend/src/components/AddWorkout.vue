@@ -7,11 +7,14 @@
             <fa class="plus-icon" icon="plus"></fa>
         </div>
         <div class="add-form" @click.stop v-else>
-        <WorkoutFormAdder/>
-        <div class="divider"></div>
-        <button @click="collapseCard">Cancel</button>
-        <button @click="collapseCard">Save</button>
-      </div>
+            <WorkoutFormAdder
+                :exerciseList="exerciseList"
+                v-on:add-item="addItem"
+                v-on:add-name="addName"
+            />
+            <button @click="collapseCard">Cancel</button>
+            <button @click="submitWorkout">Save</button>
+        </div>
     </transition>
     </div>
 </template>
@@ -30,6 +33,8 @@ export default {
       title: '',
       createButton: true,
       addCardColor : '#efefef',
+        exerciseList: []
+
     }
   },
   methods: {
@@ -44,7 +49,34 @@ export default {
         this.createButton = true;
         this.addCardColor = "#fff"
       }
+    },
+    newRepetition(name){
+        let exercise = this.exerciseList.find(ele => ele["name"] == name)
+        const length = exercise["set"].length
+        if (length > 1) {
+            const weight = exercise["set"][length - 1]["weight"];
+            const reps = exercise["set"][length - 1]["repetitions"];
+            exercise["set"].push({repetitions : reps, weight : weight}) 
+        } else {
+            exercise["set"].push({repetitions : 0, weight : 0}) 
+        }
+    },
+    addItem() {
+        console.log("pusing")
+        this.exerciseList.push({ name: "", set: []})
+        console.log(this.exerciseList)
+    },
+    addName(data) {
+        let ele = this.exerciseList.find(element => element == data["oldItem"]) 
+        ele.name = data["title"] 
+    },
+    submitWorkout() {
+        this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
     }
+  },
+  mounted() {
+        this.emitter.on('exercise-name', this.addName)
+        this.emitter.on('workout-header', (data) => {this.title = data})
   }
 }
 </script>

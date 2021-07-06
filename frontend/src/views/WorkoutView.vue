@@ -114,6 +114,10 @@ export default {
         backgroundPressed() {
             console.log("Pressed background")
             this.emitter.emit('pressed-background')
+        },
+        async submitWorkout(data) {
+            const res = await this.apiInstance.post('/workout', data)
+            console.log(res)
         }
     },
     computed : {
@@ -133,6 +137,7 @@ export default {
     mounted() {
         this.emitter.on('new-repetition', this.addRepetition)
         this.emitter.on('completed-rep-edit', this.changeRep)
+        this.emitter.on('submit-new-workout', this.submitWorkout)
     }
 }
 

@@ -6,17 +6,16 @@
         placeholder="Titel" 
         @blur="checkHeader"/>
     </div>
-    <div class="divider"></div>
+    <div class="divider" v-show="exerciseList == 0"></div>
     <div v-bind:key="exercise" v-for="(exercise, index) in exerciseList" >
         <ExerciseItem 
             :exerciseItem="exercise"
             :index="index"
             :edit="true"
-            v-on:exercise-item="addName"
-            v-on:new-repetition="newRepetition"
+            v-on:new-repetition="$emit('new-repetition')"
         /> 
     </div>
-    <div class="add-exercise-button" @click.stop="addItem">
+    <div class="add-exercise-button" @click.stop="$emit('add-item')">
         <fa class="plus-icon" icon="plus"></fa>
     </div>
 </template>
@@ -31,40 +30,20 @@ export default {
     components : {
         ExerciseItem
     },
+    props: ['exerciseList'],
+    emits: ['add-item', 'add-name', 'new-repetition'],
     created() {
     },
     data() {
         return {
             workoutHeader : '',
-            picked : '',
-            exerciseList: []
+            picked : ''        }
+    },
+    methods: {
+        checkHeader() {
+            this.emitter.emit('workout-header', this.workoutHeader)
         }
-    },
-  methods: {
-    checkHeader() {
-      console.log(this.workoutHeader)
-    },
-    newRepetition(name){
-        let exercise = this.exerciseList.find(ele => ele["name"] == name)
-        const length = exercise["set"].length
-        if (length > 1) {
-            const weight = exercise["set"][length - 1]["weight"];
-            const reps = exercise["set"][length - 1]["repetitions"];
-            exercise["set"].push({repetitions : reps, weight : weight}) 
-        } else {
-            exercise["set"].push({repetitions : 0, weight : 0}) 
-        }
-    },
-    addItem() {
-        console.log("pusing")
-        this.exerciseList.push({ name: "", set: []})
-        console.log(this.exerciseList)
-    },
-    addName(item, newName) {
-        let ele = this.exerciseList.find(element => element == item) 
-        ele.name = newName
     }
-  }
 }
 
 </script>
@@ -77,6 +56,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-bottom: 1rem;
     
 
     .header-input {

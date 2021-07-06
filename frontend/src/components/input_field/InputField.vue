@@ -57,7 +57,6 @@ export default {
 .title-editor {
     display: none;
     align-items: center;
-    width: 80%;
 
     .title-input {
         border: none;

@@ -23,11 +23,11 @@
             
         </div>
         <div v-else>
-            <span v-show="showWeight"> 
-                {{ repItem.weight }} kg x
+            <span v-if="repItem.weight > 0"> 
+                {{ repItem.weight }} kg x {{ repItem.repetitions }}
             </span>
-            <span>
-                {{ repItem.repetitions }}
+            <span v-else>
+                {{ repItem.repetitions }} reps
             </span> 
         </div>
         </transition>
@@ -143,11 +143,11 @@ export default {
 }
 
 .fade-enter-active {
-    animation: move-list 0.4s linear;
+    animation: move-list 0.2s linear;
 }
 
 .fade-leave-active {
-    animation: move-list 0.4s linear reverse;
+    animation: move-list 0.2s linear reverse;
 }
 @keyframes move-list {
   0% {

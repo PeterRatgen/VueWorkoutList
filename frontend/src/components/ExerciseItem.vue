@@ -73,7 +73,7 @@ export default {
         },
         titleSubmitEdit(result) {
             this.nameEdit = false
-            this.$emit('exercise-item', this.exerciseItem, result)
+            this.emitter.emit('exercise-name', { oldItem :  this.exerciseItem, title : result })
         },
         titleEditEnd() {
             this.nameEdit = false 
@@ -150,7 +150,7 @@ h4 {
 }
 
 .fade-enter-active {
-  animation: move-list 0.4s linear;
+  animation: move-list 0.2s linear;
 }
 
 .fade-leave-active {
