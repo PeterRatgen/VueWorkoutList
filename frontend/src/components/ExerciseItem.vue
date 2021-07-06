@@ -46,7 +46,7 @@ import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
   name: "ExerciseItem",
-  props: ["exerciseItem", "index"],
+  props: ["exerciseItem", "index", "edit"],
   emits: ['new-repetition', 'completed-rep-edit'],
   components: {
     Repetition,

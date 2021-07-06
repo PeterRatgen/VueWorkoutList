@@ -106,9 +106,9 @@ export default {
             let rep = exercise["set"][data["repIndex"]]
             rep.repetitions = data["repItem"].repetitions
             rep.weight = data["repItem"].weight
-            this.apiInstance.post('/workout/update', {
+            this.apiInstance.post('/workout/update_exercise', {
                 id: data["workoutId"],
-                exerciseList : this.workouts
+                exerciseList : workout["exerciseList"]
             })
         },
         backgroundPressed() {
