@@ -26,12 +26,11 @@ exports.workout_post = function(req, res) {
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").insertOne(workout_log, function(err, result) {
 			if (err) throw err;
-            console.log(result["insertedId"])
+            res.send(result["insertedId"])
 			db.close();
 		});
 	});
 	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document inserted: " + req.body);
 }
 
 exports.workout_get = function(req, res) {
