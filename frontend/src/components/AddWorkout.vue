@@ -11,9 +11,11 @@
                 :exerciseList="exerciseList"
                 v-on:add-item="addItem"
                 v-on:add-name="addName"
+                v-on:new-repetition="newRepetition"
             />
-            <button @click="collapseCard">Cancel</button>
-            <button @click="submitWorkout">Save</button>
+            <div class="divider"></div>
+            <button class="button" @click="collapseCard">Cancel</button>
+            <button class="button" @click="submitWorkout">Save</button>
         </div>
     </transition>
     </div>
@@ -51,6 +53,7 @@ export default {
       }
     },
     newRepetition(name){
+        console.log("The name of the new rep is " + name)
         let exercise = this.exerciseList.find(ele => ele["name"] == name)
         const length = exercise["set"].length
         if (length > 1) {
@@ -67,16 +70,24 @@ export default {
         console.log(this.exerciseList)
     },
     addName(data) {
+        console.log("Data" + JSON.stringify(data) + " " + "set the name ")
         let ele = this.exerciseList.find(element => element == data["oldItem"]) 
         ele.name = data["title"] 
     },
     submitWorkout() {
         this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
+        this.title = ''
+        this.exerciseList = []
+        this.createButton = true
+    },
+    titleEditEnd(index) {
+        this.exerciseList.splice(index, 1) 
     }
   },
   mounted() {
         this.emitter.on('exercise-name', this.addName)
         this.emitter.on('workout-header', (data) => {this.title = data})
+        this.emitter.on('title-edit-end', this.titleEditEnd)
   }
 }
 </script>
@@ -98,6 +109,10 @@ export default {
   .divider {
     @include divider;
     margin: 1rem 0;
+  }
+
+  .button {
+    @include button;
   }
     
   .cardTransition-enter-active {

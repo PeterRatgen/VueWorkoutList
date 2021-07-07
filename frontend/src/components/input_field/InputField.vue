@@ -24,7 +24,9 @@ export default {
         acceptEdit(){
             const editValue = this.$refs.titleInput.value
             this.$emit('result', editValue)
-            this.stopEditing();
+            let title_editor = this.$el
+            title_editor.style.display = "none"
+            this.editingTitle = false
         },
         startEditing(){
             let title_editor = this.$el

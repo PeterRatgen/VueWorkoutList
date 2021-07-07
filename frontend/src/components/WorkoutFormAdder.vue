@@ -4,7 +4,7 @@
         type="text" 
         v-model="workoutHeader" 
         placeholder="Titel" 
-        @blur="checkHeader"/>
+        @input="checkHeader"/>
     </div>
     <div class="divider" v-show="exerciseList == 0"></div>
     <div v-bind:key="exercise" v-for="(exercise, index) in exerciseList" >
@@ -12,7 +12,8 @@
             :exerciseItem="exercise"
             :index="index"
             :edit="true"
-            v-on:new-repetition="$emit('new-repetition')"
+            v-on:new-repetition="newRepetition"
+            v-on:title-edit-end="titleEditEnd"
         /> 
     </div>
     <div class="add-exercise-button" @click.stop="$emit('add-item')">
@@ -41,7 +42,15 @@ export default {
     },
     methods: {
         checkHeader() {
+            console.log("entered cher in header")
             this.emitter.emit('workout-header', this.workoutHeader)
+        },
+        newRepetition(name) {
+            this.$emit('new-repetition', name)
+        },
+        titleEditEnd() {
+            this.nameEdit = false 
+            this.emitter.emit('title-edit-end', this.index)
         }
     }
 }

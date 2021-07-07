@@ -5,50 +5,68 @@ $text-color: #2c3e50;
 $background-color: #EFEFEF; 
 
 @mixin workout-card {
-  padding: 1.5rem 1.5rem;
-  border-radius: 8px;
-  margin: 10px 0;
-  background: #fff;
-  box-sizing: border-box;
-  width: 100%;
-  overflow: hidden;
-  box-shadow: 4px 2px 8px #b2b2b2;
+    padding: 1.5rem 1.5rem;
+    border-radius: 8px;
+    margin: 10px 0;
+    background: #fff;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 4px 2px 8px #b2b2b2;
 
-  h3 {
-    font-weight: 700; 
-    text-align: left;
-    font-size: 1.3rem;
-  }
+    h3 {
+        font-weight: 700; 
+        text-align: left;
+        font-size: 1.3rem;
+    }
 }
 
 @mixin input-field { 
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 2px solid #d1d1d1;
-  outline: none;
-
-  &:focus {
-    outline: none;
+    box-sizing: border-box;
     border: none;
-    border-bottom: 2px solid lighten($accent-color, 20%);
-    background-color: #fff;
+    border-bottom: 2px solid #d1d1d1;
+    outline: none;
+
+    &:focus {
+        outline: none;
+        border: none;
+        border-bottom: 2px solid lighten($accent-color, 20%);
+        background-color: #fff;
     }
 }
 
 @mixin divider { 
-  height: 80%;
-  border-top: 1.5px solid $divider-color;
+    height: 80%;
+    border-top: 1.5px solid $divider-color;
+}
+
+@mixin button {
+    border: 2px solid lighten($accent-color, 5%); 
+    padding: 0.35rem;
+    background-color: #fff;
+    border-radius: 4px;
+    margin: 0 0.5rem;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    color:  $text-color;
+    outline: none;
+
+    &:hover {
+        transition: all 200ms linear;
+        background-color: lighten($accent-color, 5%); 
+        color: #fff;
+    }
 }
 
 
 .v3dp__popout {
-  position: fixed !important; 
+    position: fixed !important; 
 }
 
 input.datepicker {
-  @include input-field;
-  text-align: right;
-  max-width: 4.5rem;
+    @include input-field;
+    text-align: right;
+    max-width: 4.5rem;
 }
 
 

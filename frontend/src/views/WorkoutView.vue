@@ -117,7 +117,8 @@ export default {
         },
         async submitWorkout(data) {
             const res = await this.apiInstance.post('/workout', data)
-            console.log(res)
+            data._id =  res.data
+            this.workouts.push(data)
         }
     },
     computed : {
@@ -186,6 +187,14 @@ body {
   margin: 0 auto;
 }
 
+@media only screen and (max-width: 1400px) {
+  .todo-block {
+    width: 60%;
+  }
+  .hello-header {
+    width: 60%;
+  }
+}
 
 
 @media only screen and (max-width: 1000px) {

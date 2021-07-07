@@ -30,7 +30,7 @@
                 </div>
                 <div class="repetition add-repetition"> 
                     <NewRepetition
-                        v-on:new-repetition="this.$emit('new-repetition', exerciseItem.name)"
+                        v-on:new-repetition="newRepetition"
                     />
                 </div>
             </div>
@@ -47,7 +47,7 @@ import NewRepetition from "./repetitions/NewRepetition"
 export default {
   name: "ExerciseItem",
   props: ["exerciseItem", "index", "edit"],
-  emits: ['new-repetition', 'completed-rep-edit'],
+  emits: ['new-repetition', 'completed-rep-edit', 'title-edit-end'],
   components: {
     Repetition,
     InputField,
@@ -74,12 +74,17 @@ export default {
         titleSubmitEdit(result) {
             this.nameEdit = false
             this.emitter.emit('exercise-name', { oldItem :  this.exerciseItem, title : result })
+            this.contracted = false
         },
         titleEditEnd() {
             this.nameEdit = false 
+            this.$emit('title-edit-end', this.index)
         },
         repChange(repItem, index) {
             this.$emit('completed-rep-edit', repItem, index, this.index)             
+        },
+        newRepetition() {
+            this.$emit('new-repetition', this.exerciseItem.name)
         }
     },
     created() {
