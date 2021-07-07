@@ -26,7 +26,7 @@ exports.workout_post = function(req, res) {
 		let dbase = db.db("workout_db");
 		dbase.collection("workouts").insertOne(workout_log, function(err, result) {
 			if (err) throw err;
-            console.log(result)
+            console.log(result["insertedId"])
 			db.close();
 		});
 	});
