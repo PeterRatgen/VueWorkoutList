@@ -119,6 +119,24 @@ export default {
             const res = await this.apiInstance.post('/workout', data)
             data._id =  res.data
             this.workouts.push(data)
+        },
+        changeExerciseName(data) {
+            console.log("Changing exercise name")
+            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
+            let exercise =  workout["exerciseList"][data["exerciseIndex"]]
+            exercise.name = data["name"]
+            this.apiInstance.post('/workout/update_exercise', {
+                id: data["workoutId"],
+                exerciseList : workout["exerciseList"]
+            })
+        },
+        deleteExercise(data) {
+            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
+            workout["exerciseList"].splice(data["exerciseIndex"], 1)
+            this.apiInstance.post('/workout/update_exercise', {
+                id: data["workoutId"],
+                exerciseList : workout["exerciseList"]
+            })
         }
     },
     computed : {
@@ -139,6 +157,8 @@ export default {
         this.emitter.on('new-repetition', this.addRepetition)
         this.emitter.on('completed-rep-edit', this.changeRep)
         this.emitter.on('submit-new-workout', this.submitWorkout)
+        this.emitter.on('exercise-name-change', this.changeExerciseName)
+        this.emitter.on('delete-exercise', this.deleteExercise)
     }
 }
 

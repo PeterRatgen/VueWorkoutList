@@ -14,25 +14,28 @@
             :edit="true"
             v-on:new-repetition="newRepetition"
             v-on:title-edit-end="titleEditEnd"
+            v-on:exercise-name="changeExerciseName"
         /> 
     </div>
-    <div class="add-exercise-button" @click.stop="$emit('add-item')">
-        <fa class="plus-icon" icon="plus"></fa>
-    </div>
+    <NewExercise
+        v-on:add-item ="$emit('add-item')" 
+    />
 </template>
 
 
 <script>
-import ExerciseItem from './ExerciseItem.vue' ;
+import ExerciseItem from './ExerciseItem.vue';
+import NewExercise from './NewExercise.vue';
 
 
 export default {
     name: "WorkoutFormAdder",
     components : {
-        ExerciseItem
+        ExerciseItem,
+        NewExercise
     },
     props: ['exerciseList'],
-    emits: ['add-item', 'add-name', 'new-repetition'],
+    emits: ['add-item', 'add-name', 'new-repetition', 'exercise-name'],
     created() {
     },
     data() {
@@ -51,6 +54,9 @@ export default {
         titleEditEnd() {
             this.nameEdit = false 
             this.emitter.emit('title-edit-end', this.index)
+        },
+        changeExerciseName(data) {
+            this.$emit('exercise-name', data)
         }
     }
 }
@@ -78,26 +84,7 @@ export default {
     }
   }
   
-  .add-exercise-button {
-    background-color: lighten($accent-color, 5%); 
-    width: 2.5rem;
-    height: 1.8rem;
-    margin: auto;
-    border-radius: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s;
 
-    &:hover {
-      background-color: lighten($accent-color, 20%); 
-    }
-  }
-
-  .plus-icon {
-    transform: scale(1.2);
-    color: white;
-  }
 
   .divider {
     @include divider;

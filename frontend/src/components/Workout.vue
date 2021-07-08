@@ -32,8 +32,13 @@
             :index="index"
             v-on:new-repetition="newRepetition"
             v-on:completed-rep-edit="changeRep"
+            v-on:exercise-name="changeExerciseName"
+            v-on:delete-exercise="deleteExercise"
         /> 
         </div>
+        <NewExercise
+            v-on:add-item ="$emit('add-item')" 
+        />
       </div>
     </transition>
   </div>
@@ -43,6 +48,7 @@
 import ExerciseItem from "./ExerciseItem"
 import HoverMenu from "./HoverMenu/HoverMenu.vue"
 import InputField from "./input_field/InputField.vue";
+import NewExercise from "./NewExercise.vue"
 
 export default {
     name: "Workout",
@@ -51,7 +57,8 @@ export default {
     components: {
         ExerciseItem,
         HoverMenu,
-        InputField
+        InputField,
+        NewExercise
     },
     data () {
     return {
@@ -117,12 +124,21 @@ export default {
                     workoutId: this.workout._id
                 }
             )
+        },
+        changeExerciseName(data) {
+            data.workoutId = this.workout._id
+            this.emitter.emit('exercise-name-change', data)
+        },
+        deleteExercise(data) {
+            data.workoutId = this.workout._id
+            this.emitter.emit('delete-exercise', data)
         }
     },
     created() {
         this.emitter.on('pressed-background', () => {
             this.contracted = true;
         })
+        this.emitter.on('')
     }
 }
 </script>

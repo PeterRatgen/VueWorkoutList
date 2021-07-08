@@ -1,6 +1,6 @@
 <template> 
     <div class="divder"></div>
-    <div class="name" @click.stop="expand_card">
+    <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
         <div class="item-header">
             <div v-if="nameEdit" >
                 <InputField
@@ -14,28 +14,43 @@
             <div v-else>
                 <h4> {{ exerciseItem.name }}</h4>    
             </div>
-            <span> {{ exerciseItem.set.length }} sæt</span>
+            <span>  <span class="icon-container" @click.stop="editName" > 
+                        <fa 
+                            class="edit-icon"  
+                            v-bind:class="{ editiconactive : isHover }"  
+                            icon="pencil-alt" >
+                        </fa> 
+                    </span>
+                    <span class="icon-container" @click.stop="deleteExercise" >
+                        <fa 
+                            class="edit-icon" 
+                            v-bind:class="{ editiconactive : isHover }" 
+                            icon="trash-alt" >
+                        </fa> 
+                    </span>
+                    {{ exerciseItem.set.length }} sæt
+            </span>
         </div>
-    <transition name="fade" mode="out-in">
-        <div class="description" v-if="contracted">
-        </div>
-        <div v-else class="description-expand">
-            <div class="repetition-container">
-                <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
-                    <Repetition  
-                        v-bind:repetition="rep"
-                        v-bind:index="index"
-                        v-on:completed-rep-edit="repChange"
-                    />
-                </div>
-                <div class="repetition add-repetition"> 
-                    <NewRepetition
-                        v-on:new-repetition="newRepetition"
-                    />
+        <transition name="fade" mode="out-in">
+            <div class="description" v-if="contracted">
+            </div>
+            <div v-else class="description-expand">
+                <div class="repetition-container">
+                    <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
+                        <Repetition  
+                            v-bind:repetition="rep"
+                            v-bind:index="index"
+                            v-on:completed-rep-edit="repChange"
+                        />
+                    </div>
+                    <div class="repetition add-repetition"> 
+                        <NewRepetition
+                            v-on:new-repetition="newRepetition"
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
-    </transition>
+        </transition>
     </div>
 </template>
 
@@ -47,7 +62,11 @@ import NewRepetition from "./repetitions/NewRepetition"
 export default {
   name: "ExerciseItem",
   props: ["exerciseItem", "index", "edit"],
-  emits: ['new-repetition', 'completed-rep-edit', 'title-edit-end'],
+  emits: ['new-repetition', 
+            'completed-rep-edit', 
+            'title-edit-end',
+            'exercise-name',
+            'delete-exercise'],
   components: {
     Repetition,
     InputField,
@@ -58,7 +77,8 @@ export default {
       ex: '',
       showWeight: false,
       contracted: true,
-      nameEdit: ''
+      nameEdit: '',
+      isHover : false
     }
   }, 
     methods : {
@@ -73,8 +93,9 @@ export default {
         },
         titleSubmitEdit(result) {
             this.nameEdit = false
-            this.emitter.emit('exercise-name', { oldItem :  this.exerciseItem, title : result })
+            console.log("submitting new exercise title")
             this.contracted = false
+            this.$emit('exercise-name', { exerciseIndex :  this.index, name : result })
         },
         titleEditEnd() {
             this.nameEdit = false 
@@ -85,6 +106,16 @@ export default {
         },
         newRepetition() {
             this.$emit('new-repetition', this.exerciseItem.name)
+        }, 
+        displayEdit() {
+            this.isHover = true;        
+        },
+        editName() {
+            this.nameEdit = true;
+            console.log("Editing name")
+        },
+        deleteExercise() {
+            this.$emit('delete-exercise', {exerciseIndex : this.index}) 
         }
     },
     created() {
@@ -140,6 +171,21 @@ export default {
     }
 }
 
+.edit-icon {
+    opacity: 0;
+    color: $text-color;
+    transition: all 0.2s linear;
+    display: inline;
+}
+
+.editiconactive {
+    opacity: 0.6;
+    transition: all 0.2s linear;
+}
+
+.icon-container {
+    margin: 0 0.5rem;
+}
 
 .divder {
   @include divider;

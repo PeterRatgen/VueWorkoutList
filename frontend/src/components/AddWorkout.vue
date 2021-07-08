@@ -12,6 +12,7 @@
                 v-on:add-item="addItem"
                 v-on:add-name="addName"
                 v-on:new-repetition="newRepetition"
+                v-on:exercise-name="addName"
             />
             <div class="divider"></div>
             <button class="button" @click="collapseCard">Cancel</button>
@@ -70,9 +71,11 @@ export default {
         console.log(this.exerciseList)
     },
     addName(data) {
-        console.log("Data" + JSON.stringify(data) + " " + "set the name ")
-        let ele = this.exerciseList.find(element => element == data["oldItem"]) 
-        ele.name = data["title"] 
+        if(this.contracted == false) {
+            console.log("Data" + JSON.stringify(data) + " " + "set the name ")
+            let ele = this.exerciseList[data["exerciseIndex"]]
+            ele.name = data["name"] 
+        }
     },
     submitWorkout() {
         this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
@@ -113,6 +116,7 @@ export default {
 
   .button {
     @include button;
+    width: 4rem;
   }
     
   .cardTransition-enter-active {

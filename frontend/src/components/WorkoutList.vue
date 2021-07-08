@@ -28,7 +28,7 @@ export default {
         },
         emitDeleteWorkout(id){
             this.$emit('delete-workout', id)
-        }
+        },
     }
 }
 </script>
