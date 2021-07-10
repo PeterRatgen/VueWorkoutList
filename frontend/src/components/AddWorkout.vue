@@ -71,8 +71,7 @@ export default {
         console.log(this.exerciseList)
     },
     addName(data) {
-        if(this.contracted == false) {
-            console.log("Data" + JSON.stringify(data) + " " + "set the name ")
+        if(this.createButton == false) {
             let ele = this.exerciseList[data["exerciseIndex"]]
             ele.name = data["name"] 
         }

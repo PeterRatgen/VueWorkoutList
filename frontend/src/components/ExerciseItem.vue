@@ -84,7 +84,6 @@ export default {
     methods : {
         expand_card() {
           if (this.contracted) {
-                console.log("expanding card")
                 this.contracted = false
           } else {
                 this.contracted = true
@@ -93,7 +92,6 @@ export default {
         },
         titleSubmitEdit(result) {
             this.nameEdit = false
-            console.log("submitting new exercise title")
             this.contracted = false
             this.$emit('exercise-name', { exerciseIndex :  this.index, name : result })
         },
@@ -112,7 +110,6 @@ export default {
         },
         editName() {
             this.nameEdit = true;
-            console.log("Editing name")
         },
         deleteExercise() {
             this.$emit('delete-exercise', {exerciseIndex : this.index}) 

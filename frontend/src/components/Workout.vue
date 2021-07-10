@@ -82,7 +82,6 @@ export default {
             } else {
                 this.contracted = true
             }
-            console.log("")
             this.emitter.emit('pressed-workout')
         },
         renameTitle(){
@@ -92,7 +91,6 @@ export default {
                 this.editingTitle = true
                 this.displayHover = false
             }
-            console.log("State of editingTtle " + this.editingTitle)
         },
         handleOption(item){
             switch(item) {
@@ -112,7 +110,6 @@ export default {
             title_element.style.display = "block"
         },
         newRepetition(name){
-            console.log(JSON.stringify(this.workout._id))
             this.emitter.emit('new-repetition', {name : name, id : this.workout._id}) 
         },
         changeRep(repItem, repIndex, exerciseIndex) {

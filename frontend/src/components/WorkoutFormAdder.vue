@@ -44,14 +44,12 @@ export default {
     },
     methods: {
         checkHeader() {
-            console.log("entered cher in header")
             this.emitter.emit('workout-header', this.workoutHeader)
         },
         newRepetition(name) {
             this.$emit('new-repetition', name)
         },
         titleEditEnd(index) {
-            console.log('end of editing title')
             this.nameEdit = false 
             this.emitter.emit('title-edit-end', index)
         },
