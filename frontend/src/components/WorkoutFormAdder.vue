@@ -17,8 +17,7 @@
             v-on:exercise-name="changeExerciseName"
         /> 
     </div>
-    <NewExercise
-        v-on:add-item ="$emit('add-item')" 
+    <NewExercise v-on:add-item ="$emit('add-item')" 
     />
 </template>
 
@@ -51,9 +50,10 @@ export default {
         newRepetition(name) {
             this.$emit('new-repetition', name)
         },
-        titleEditEnd() {
+        titleEditEnd(index) {
+            console.log('end of editing title')
             this.nameEdit = false 
-            this.emitter.emit('title-edit-end', this.index)
+            this.emitter.emit('title-edit-end', index)
         },
         changeExerciseName(data) {
             this.$emit('exercise-name', data)
