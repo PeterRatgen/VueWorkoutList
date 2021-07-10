@@ -46,8 +46,8 @@ export default {
         checkHeader() {
             this.emitter.emit('workout-header', this.workoutHeader)
         },
-        newRepetition(name) {
-            this.$emit('new-repetition', name)
+        newRepetition(index) {
+            this.$emit('new-repetition', index)
         },
         titleEditEnd(index) {
             this.nameEdit = false 

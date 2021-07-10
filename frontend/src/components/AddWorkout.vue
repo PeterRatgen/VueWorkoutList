@@ -53,11 +53,10 @@ export default {
         this.addCardColor = "#fff"
       }
     },
-    newRepetition(name){
-        console.log("The name of the new rep is " + name)
-        let exercise = this.exerciseList.find(ele => ele["name"] == name)
+    newRepetition(index){
+        let exercise = this.exerciseList[index]
         const length = exercise["set"].length
-        if (length > 1) {
+        if (length > 0) {
             const weight = exercise["set"][length - 1]["weight"];
             const reps = exercise["set"][length - 1]["repetitions"];
             exercise["set"].push({repetitions : reps, weight : weight}) 
