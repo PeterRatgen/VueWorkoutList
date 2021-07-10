@@ -86,12 +86,11 @@ export default {
             this.workouts.splice(index, 1)
         },
         addRepetition(data){
-            console.log("adding rep " + data["name"]+ " " + data["id"] )
             let workout = this.workouts.find(element => element["_id"] == data["id"])
-            console.log("workout" + workout)
-            let exercise = workout["exerciseList"].find(ele => ele["name"] == data["name"])
+            let exercise = workout["exerciseList"][data["index"]]
+            console.log("exercise " + JSON.stringify(exercise))
             const length = exercise["set"].length
-            if (length > 1) {
+            if (length > 0) {
                 const weight = exercise["set"][length - 1]["weight"];
                 const reps = exercise["set"][length - 1]["repetitions"];
                 exercise["set"].push({repetitions : reps, weight : weight}) 
@@ -137,6 +136,10 @@ export default {
                 id: data["workoutId"],
                 exerciseList : workout["exerciseList"]
             })
+        },
+        addExercise(id) {
+            let workout = this.workouts.find(element => element["_id"] == id)
+            workout["exerciseList"].push({ name: "", set: []})
         }
     },
     computed : {
@@ -159,6 +162,7 @@ export default {
         this.emitter.on('submit-new-workout', this.submitWorkout)
         this.emitter.on('exercise-name-change', this.changeExerciseName)
         this.emitter.on('delete-exercise', this.deleteExercise)
+        this.emitter.on('add-item', this.addExercise)
     }
 }
 

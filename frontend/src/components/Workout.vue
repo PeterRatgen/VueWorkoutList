@@ -37,7 +37,7 @@
         /> 
         </div>
         <NewExercise
-            v-on:add-item ="$emit('add-item')" 
+            v-on:add-item="this.emitter.emit('add-item', this.workout._id)"
         />
       </div>
     </transition>
@@ -109,8 +109,8 @@ export default {
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
-        newRepetition(name){
-            this.emitter.emit('new-repetition', {name : name, id : this.workout._id}) 
+        newRepetition(index){
+            this.emitter.emit('new-repetition', {index : index, id : this.workout._id}) 
         },
         changeRep(repItem, repIndex, exerciseIndex) {
             this.emitter.emit('completed-rep-edit', 
