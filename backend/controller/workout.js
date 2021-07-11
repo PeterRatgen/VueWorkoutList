@@ -69,7 +69,7 @@ exports.workout_post_rename =  function(req, res) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
 		let query = { _id: ObjectId(body["id"])}
-		let newValues = {$set : { title : body["name"]}}
+		let newValues = {$set : { title : body["title"]}}
 		dbase.collection("workouts").updateOne(query, newValues, function(err, result) {
 			if (err) throw err;
 			console.log("Document updated");
