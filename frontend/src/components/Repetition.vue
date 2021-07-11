@@ -2,16 +2,16 @@
     <div class="rep-container" @click.stop="repetition_click()">
         <transition name="fade" mode="out-in">
         <div v-if="editing">
-            <div class="item"> 
-                <span class="icon-container" @click.stop="dec('weight')">
+            <div class="item"  @mousewheel="scrolledWeight" > 
+                <span class="icon-container"  @click.stop="dec('weight')">
                     <fa class="icon" icon=minus  ></fa>
                 </span>
                 {{ repItem.weight }} kg 
-                <span class="icon-container" @click.stop="inc('weight')">
+                <span class="icon-container"  @click.stop="inc('weight')">
                     <fa class="icon" icon=plus  ></fa>
                 </span>
             </div>
-            <div class="item">
+            <div class="item" @mousewheel="scrolledReps">
                 <span class="icon-container" @click.stop="dec('reps')">
                     <fa class="icon" icon=minus  ></fa>
                 </span>
@@ -58,22 +58,16 @@ export default {
         this.repItem = this.repetition
         this.emitter.on('pressed-repetition', () => {
             this.editing = false
-            console.log("received repetition")
         })
     },
     methods: {
         check (e) {
-          console.log(e)
           if (this.repItem.weight > 100) {
             e.originalTarget.style.color = 'red'
           }
           if ( this.repItem.weight < 100) {
             e.originalTarget.style.color = 'black'
           }
-          console.log(this.repItem.weight)
-        },
-        printWeight() {
-          console.log(this.repItem.weight)
         },
         inc(target) {
             switch(target){
@@ -106,6 +100,20 @@ export default {
                 this.editing = false;
             }
             this.$emit('completed-rep-edit', this.repItem, this.index)
+        },
+        scrolledReps(event) {
+            if (event.deltaY < 0){
+                this.inc("reps")
+            } else {
+                this.dec("reps")
+            }
+        },
+        scrolledWeight(event) {
+            if (event.deltaY < 0){
+                this.inc("weight")
+            } else {
+                this.dec("weight")
+            }
         }
     }
 }
