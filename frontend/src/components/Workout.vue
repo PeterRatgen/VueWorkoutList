@@ -34,6 +34,7 @@
             v-on:completed-rep-edit="changeRep"
             v-on:exercise-name="changeExerciseName"
             v-on:delete-exercise="deleteExercise"
+            v-on:delete-rep="deleteRep"
         /> 
         </div>
         <NewExercise
@@ -53,7 +54,8 @@ import NewExercise from "./NewExercise.vue"
 export default {
     name: "Workout",
     props: ["workout"],
-    emits: ["title-change", 'delete-workout'],
+    emits: ["title-change", 
+            'delete-workout'],
     components: {
         ExerciseItem,
         HoverMenu,
@@ -129,6 +131,10 @@ export default {
         deleteExercise(data) {
             data.workoutId = this.workout._id
             this.emitter.emit('delete-exercise', data)
+        },
+        deleteRep(data) {
+            data.workoutId = this.workout._id
+            this.emitter.emit('delete-rep', data)
         }
     },
     created() {

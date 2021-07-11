@@ -140,6 +140,16 @@ export default {
         addExercise(id) {
             let workout = this.workouts.find(element => element["_id"] == id)
             workout["exerciseList"].push({ name: "", set: []})
+        },
+        deleteRep(data) {
+            console.log("deleting data " + data)
+            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
+            let exercise = workout.exerciseList[data.exerciseIndex]
+            exercise.set.splice(data.repIndex, 1)
+            this.apiInstance.post('/workout/update_exercise', {
+                id: data.workoutId,
+                    exerciseList : workout.exerciseList
+            })
         }
     },
     computed : {
@@ -163,6 +173,7 @@ export default {
         this.emitter.on('exercise-name-change', this.changeExerciseName)
         this.emitter.on('delete-exercise', this.deleteExercise)
         this.emitter.on('add-item', this.addExercise)
+        this.emitter.on('delete-rep', this.deleteRep)
     }
 }
 

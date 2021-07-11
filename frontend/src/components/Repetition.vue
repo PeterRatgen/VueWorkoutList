@@ -1,35 +1,42 @@
 <template> 
-    <div class="rep-container" @click.stop="repetition_click()">
+    <div class="rep-container" >
         <transition name="fade" mode="out-in">
-        <div v-if="editing">
-            <div class="item"  @mousewheel="scrolledWeight" > 
-                <span class="icon-container"  @click.stop="dec('weight')">
-                    <fa class="icon" icon=minus  ></fa>
-                </span>
-                {{ repItem.weight }} kg 
-                <span class="icon-container"  @click.stop="inc('weight')">
-                    <fa class="icon" icon=plus  ></fa>
-                </span>
+            <div @click="deleteRep" v-if="delMode">
+                <fa icon="trash-alt"></fa>
             </div>
-            <div class="item" @mousewheel="scrolledReps">
-                <span class="icon-container" @click.stop="dec('reps')">
-                    <fa class="icon" icon=minus  ></fa>
-                </span>
-                {{ repItem.repetitions }} reps
-                <span class="icon-container" @click.stop="inc('reps')">
-                    <fa class="icon" icon=plus  ></fa>
-                </span>
-            </div> 
-            
-        </div>
-        <div v-else>
-            <span v-if="repItem.weight > 0"> 
-                {{ repItem.weight }} kg x {{ repItem.repetitions }}
-            </span>
-            <span v-else>
-                {{ repItem.repetitions }} reps
-            </span> 
-        </div>
+            <div @click.stop="repetition_click()" v-else>
+                <transition name="fade" mode="out-in">
+                <div v-if="editing " >
+                    <div class="item"  @mousewheel="scrolledWeight" > 
+                        <span class="icon-container"  @click.stop="dec('weight')">
+                            <fa class="icon" icon=minus  ></fa>
+                        </span>
+                        {{ repItem.weight }} kg 
+                        <span class="icon-container"  @click.stop="inc('weight')">
+                            <fa class="icon" icon=plus  ></fa>
+                        </span>
+                    </div>
+                    <div class="item" @mousewheel="scrolledReps">
+                        <span class="icon-container" @click.stop="dec('reps')">
+                            <fa class="icon" icon=minus  ></fa>
+                        </span>
+                        {{ repItem.repetitions }} reps
+                        <span class="icon-container" @click.stop="inc('reps')">
+                            <fa class="icon" icon=plus  ></fa>
+                        </span>
+                    </div> 
+                    
+                </div>
+                <div v-else>
+                    <span v-if="repItem.weight > 0"> 
+                        {{ repItem.weight }} kg x {{ repItem.repetitions }}
+                    </span>
+                    <span v-else>
+                        {{ repItem.repetitions }} reps
+                    </span> 
+                </div>
+                </transition>
+            </div>
         </transition>
     </div>
 </template>
@@ -38,14 +45,14 @@
 
 export default {
     name: "Repetition",
-    props: ["repetition", "index"],
-    emits : ["completed-rep-edit"],
+    props: ["repetition", "index", "delMode"],
+    emits : ["completed-rep-edit", "delete-rep"],
     data () {
         return {
             showWeight: false,
             alignment: 'left',
             repItem: '',
-            editing: false
+            editing: false,
         }
     }, 
     created() {
@@ -69,6 +76,9 @@ export default {
             e.originalTarget.style.color = 'black'
           }
         },
+        deleteRep() {
+           this.$emit('delete-rep', this.index) 
+        },
         inc(target) {
             switch(target){
                 case "weight":
@@ -90,16 +100,18 @@ export default {
             }
         },
         repetition_click(){
-            let oldEdit = this.editing;
-            this.editing = !this.editing
-            this.emitter.emit('pressed-repetition')
-            console.log("Pressed the repetition")
-            if (oldEdit == false) {
-                this.editing = true;
-            } else {
-                this.editing = false;
+            if (!this.delMode) {
+                let oldEdit = this.editing;
+                this.editing = !this.editing
+                this.emitter.emit('pressed-repetition')
+                console.log("Pressed the repetition")
+                if (oldEdit == false) {
+                    this.editing = true;
+                } else {
+                    this.editing = false;
+                }
+                this.$emit('completed-rep-edit', this.repItem, this.index)
             }
-            this.$emit('completed-rep-edit', this.repItem, this.index)
         },
         scrolledReps(event) {
             if (event.deltaY < 0){

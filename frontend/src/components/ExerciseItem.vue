@@ -2,9 +2,9 @@
     <div class="divder"></div>
     <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
         <div class="item-header">
-            <div v-if="nameEdit" >
+            <div v-if="editing" >
                 <InputField
-                    :startEdit="nameEdit"   
+                    :startEdit="editing"   
                     :fontSize="'1rem'"
                     :fontWeight="'700'"
                     v-on:result="titleSubmitEdit"
@@ -40,6 +40,8 @@
                         <Repetition  
                             v-bind:repetition="rep"
                             v-bind:index="index"
+                            v-bind:delMode="editing"
+                            v-on:delete-rep="deleteRep"
                             v-on:completed-rep-edit="repChange"
                         />
                     </div>
@@ -66,7 +68,8 @@ export default {
             'completed-rep-edit', 
             'title-edit-end',
             'exercise-name',
-            'delete-exercise'],
+            'delete-exercise',
+            'delete-rep'],
   components: {
     Repetition,
     InputField,
@@ -77,7 +80,7 @@ export default {
       ex: '',
       showWeight: false,
       contracted: true,
-      nameEdit: '',
+      editing: false,
       isHover : false
     }
   }, 
@@ -91,12 +94,12 @@ export default {
           this.emitter.emit('pressed-exerciseItem')
         },
         titleSubmitEdit(result) {
-            this.nameEdit = false
+            this.editing = false
             this.contracted = false
             this.$emit('exercise-name', { exerciseIndex :  this.index, name : result })
         },
         titleEditEnd() {
-            this.nameEdit = false 
+            this.editing = false 
             this.$emit('title-edit-end', this.index)
         },
         repChange(repItem, index) {
@@ -109,15 +112,18 @@ export default {
             this.isHover = true;        
         },
         editName() {
-            this.nameEdit = true;
+            this.editing = true;
         },
         deleteExercise() {
             this.$emit('delete-exercise', {exerciseIndex : this.index}) 
+        },
+        deleteRep(index) {
+            this.$emit('delete-rep', {repIndex: index, exerciseIndex: this.index})
         }
     },
     created() {
         this.ex = this.exerciseItem;
-        this.nameEdit = this.edit;
+        this.editing = this.edit;
     },
     mounted() {
     }
