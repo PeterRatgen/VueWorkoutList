@@ -3,7 +3,6 @@
   <div v-bind:key="workout.dateCreated" v-for="workout in workouts" >
     <Workout 
         v-bind:workout="workout" 
-        v-on:title-change="emitTitleChange" 
         v-on:delete-workout="emitDeleteWorkout"
     />
   </div>

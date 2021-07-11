@@ -76,10 +76,12 @@ export default {
         }
     },
     submitWorkout() {
-        this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
-        this.title = ''
-        this.exerciseList = []
-        this.createButton = true
+        if (this.title != '' && this.exerciseList != []) {
+            this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
+            this.title = ''
+            this.exerciseList = []
+            this.createButton = true
+        }
     },
     titleEditEnd(index) {
         this.exerciseList.splice(index, 1) 

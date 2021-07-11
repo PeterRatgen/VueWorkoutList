@@ -5,7 +5,6 @@
       <div class="todo">
         <WorkoutList 
             v-bind:workouts="workouts" 
-            v-on:title-change="titleChange"
             v-on:delete-workout="deleteWorkout"
         />
         <AddWorkout/>
@@ -69,15 +68,17 @@ export default {
             const response = await this.apiInstance.get('/workout')
             this.workouts = JSON.parse(response.request.response)
         },
-        titleChange(workoutId, newName){
-            this.apiInstance.post('/workout/rename',
+        async titleChange(data){
+            console.log(data)
+            let res = await this.apiInstance.post('/workout/rename',
                 {
-                    id : workoutId,
-                    name : newName
+                    id : data["workoutId"],
+                    title : data["title"]
                 }
             )
-            let ele = this.workouts.find(element => element["_id"] == workoutId)
-            ele["title"] = newName
+            console.log(res)
+            let ele = this.workouts.find(element => element._id == data.workoutId)
+            ele.title = data.title
         },
         deleteWorkout(workoutId) {
             this.apiInstance.delete('/workout/' + workoutId )
@@ -174,6 +175,7 @@ export default {
         this.emitter.on('delete-exercise', this.deleteExercise)
         this.emitter.on('add-item', this.addExercise)
         this.emitter.on('delete-rep', this.deleteRep)
+        this.emitter.on('title-change', this.titleChange)
     }
 }
 

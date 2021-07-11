@@ -8,7 +8,6 @@
             :fontSize="'1.3rem'"
             :fontWeight="'700'"
             v-on:result="submitEdit"
-            v-on:stop-edit="editEnd"
         />
         <fa class="dots" icon="ellipsis-v" 
             @click.stop="displayHover = true"></fa>
@@ -104,8 +103,13 @@ export default {
                     break;
             }
         },
-        submitEdit(result) {
-            this.$emit('title-change', this.workout._id, result)
+        submitEdit(title) {
+            this.emitter.emit('title-change', { workoutId : this.workout._id, title : title})
+            if (this.editingTitle) {
+                let title_element = this.$el.querySelector("#title")
+                title_element.style.display = "block"
+                this.editingTitle = false
+            }
         },
         editEnd(){
             let title_element = this.$el.querySelector("#title")

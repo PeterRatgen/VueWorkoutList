@@ -1,8 +1,6 @@
 <template>
     <div class="title-editor" id="titleEditor">
-        <input ref="titleInput" class="header-input" type="text">
-        <span class="icon" @click.stop="acceptEdit"><fa class="" icon="check" ></fa></span>
-        <span class="icon" @click.stop ="stopEditing"><fa class="cross" icon="plus" ></fa></span>
+        <input ref="titleInput" class="header-input" @blur="acceptEdit" type="text">
     </div>
 </template>
 
@@ -13,20 +11,15 @@
 export default {
     name : 'InputField',
     props: ["startEdit" , 'fontSize', 'fontWeight'],
-    emits: ['result', 'stop-edit'],
+    emits: ['result'],
     methods: {
-        stopEditing() {
-            let title_editor = this.$el
-            title_editor.style.display = "none"
-            this.editingTitle = false
-            this.$emit('stop-edit')
-        },
         acceptEdit(){
             const editValue = this.$refs.titleInput.value
             this.$emit('result', editValue)
             let title_editor = this.$el
             title_editor.style.display = "none"
             this.editingTitle = false
+            console.log("accepted edit " + editValue)
         },
         startEditing(){
             let title_editor = this.$el
@@ -66,23 +59,13 @@ export default {
     }
     
     .header-input {
-        font-weight: 700; 
-        text-align: left;
-        font-size: 1.3rem;
-        padding: 0.0rem 0.25rem;
-        background-color: #fff;
-        box-sizing: border-box;
-        border: none;
-        border-bottom: 2px solid #d1d1d1;
-        outline: none;
-
-        &:focus {
-            outline: none;
-            border: none;
-            border-bottom: 2px solid lighten($accent-color, 20%);
-            background-color: #fff;
-            }
-        }
+      font-weight: 700; 
+      text-align: left;
+      font-size: 1.3rem;
+      padding: 0.0rem 0.25rem;
+      background-color: #fff;
+      @include input-field;
+    }
 
     .cross {
         transform: rotate(45deg);
