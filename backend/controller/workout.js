@@ -109,7 +109,7 @@ exports.workout_put_exercise_name = function(req, res) {
         let options = [
             { arrayFilters : 
                 [
-                    { "element.name" : { $eq : body.exerciseName } } 
+                    { "element.name" : body.exerciseName } 
                 ] 
             }     
         ]
