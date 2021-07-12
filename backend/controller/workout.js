@@ -4,7 +4,7 @@ const {ObjectId} = require('mongodb');
 dotenv.config();
 
 exports.workout_post = function(req, res) {
-	//check if user exists
+    //check if user exists
 	let workout_log = req.body;
 
 	if ('title' in workout_log === false) {
@@ -30,11 +30,9 @@ exports.workout_post = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
 exports.workout_get = function(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', '*')
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
@@ -49,7 +47,7 @@ exports.workout_get = function(req, res) {
 }
 
 exports.workout_delete = function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
+
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
@@ -73,28 +71,34 @@ exports.workout_post_rename =  function(req, res) {
 		let newValues = {$set : { title : body["title"]}}
 		dbase.collection("workouts").updateOne(query, newValues, function(err, result) {
 			if (err) throw err;
-			console.log("Document updated");
+			console.log("Document updated " + result);
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document modified: " + req.body);
+	res.send("Document modified: " + req.body);
 
 }
 
 exports.workout_post_update_exercise = function(req, res) {
+	let body = req.body
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
-		dbase.collection("workouts").updateOne({ _id: ObjectId(req.body.id)}, {$set : { exerciseList : req.body.exerciseList}}, function(err, result) {
+        let query = { _id: ObjectId(req.body.id)}
+        let newValues = {
+            $set : { 
+                "exerciseList.${body.exerciseIndex}.name" : body.name
+            }
+        }
+		dbase.collection("workouts").updateOne(query, newValues 
+                    , function(err, result) {
 			if (err) throw err;
 			console.log("1 document inserted");
 			console.log(result.body)
 			db.close();
+            res.send("Completed successfully")
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.send("document modified: " + req.body);
 }
 
 
