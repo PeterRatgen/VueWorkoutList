@@ -103,16 +103,12 @@ exports.workout_put_exercise_name = function(req, res) {
         let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.$[element].name" : body.name
+                "exerciseList.0.name" : body.name
             }
         }
-        let arrayFilters = [
-            { arrayFilters : [ {element : { $position : body.exerciseIndex } } ] }     
-        ]
 		dbase.collection("workouts").updateOne(
             query, 
             newValues, 
-            arrayFilters,
             function(err, result) {
                 if (err) throw err;
                 console.log("1 document inserted");
