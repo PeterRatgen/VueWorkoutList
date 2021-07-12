@@ -103,16 +103,22 @@ exports.workout_put_exercise_name = function(req, res) {
         let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.${body.exerciseIndex}.name" : body.name
+                "exerciseList.${element}.name" : body.name
             }
         }
-		dbase.collection("workouts").updateOne(query, newValues 
-                    , function(err, result) {
-			if (err) throw err;
-			console.log("1 document inserted");
-			console.log(result.body)
-			db.close();
-            res.send("Completed successfully")
+        let arrayFilters = [
+            { arrayFilters : [ {element : 0 } ] }     
+        ]
+		dbase.collection("workouts").updateOne(
+            query, 
+            newValues, 
+            arrayFilters,
+            function(err, result) {
+                if (err) throw err;
+                console.log("1 document inserted");
+                console.log(result.body)
+                db.close();
+                res.send("Completed successfully")
 		});
 	});
 }
