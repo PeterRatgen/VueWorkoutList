@@ -36,7 +36,8 @@ export default {
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: lighten($accent-color, 20%); 
+        background-color: lighten($accent-color, 20%); 
+        cursor: pointer;
     }
   }
 

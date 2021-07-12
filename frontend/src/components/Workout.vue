@@ -7,10 +7,12 @@
             :startEdit="editingTitle"   
             :fontSize="'1.3rem'"
             :fontWeight="'700'"
+            :initialValue="workout.title"
             v-on:result="submitEdit"
         />
-        <fa class="dots" icon="ellipsis-v" 
-            @click.stop="displayHover = true"></fa>
+        <span class="icon-container" @click.stop="displayHover = true">
+            <fa class="dots" icon="ellipsis-v"></fa>
+        </span>
         <HoverMenu 
             :menuItems=hovMen 
             :display=displayHover  
@@ -171,12 +173,22 @@ export default {
       text-align: left;
       font-size: 1.3rem;
     }
+
+    #title:hover {
+        cursor: pointer;
+    }
+
+
+    .icon-container {
+        width: 2rem;
+    }
     
     .dots {
         color: lighten($text-color, 30%);
 
         &:hover {
             color: $text-color; 
+            cursor: pointer;
         }
     }
   }
@@ -192,6 +204,7 @@ export default {
     }
   }
 }
+
 
 .outside {
   width: 100vw;

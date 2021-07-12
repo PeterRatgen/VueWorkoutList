@@ -7,7 +7,7 @@
             <div @click.stop="repetition_click()" v-else>
                 <transition name="fade" mode="out-in">
                 <div v-if="editing " >
-                    <div class="item"  @mousewheel="scrolledWeight" > 
+                    <div class="item"  @mousewheel.prevent="scrolledWeight" > 
                         <span class="icon-container"  @click.stop="dec('weight')">
                             <fa class="icon" icon=minus  ></fa>
                         </span>
@@ -16,7 +16,7 @@
                             <fa class="icon" icon=plus  ></fa>
                         </span>
                     </div>
-                    <div class="item" @mousewheel="scrolledReps">
+                    <div class="item" @mousewheel.prevent="scrolledReps">
                         <span class="icon-container" @click.stop="dec('reps')">
                             <fa class="icon" icon=minus  ></fa>
                         </span>

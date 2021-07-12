@@ -7,12 +7,13 @@
                     :startEdit="editing"   
                     :fontSize="'1rem'"
                     :fontWeight="'700'"
+                    :initialValue="exerciseItem.name"
                     v-on:result="titleSubmitEdit"
                     v-on:stop-edit="titleEditEnd"
                 />
             </div>
             <div v-else>
-                <h4> {{ exerciseItem.name }}</h4>    
+                <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
             </div>
             <span>  <span class="icon-container" @click.stop="editName" > 
                         <fa 
@@ -174,11 +175,22 @@ export default {
     }
 }
 
+.clickable-header {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .edit-icon {
     opacity: 0;
     color: $text-color;
     transition: all 0.2s linear;
     display: inline;
+
+    &:hover {
+        cursor: pointer;
+    }
+
 }
 
 .editiconactive {

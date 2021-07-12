@@ -10,7 +10,7 @@
 
 export default {
     name : 'InputField',
-    props: ["startEdit" , 'fontSize', 'fontWeight'],
+    props: ["startEdit" , 'fontSize', 'fontWeight', 'initialValue'],
     emits: ['result'],
     methods: {
         acceptEdit(){
@@ -35,6 +35,8 @@ export default {
         let title_input = this.$refs.titleInput
         title_input.style.fontSize = this.fontSize
         title_input.style.fontWeight = this.fontWeight
+        title_input.value = this.initialValue
+        console.log(title_input.value)
     },
     updated() {
         console.log("state of start edit " + this.startEdit)
