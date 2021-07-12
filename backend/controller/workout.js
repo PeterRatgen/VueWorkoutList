@@ -107,7 +107,7 @@ exports.workout_put_exercise_name = function(req, res) {
             }
         }
         let arrayFilters = [
-            { arrayFilters : [ {element : { "name" : body.exerciseName } } ] }     
+            { arrayFilters : [ { "element.name" : { $eq : body.exerciseName } } ] }     
         ]
 		dbase.collection("workouts").updateOne(
             query, 
