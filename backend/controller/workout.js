@@ -103,13 +103,13 @@ exports.workout_put_exercise_name = function(req, res) {
         let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.$[element].name" : body.name
+                "exerciseList.$[el].name" : body.name
             }
         }
         let options = [
             { arrayFilters : 
                 [
-                    { "element.name" : body.exerciseName } 
+                    { "el.name" : body.exerciseName } 
                 ] 
             }     
         ]
