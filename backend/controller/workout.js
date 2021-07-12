@@ -103,11 +103,11 @@ exports.workout_put_exercise_name = function(req, res) {
         let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.${element}.name" : body.name
+                "exerciseList.$[element].name" : body.name
             }
         }
         let arrayFilters = [
-            { arrayFilters : [ {element : 0 } ] }     
+            { arrayFilters : [ {element : body.exerciseIndex } ] }     
         ]
 		dbase.collection("workouts").updateOne(
             query, 
