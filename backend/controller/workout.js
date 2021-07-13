@@ -143,7 +143,7 @@ exports.workout_change_reps = function(req, res) {
             arrayFilters : [
                 { 
                     "el.id" : body.exerciseId,
-                    "rep.id" : body.repId
+                    "rep.id" : body.repId.id
                 } 
             ]
         }     
