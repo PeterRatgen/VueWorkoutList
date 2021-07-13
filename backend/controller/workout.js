@@ -100,24 +100,27 @@ exports.workout_put_exercise_name = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        let query = { 
-            _id: ObjectId(req.body.id),
-            $expr : {
-                $arrayElemAt: [ "$exerciseList", req.body.exerciseIndex ]
-            }
-
-        }
+        let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.$" : body.name
+                "exerciseList.$[el].name" : body.name
             }
         }
+        let options = { 
+            arrayFilters : [
+                { 
+                    "el.id" : body.exerciseId
+                } 
+            ]
+        }     
         dbase.collection("workouts").updateOne(
             query, 
             newValues, 
+            options,
             function(err, result) {
                 if (err) throw err;
-                console.log(result)
+                console.log("1 document inserted");
+                console.log(result.body)
                 db.close();
                 res.send("Completed successfully")
             });
@@ -129,21 +132,25 @@ exports.workout_change_reps = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        let query = { 
-            _id: ObjectId(req.body.id),
-            $expr : {
-                $arrayElemAt: [ "$exerciseList", req.body.exerciseIndex ]
-            }
-
-        }
+        let query = { _id: ObjectId(req.body.id)}
         let newValues = {
             $set : { 
-                "exerciseList.$" : body.name
+                "exerciseList.$[el].set.$[rep].weight" : body.weight,
+                "exerciseList.$[el].set.$[rep].repetitions" : body.repetitions
             }
         }
+        let options = { 
+            arrayFilters : [
+                { 
+                    "el.id" : body.exerciseId,
+                    "rep.id" : body.repId
+                } 
+            ]
+        }     
         dbase.collection("workouts").updateOne(
             query, 
             newValues, 
+            options,
             function(err, result) {
                 if (err) throw err;
                 console.log("1 document inserted");
@@ -153,7 +160,3 @@ exports.workout_change_reps = function(req, res) {
             });
     });
 }
-
-
-
-
