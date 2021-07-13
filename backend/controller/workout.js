@@ -107,10 +107,12 @@ exports.workout_put_exercise_name = function(req, res) {
             }
         }
         let options = [
-            { arrayFilters : 
-                [
-                    { "el.name" : body.exerciseName } 
-                ] 
+            { 
+                arrayFilters : 
+                    [
+                        { "el.name" : body.exerciseName } 
+                    ],
+                multi : true
             }     
         ]
 		dbase.collection("workouts").updateOne(
