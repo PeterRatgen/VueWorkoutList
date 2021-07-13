@@ -117,8 +117,7 @@ exports.workout_put_exercise_name = function(req, res) {
             newValues, 
             function(err, result) {
                 if (err) throw err;
-                console.log("1 document inserted");
-                console.log(result.body)
+                console.log(result)
                 db.close();
                 res.send("Completed successfully")
             });
