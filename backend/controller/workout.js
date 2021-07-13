@@ -100,23 +100,21 @@ exports.workout_put_exercise_name = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        let query = { _id: ObjectId(req.body.id)}
+        let query = { 
+            _id: ObjectId(req.body.id),
+            $expr : {
+                $arrayElemAt: [ "$exerciseList", req.body.exerciseIndex ]
+            }
+
+        }
         let newValues = {
             $set : { 
-                "exerciseList.$[el].name" : body.name
+                "exerciseList.$" : body.name
             }
         }
-        let options = { 
-            arrayFilters : [
-                { 
-                    "el.name" : body.exerciseName 
-                } 
-            ]
-        }     
         dbase.collection("workouts").updateOne(
             query, 
             newValues, 
-            options,
             function(err, result) {
                 if (err) throw err;
                 console.log("1 document inserted");
@@ -126,5 +124,37 @@ exports.workout_put_exercise_name = function(req, res) {
             });
     });
 }
+
+exports.workout_change_reps = function(req, res) {
+    let body = req.body
+    mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        if (err) throw err;
+        let dbase = db.db("workout_db");
+        let query = { 
+            _id: ObjectId(req.body.id),
+            $expr : {
+                $arrayElemAt: [ "$exerciseList", req.body.exerciseIndex ]
+            }
+
+        }
+        let newValues = {
+            $set : { 
+                "exerciseList.$" : body.name
+            }
+        }
+        dbase.collection("workouts").updateOne(
+            query, 
+            newValues, 
+            function(err, result) {
+                if (err) throw err;
+                console.log("1 document inserted");
+                console.log(result.body)
+                db.close();
+                res.send("Completed successfully")
+            });
+    });
+}
+
+
 
 
