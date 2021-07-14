@@ -64,7 +64,7 @@ import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
   name: "ExerciseItem",
-  props: ["exerciseItem", "index", "edit"],
+  props: ["exerciseItem", "edit"],
   emits: ['new-repetition', 
             'completed-rep-edit', 
             'title-edit-end',
@@ -97,17 +97,18 @@ export default {
         titleSubmitEdit(result) {
             this.editing = false
             this.contracted = false
-            this.$emit('exercise-name', { exerciseIndex :  this.index, name : result })
+            this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         titleEditEnd() {
             this.editing = false 
-            this.$emit('title-edit-end', this.index)
+            this.$emit('title-edit-end', this.exerciseItem.id)
         },
-        repChange(repItem, index) {
-            this.$emit('completed-rep-edit', repItem, index, this.index)             
+        repChange(repItem) {
+            console.log("change some rep of ex: " + this.exerciseItem.id)
+            this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
         },
         newRepetition() {
-            this.$emit('new-repetition', this.index)
+            this.$emit('new-repetition', this.exerciseItem.id)
         }, 
         displayEdit() {
             this.isHover = true;        
@@ -116,10 +117,10 @@ export default {
             this.editing = true;
         },
         deleteExercise() {
-            this.$emit('delete-exercise', {exerciseIndex : this.index}) 
+            this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id}) 
         },
-        deleteRep(index) {
-            this.$emit('delete-rep', {repIndex: index, exerciseIndex: this.index})
+        deleteRep(id) {
+            this.$emit('delete-rep', { repId: id , exerciseId: this.exerciseItem.id })
         }
     },
     created() {

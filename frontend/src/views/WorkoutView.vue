@@ -69,7 +69,6 @@ export default {
             this.workouts = JSON.parse(response.request.response)
         },
         async titleChange(data){
-            console.log(data)
             let res = await this.apiInstance.post('/workout/rename',
                 {
                     id : data["workoutId"],
@@ -89,7 +88,6 @@ export default {
         addRepetition(data){
             let workout = this.workouts.find(element => element["_id"] == data["id"])
             let exercise = workout["exerciseList"][data["index"]]
-            console.log("exercise " + JSON.stringify(exercise))
             const length = exercise["set"].length
             if (length > 0) {
                 const weight = exercise["set"][length - 1]["weight"];
@@ -100,14 +98,8 @@ export default {
             }
         },
         changeRep(data){
-            console.log(data)
-            console.log("chaning reps")
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            console.log("workout")
-            console.log(workout)
             let exercise =  workout["exerciseList"].find(element => element.id = data.exerciseId)
-            console.log("exercise")
-            console.log(exercise)
             let rep = exercise["set"].find(element => element.id == data.repItem.id)
             rep.repetitions = data["repItem"].repetitions
             rep.weight = data["repItem"].weight
@@ -118,7 +110,6 @@ export default {
             })
         },
         backgroundPressed() {
-            console.log("Pressed background")
             this.emitter.emit('pressed-background')
         },
         async submitWorkout(data) {
@@ -127,9 +118,7 @@ export default {
             this.workouts.push(data)
         },
         changeExerciseName(data) {
-            console.log("Changing exercise name")
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            console.log(workout)
             let exercise =  workout["exerciseList"].find(element => element["id"] == data["exerciseId"])
             exercise.name = data["name"]
             this.apiInstance.put('/workout/rename_exercise', {
@@ -151,7 +140,6 @@ export default {
             workout["exerciseList"].push({ name: "", set: []})
         },
         deleteRep(data) {
-            console.log("deleting data " + data)
             let workout = this.workouts.find(element => element["_id"] == data.workoutId)
             let exercise = workout.exerciseList[data.exerciseIndex]
             exercise.set.splice(data.repIndex, 1)

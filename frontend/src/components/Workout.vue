@@ -27,10 +27,9 @@
         </p>
       </div>
       <div v-else class="description-expand">
-        <div v-bind:key="exercise" v-for="(exercise, index) in workout.exerciseList">
+        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
           <ExerciseItem 
             :exerciseItem="exercise"
-            :index="index"
             v-on:new-repetition="newRepetition"
             v-on:completed-rep-edit="changeRep"
             v-on:exercise-name="changeExerciseName"
@@ -117,15 +116,14 @@ export default {
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
-        newRepetition(index){
-            this.emitter.emit('new-repetition', {index : index, id : this.workout._id}) 
+        newRepetition(id){
+            this.emitter.emit('new-repetition', {exerciseId : id, workoutId : this.workout._id}) 
         },
-        changeRep(repItem, repIndex, exerciseIndex) {
+        changeRep(repItem, exerciseId) {
             this.emitter.emit('completed-rep-edit', 
                 {
                     repItem : repItem, 
-                    repIndex : repIndex,
-                    exerciseIndex: exerciseIndex,
+                    exerciseId: exerciseId,
                     workoutId: this.workout._id
                 }
             )

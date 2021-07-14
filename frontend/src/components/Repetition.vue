@@ -45,7 +45,7 @@
 
 export default {
     name: "Repetition",
-    props: ["repetition", "index", "delMode"],
+    props: ["repetition", "delMode"],
     emits : ["completed-rep-edit", "delete-rep"],
     data () {
         return {
@@ -77,7 +77,7 @@ export default {
           }
         },
         deleteRep() {
-           this.$emit('delete-rep', this.index) 
+           this.$emit('delete-rep', this.repItem.id) 
         },
         inc(target) {
             switch(target){
@@ -109,8 +109,8 @@ export default {
                     this.editing = true;
                 } else {
                     this.editing = false;
+                    this.$emit('completed-rep-edit', this.repItem)
                 }
-                this.$emit('completed-rep-edit', this.repItem, this.index)
             }
         },
         scrolledReps(event) {
