@@ -17,9 +17,18 @@ exports.workout_post = function(req, res) {
         res.send("Include sets in post")
     }
 
+    for (const exercise in workout_log.exerciseList) {
+        exercise.id = new ObjectId()
+        for (const set in exercise.set) {
+            set.id = new ObjectId()
+        }
+    }
+
     let date = new Date();
     workout_log["dateCreated"] = date.valueOf();
     workout_log["userId"] = ObjectId(req.user["userId"]);
+
+    console.log(workout_log)
 
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
