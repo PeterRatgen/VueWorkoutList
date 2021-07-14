@@ -135,8 +135,8 @@ exports.workout_change_reps = function(req, res) {
         let query = { _id: ObjectId(req.body.workoutId)}
         let newValues = {
             $set : { 
-                "exerciseList.$[el].set.$[rep].weight" : body.rep.weight,
-                "exerciseList.$[el].set.$[rep].repetitions" : body.rep.repetitions
+                "exerciseList.$[el].set.$[rep].weight" : body.repItem.weight,
+                "exerciseList.$[el].set.$[rep].repetitions" : body.repItem.repetitions
             }
         }
         let options = { 

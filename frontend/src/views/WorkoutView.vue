@@ -100,15 +100,21 @@ export default {
             }
         },
         changeRep(data){
+            console.log(data)
             console.log("chaning reps")
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            let exercise =  workout["exerciseList"][data["exerciseIndex"]]
-            let rep = exercise["set"][data["repIndex"]]
+            console.log("workout")
+            console.log(workout)
+            let exercise =  workout["exerciseList"].find(element => element.id = data.exerciseId)
+            console.log("exercise")
+            console.log(exercise)
+            let rep = exercise["set"].find(element => element.id == data.repItem.id)
             rep.repetitions = data["repItem"].repetitions
             rep.weight = data["repItem"].weight
-            this.apiInstance.post('/workout/update_exercise', {
-                id: data["workoutId"],
-                exerciseList : workout["exerciseList"]
+            this.apiInstance.put('/workout/rep_change', {
+                workoutId: data["workoutId"],
+                exerciseId : data["exerciseId"],
+                repItem: data["repItem"]
             })
         },
         backgroundPressed() {
@@ -123,11 +129,13 @@ export default {
         changeExerciseName(data) {
             console.log("Changing exercise name")
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            let exercise =  workout["exerciseList"][data["exerciseIndex"]]
+            console.log(workout)
+            let exercise =  workout["exerciseList"].find(element => element["id"] == data["exerciseId"])
             exercise.name = data["name"]
-            this.apiInstance.post('/workout/update_exercise', {
+            this.apiInstance.put('/workout/rename_exercise', {
                 id: data["workoutId"],
-                exerciseList : workout["exerciseList"]
+                exerciseId : data["exerciseId"],
+                name : data["name"]
             })
         },
         deleteExercise(data) {
