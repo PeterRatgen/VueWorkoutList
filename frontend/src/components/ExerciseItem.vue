@@ -9,7 +9,6 @@
                     :fontWeight="'700'"
                     :initialValue="exerciseItem.name"
                     v-on:result="titleSubmitEdit"
-                    v-on:stop-edit="titleEditEnd"
                 />
             </div>
             <div v-else>
@@ -99,10 +98,6 @@ export default {
             this.contracted = false
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
-        titleEditEnd() {
-            this.editing = false 
-            this.$emit('title-edit-end', this.exerciseItem.id)
-        },
         repChange(repItem) {
             console.log("change some rep of ex: " + this.exerciseItem.id)
             this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
@@ -177,6 +172,7 @@ export default {
 }
 
 .clickable-header {
+    font-size: 1rem;
     &:hover {
         cursor: pointer;
     }

@@ -22,7 +22,7 @@ $background-color: #EFEFEF;
 }
 
 @mixin input-field { 
-    box-sizing: border-box;
+    font-family: 'Open Sans';
     border: none;
     border-bottom: 2px solid #d1d1d1;
     outline: none;
