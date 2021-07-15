@@ -19,8 +19,6 @@ exports.workout_post = function(req, res) {
 
     for (let exercise of workout_log.exerciseList) {
         let exId = new ObjectId()
-        console.log("new id " + exId)
-        console.log("new exercise " + JSON.stringify(exercise))
         exercise["id"] = exId
         for (let set of exercise.set) {
             set["id"] = new ObjectId()
@@ -30,11 +28,6 @@ exports.workout_post = function(req, res) {
     let date = new Date();
     workout_log["dateCreated"] = date.valueOf();
     workout_log["userId"] = ObjectId(req.user["userId"]);
-
-    console.log("generating id " + new ObjectId())
-
-    console.log(workout_log)
-    console.log(workout_log.exerciseList)
 
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
@@ -53,8 +46,6 @@ exports.workout_get = function(req, res) {
         let dbase = db.db("workout_db");
         dbase.collection("workouts").find({userId: ObjectId(req.user["userId"])}, {limit : 10}).toArray( function(err, result) {
             if (err) throw err;
-            console.log("1 document found");
-            console.log(result);
             res.send(result);
             db.close();
         });
@@ -68,8 +59,6 @@ exports.workout_delete = function(req, res) {
         let dbase = db.db("workout_db");
         dbase.collection("workouts").deleteOne({_id : ObjectId(req.params.workoutId), userId: ObjectId(req.user["userId"])}, function(err, result) {
             if (err) throw err;
-            console.log("1 document found");
-            console.log(result);
             res.send(result);
             db.close();
         });
@@ -86,7 +75,6 @@ exports.workout_post_rename =  function(req, res) {
         let newValues = {$set : { title : body["title"]}}
         dbase.collection("workouts").updateOne(query, newValues, function(err, result) {
             if (err) throw err;
-            console.log("Document updated " + result);
             db.close();
         });
     });
@@ -100,8 +88,6 @@ exports.workout_post_update_exercise = function(req, res) {
         let dbase = db.db("workout_db");
         dbase.collection("workouts").updateOne({ _id: ObjectId(req.body.id)}, {$set : { exerciseList : req.body.exerciseList}}, function(err, result) {
             if (err) throw err;
-            console.log("1 document inserted");
-            console.log(result.body)
             db.close();
         });
     });
@@ -134,8 +120,6 @@ exports.workout_put_exercise_name = function(req, res) {
             options,
             function(err, result) {
                 if (err) throw err;
-                console.log("1 document inserted");
-                console.log(result.body)
                 db.close();
                 res.send("Completed successfully")
             });
@@ -170,8 +154,6 @@ exports.workout_change_reps = function(req, res) {
             options,
             function(err, result) {
                 if (err) throw err;
-                console.log("1 document inserted");
-                console.log(result.body)
                 db.close();
                 res.send("Completed successfully")
             });
