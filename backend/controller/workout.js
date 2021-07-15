@@ -19,6 +19,7 @@ exports.workout_post = function(req, res) {
 
     for (let exercise in workout_log.exerciseList) {
         exercise.id = new ObjectId()
+        console.log(JSON.stringify(exercise))
         console.log("new id " + exercise.id)
         for (let set in exercise.set) {
             set.id = new ObjectId()
