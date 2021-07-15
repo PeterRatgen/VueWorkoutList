@@ -17,9 +17,10 @@ exports.workout_post = function(req, res) {
         res.send("Include sets in post")
     }
 
-    for (const exercise in workout_log.exerciseList) {
+    for (let exercise in workout_log.exerciseList) {
         exercise.id = new ObjectId()
-        for (const set in exercise.set) {
+        console.log("new id " + exercise.id)
+        for (let set in exercise.set) {
             set.id = new ObjectId()
         }
     }
