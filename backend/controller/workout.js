@@ -17,7 +17,7 @@ exports.workout_post = function(req, res) {
         res.send("Include sets in post")
     }
 
-    for (let exercise in workout_log.exerciseList) {
+    for (let exercise of workout_log.exerciseList) {
         let exId = new ObjectId()
         console.log("new id " + exId)
         console.log("new exercise " + JSON.stringify(exercise))
