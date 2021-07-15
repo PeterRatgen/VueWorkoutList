@@ -28,7 +28,10 @@ exports.workout_post = function(req, res) {
     workout_log["dateCreated"] = date.valueOf();
     workout_log["userId"] = ObjectId(req.user["userId"]);
 
+    console.log("generating id " + new ObjectId())
+
     console.log(workout_log)
+    console.log(workout_log.exerciseList)
 
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
