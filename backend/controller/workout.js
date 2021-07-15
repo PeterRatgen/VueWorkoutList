@@ -22,7 +22,7 @@ exports.workout_post = function(req, res) {
         console.log("new id " + exId)
         console.log("new exercise " + JSON.stringify(exercise))
         exercise["id"] = exId
-        for (let set in exercise.set) {
+        for (let set of exercise.set) {
             set["id"] = new ObjectId()
         }
     }
