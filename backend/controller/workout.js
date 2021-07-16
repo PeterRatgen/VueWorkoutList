@@ -151,7 +151,8 @@ exports.workout_change_reps = function(req, res) {
         dbase.collection("workouts").find(
             query, function(err, result) {
                 if (err) throw err;
-                console.log("find result "  + result)
+                console.log("find result ")
+                console.log(result)
             }
         )
         dbase.collection("workouts").updateOne(
