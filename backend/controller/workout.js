@@ -148,6 +148,12 @@ exports.workout_change_reps = function(req, res) {
                 }
             ]
         }     
+        dbase.collection("workouts").find({
+            query, function(err, result) {
+                if (err) throw err;
+                console.log("find result "  + JSON.stringify(result))
+            }
+        })
         dbase.collection("workouts").updateOne(
             query, 
             newValues, 
@@ -164,11 +170,5 @@ exports.workout_change_reps = function(req, res) {
                 }
             }
         );
-        dbase.collection("workouts").find({
-            query, function(err, result) {
-                if (err) throw err;
-                console.log(JSON.stringify(result))
-            }
-        })
     });
 }
