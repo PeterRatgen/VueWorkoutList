@@ -148,12 +148,12 @@ exports.workout_change_reps = function(req, res) {
                 }
             ]
         }     
-        dbase.collection("workouts").find({
+        dbase.collection("workouts").find(
             query, function(err, result) {
                 if (err) throw err;
                 console.log("find result "  + JSON.stringify(result))
             }
-        })
+        )
         dbase.collection("workouts").updateOne(
             query, 
             newValues, 
