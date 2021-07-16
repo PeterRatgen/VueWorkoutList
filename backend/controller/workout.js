@@ -154,7 +154,7 @@ exports.workout_change_reps = function(req, res) {
             options,
             function(err, result) {
                 if (err) throw err;
-                console.log(JSON.stringify(result.body))
+                console.log(JSON.stringify(result))
                 console.log(JSON.stringify(req.body))
                 db.close();
                 res.send("Completed successfully")
