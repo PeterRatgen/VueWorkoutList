@@ -156,9 +156,12 @@ exports.workout_change_reps = function(req, res) {
                 if (err) throw err;
                 console.log(JSON.stringify(result))
                 console.log(JSON.stringify(req.body))
-                console.log("user " + JSON.stringify(req.user))
                 db.close();
-                res.send("Completed successfully")
+                if (result.nModified == 0) {
+                    res.send("Completed successfully, none modified. Found " + result.n + " documents.")
+                } else {
+                    res.send("Result modified")
+                }
             });
     });
 }
