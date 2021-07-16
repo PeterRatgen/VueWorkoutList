@@ -158,10 +158,17 @@ exports.workout_change_reps = function(req, res) {
                 console.log(JSON.stringify(req.body))
                 db.close();
                 if (result.modifiedCount == 0) {
-                    res.send("Completed successfully, none modified. Found " + result.modifiedCount + " documents.")
+                    res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
                     res.send("Result modified")
                 }
-            });
+            }
+        );
+        dbase.collection("workouts").find({
+            query, function(err, result) {
+                if (err) throw err;
+                console.log(JSON.stringify(result))
+            }
+        })
     });
 }
