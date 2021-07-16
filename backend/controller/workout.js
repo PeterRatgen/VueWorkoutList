@@ -131,7 +131,7 @@ exports.workout_change_reps = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        let query = { _id: ObjectId(req.body.workoutId)}
+        let query = { _id: ObjectId(req.body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
             $set : { 
                 "exerciseList.$[el].set.$[rep].weight" : body.repItem.weight,
@@ -156,6 +156,7 @@ exports.workout_change_reps = function(req, res) {
                 if (err) throw err;
                 console.log(JSON.stringify(result))
                 console.log(JSON.stringify(req.body))
+                console.log("user " + JSON.stringify(req.user))
                 db.close();
                 res.send("Completed successfully")
             });
