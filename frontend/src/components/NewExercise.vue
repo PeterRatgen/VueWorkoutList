@@ -1,5 +1,5 @@
 <template>
-    <div class="add-exercise-button" @click.stop="$emit('add-item')">
+    <div class="add-exercise-button" @click.stop="addExercise">
         <fa class="plus-icon" icon="plus"></fa>
     </div>
 </template>
@@ -7,15 +7,28 @@
 <script>
 
 export default {
-  name: "NewExercise",
-  components : {
-  },
-  emits: ['add-item'],
-  data() {
-    return {
-    }
-  },
-  methods: {
+    name: "NewExercise",
+    components : {
+    },
+    emits: ['add-exercise'],
+    data() {
+        return {
+        }
+    },
+    methods: {
+        addExercise() {
+            let newId = this.makeId()
+            this.$emit('add-exercise', newId)
+        },
+        makeId() {
+            let ID = "";
+            let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for ( var i = 0; i < 12; i++ ) {
+                ID += characters.charAt(Math.floor(Math.random() * 36));
+            }
+            return ID;
+        }
+
   },
   mounted() {
   }

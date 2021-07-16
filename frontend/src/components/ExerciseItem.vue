@@ -34,7 +34,7 @@
         <transition name="fade" mode="out-in">
             <div class="description" v-if="contracted">
             </div>
-            <div v-else class="description-expand">
+            <div v-else>
                 <div class="repetition-container">
                     <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
@@ -51,6 +51,10 @@
                         />
                     </div>
                 </div>
+                <div v-if="editing">
+                    <button class="button" @click.stop="">Annuller</button>
+                    <button class="button" @click.stop="saveEdit">Gem</button>
+                </div>
             </div>
         </transition>
     </div>
@@ -66,7 +70,6 @@ export default {
   props: ["exerciseItem", "edit"],
   emits: ['new-repetition', 
             'completed-rep-edit', 
-            'title-edit-end',
             'exercise-name',
             'delete-exercise',
             'delete-rep'],
@@ -94,8 +97,7 @@ export default {
           this.emitter.emit('pressed-exerciseItem')
         },
         titleSubmitEdit(result) {
-            this.editing = false
-            this.contracted = false
+            //this.contracted = false
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         repChange(repItem) {
@@ -116,6 +118,10 @@ export default {
         },
         deleteRep(id) {
             this.$emit('delete-rep', { repId: id , exerciseId: this.exerciseItem.id })
+        },
+        saveEdit() {
+            this.editing = false
+
         }
     },
     created() {
@@ -169,6 +175,12 @@ export default {
     h4 {
         display: inline;
     }
+}
+
+
+.button {
+    @include button;
+    width: 5rem;
 }
 
 .clickable-header {

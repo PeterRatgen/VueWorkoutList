@@ -7,18 +7,15 @@
         @input="checkHeader"/>
     </div>
     <div class="divider" v-show="exerciseList == 0"></div>
-    <div v-bind:key="exercise" v-for="(exercise, index) in exerciseList" >
+    <div v-bind:key="exercise" v-for="exercise in exerciseList" >
         <ExerciseItem 
             :exerciseItem="exercise"
-            :index="index"
             :edit="true"
             v-on:new-repetition="newRepetition"
-            v-on:title-edit-end="titleEditEnd"
             v-on:exercise-name="changeExerciseName"
         /> 
     </div>
-    <NewExercise v-on:add-item ="$emit('add-item')" 
-    />
+    <NewExercise v-on:add-exercise ="addExercise" />
 </template>
 
 
@@ -34,7 +31,7 @@ export default {
         NewExercise
     },
     props: ['exerciseList'],
-    emits: ['add-item', 'add-name', 'new-repetition', 'exercise-name'],
+    emits: ['add-exercise', 'new-repetition', 'exercise-name', 'workout-header'],
     created() {
     },
     data() {
@@ -44,17 +41,16 @@ export default {
     },
     methods: {
         checkHeader() {
-            this.emitter.emit('workout-header', this.workoutHeader)
+            this.$emit('workout-header', this.workoutHeader)
         },
-        newRepetition(index) {
-            this.$emit('new-repetition', index)
-        },
-        titleEditEnd(index) {
-            this.nameEdit = false 
-            this.emitter.emit('title-edit-end', index)
+        newRepetition(id) {
+            this.$emit('new-repetition', id)
         },
         changeExerciseName(data) {
             this.$emit('exercise-name', data)
+        },
+        addExercise(id) {
+            this.$emit('add-exercise', id)
         }
     }
 }

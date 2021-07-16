@@ -9,10 +9,10 @@
         <div class="add-form" @click.stop v-else>
             <WorkoutFormAdder
                 :exerciseList="exerciseList"
-                v-on:add-item="addItem"
-                v-on:add-name="addName"
+                v-on:add-exercise="addExercise"
                 v-on:new-repetition="newRepetition"
                 v-on:exercise-name="addName"
+                v-on:workout-header="newHeader"
             />
             <div class="divider"></div>
             <button class="button" @click="collapseCard">Cancel</button>
@@ -53,8 +53,8 @@ export default {
         this.addCardColor = "#fff"
       }
     },
-    newRepetition(index){
-        let exercise = this.exerciseList[index]
+    newRepetition(id){
+        let exercise = this.exerciseList.find(element => element.id == id)
         const length = exercise["set"].length
         if (length > 0) {
             const weight = exercise["set"][length - 1]["weight"];
@@ -64,14 +64,19 @@ export default {
             exercise["set"].push({repetitions : 0, weight : 0}) 
         }
     },
-    addItem() {
-        console.log("pusing")
-        this.exerciseList.push({ name: "", set: []})
-        console.log(this.exerciseList)
+    addExercise(identifier) {
+        let newExercise = {
+            id: identifier,  
+            name: "", 
+            set: []
+        }
+        console.log("The new exercise")
+        console.log(newExercise)
+        this.exerciseList.push(newExercise)
     },
     addName(data) {
         if(this.createButton == false) {
-            let ele = this.exerciseList[data["exerciseIndex"]]
+            let ele = this.exerciseList.find(element => element.id == data["exerciseId"])
             ele.name = data["name"] 
         }
     },
@@ -83,13 +88,16 @@ export default {
             this.createButton = true
         }
     },
-    titleEditEnd(index) {
+    titleEditEnd(id) {
+        let index = this.exerciseList.indexOf(this.exerciseList.find(ele => ele.id == id))
         this.exerciseList.splice(index, 1) 
+    },
+    newHeader(data) {
+        this.title = data
     }
   },
   mounted() {
         this.emitter.on('exercise-name', this.addName)
-        this.emitter.on('workout-header', (data) => {this.title = data})
         this.emitter.on('title-edit-end', this.titleEditEnd)
   }
 }

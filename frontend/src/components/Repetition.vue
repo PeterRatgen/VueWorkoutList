@@ -1,43 +1,38 @@
 <template> 
     <div class="rep-container" >
-        <transition name="fade" mode="out-in">
-            <div @click="deleteRep" v-if="delMode">
-                <fa icon="trash-alt"></fa>
-            </div>
-            <div @click.stop="repetition_click()" v-else>
-                <transition name="fade" mode="out-in">
-                <div v-if="editing " >
-                    <div class="item"  @mousewheel.prevent="scrolledWeight" > 
-                        <span class="icon-container"  @click.stop="dec('weight')">
-                            <fa class="icon" icon=minus  ></fa>
-                        </span>
-                        {{ repItem.weight }} kg 
-                        <span class="icon-container"  @click.stop="inc('weight')">
-                            <fa class="icon" icon=plus  ></fa>
-                        </span>
-                    </div>
-                    <div class="item" @mousewheel.prevent="scrolledReps">
-                        <span class="icon-container" @click.stop="dec('reps')">
-                            <fa class="icon" icon=minus  ></fa>
-                        </span>
-                        {{ repItem.repetitions }} reps
-                        <span class="icon-container" @click.stop="inc('reps')">
-                            <fa class="icon" icon=plus  ></fa>
-                        </span>
-                    </div> 
-                    
-                </div>
-                <div v-else>
-                    <span v-if="repItem.weight > 0"> 
-                        {{ repItem.weight }} kg x {{ repItem.repetitions }}
+        <div @click.stop="repetition_click()">
+            <transition name="fade" mode="out-in">
+            <div v-if="editing">
+                <div class="item"  @mousewheel.prevent="scrolledWeight" > 
+                    <span class="icon-container"  @click.stop="dec('weight')">
+                        <fa class="icon" icon=minus  ></fa>
                     </span>
-                    <span v-else>
-                        {{ repItem.repetitions }} reps
-                    </span> 
+                    {{ repItem.weight }} kg 
+                    <span class="icon-container"  @click.stop="inc('weight')">
+                        <fa class="icon" icon=plus  ></fa>
+                    </span>
                 </div>
-                </transition>
+                <div class="item" @mousewheel.prevent="scrolledReps">
+                    <span class="icon-container" @click.stop="dec('reps')">
+                        <fa class="icon" icon=minus  ></fa>
+                    </span>
+                    {{ repItem.repetitions }} reps
+                    <span class="icon-container" @click.stop="inc('reps')">
+                        <fa class="icon" icon=plus  ></fa>
+                    </span>
+                </div> 
+                
             </div>
-        </transition>
+            <div v-else>
+                <span v-if="repItem.weight > 0"> 
+                    {{ repItem.weight }} kg x {{ repItem.repetitions }}
+                </span>
+                <span v-else>
+                    {{ repItem.repetitions }} reps
+                </span> 
+            </div>
+            </transition>
+        </div>
     </div>
 </template>
 
@@ -111,6 +106,10 @@ export default {
                     this.editing = false;
                     this.$emit('completed-rep-edit', this.repItem)
                 }
+            } else {
+                let element = this.$el;
+                element.style.border = "2px solid #000"
+                console.log("delMode true")
             }
         },
         scrolledReps(event) {
@@ -126,7 +125,10 @@ export default {
             } else {
                 this.dec("weight")
             }
-        }
+        },
+    },
+    updated() {
+        console.log("state of delete " + this.delMode)
     }
 }
 

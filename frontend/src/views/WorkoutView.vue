@@ -97,17 +97,18 @@ export default {
                 exercise["set"].push({repetitions : 0, weight : 0}) 
             }
         },
-        changeRep(data){
-            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            let exercise =  workout["exerciseList"].find(element => element.id = data.exerciseId)
-            let rep = exercise["set"].find(element => element.id == data.repItem.id)
-            rep.repetitions = data["repItem"].repetitions
-            rep.weight = data["repItem"].weight
-            this.apiInstance.put('/workout/rep_change', {
+        async changeRep(data){
+            let workout = this.workouts.find(element => element._id == data.workoutId)
+            let exercise =  workout.exerciseList.find(element => element.id == data.exerciseId)
+            let rep = exercise.set.find(element => element.id == data.repItem.id)
+            rep.repetitions = data.repItem.repetitions
+            rep.weight = data.repItem.weight
+            let res = await this.apiInstance.put('/workout/rep_change', {
                 workoutId: data["workoutId"],
                 exerciseId : data["exerciseId"],
                 repItem: data["repItem"]
             })
+            console.log(" response " + res.data)
         },
         backgroundPressed() {
             this.emitter.emit('pressed-background')
