@@ -10,19 +10,24 @@
 
 export default {
     name : 'InputField',
-    props: ["startEdit" , 'fontSize', 'fontWeight', 'initialValue'],
+    props: ["startEdit" , 'fontSize', 'fontWeight', 'initialValue', 'visibility'],
     emits: ['result'],
     methods: {
         acceptEdit(){
             const editValue = this.$refs.titleInput.value
             this.$emit('result', editValue)
+        },
+        startEditing(){
+            this.display()
+            this.$refs.titleInput.focus()
+        },
+        hide(){
             let title_editor = this.$el
             title_editor.style.display = "none"
         },
-        startEditing(){
+        display() {
             let title_editor = this.$el
             title_editor.style.display = "flex"
-            this.$refs.titleInput.focus()
         }
     },
     mounted() {
@@ -38,6 +43,11 @@ export default {
     updated() {
         if (this.startEdit){
             this.startEditing()
+        }
+        if (!this.visibility) {
+            this.hide()
+        } else {
+            this.display()
         }
     }
 }

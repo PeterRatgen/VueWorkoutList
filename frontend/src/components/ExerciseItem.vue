@@ -45,15 +45,12 @@
                             v-on:completed-rep-edit="repChange"
                         />
                     </div>
+                    <fa class="trash-rep" v-bind:class="{trashrepvisible : editing }" icon="trash-alt"></fa> 
                     <div class="repetition add-repetition"> 
                         <NewRepetition
                             v-on:new-repetition="newRepetition"
                         />
                     </div>
-                </div>
-                <div v-if="editing">
-                    <button class="button" @click.stop="">Annuller</button>
-                    <button class="button" @click.stop="saveEdit">Gem</button>
                 </div>
             </div>
         </transition>
@@ -161,6 +158,16 @@ export default {
     justify-content: center;
     align-items: center;
     height: fit-content;
+}
+
+.trash-rep {
+    display: none;
+    color: red;
+}
+
+.trashrepvisible {
+    display: block;
+    position: relative;
 }
 
 .add-repetition {

@@ -183,12 +183,9 @@ export default {
 }
 
 @media only screen and (max-width: 1350px) {
-  .item-header{
-  }
-  .item-content{
-    
-  }
+
 }
+
 @media only screen and (max-width: 600px) {
   .todo-block {
    width: 95%;

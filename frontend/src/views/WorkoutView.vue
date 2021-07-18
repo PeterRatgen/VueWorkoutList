@@ -44,7 +44,7 @@ export default {
         },
         async login() {
             try {
-                let response = await axios.post("https://pratgen.dk/liftlog/login",
+                let response = await axios.post("https://liftlog.app/api/login",
                 {
                     email : this.email, 
                     password: this.password
@@ -58,7 +58,7 @@ export default {
         createInstance() {
             const token = localStorage.getItem("user")
             return axios.create({
-                baseURL: "https://pratgen.dk/liftlog",
+                baseURL: "https://liftlog.app/api",
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
