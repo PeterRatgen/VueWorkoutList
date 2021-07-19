@@ -1,48 +1,58 @@
 <template>
-  <div class="workout-item" @click.stop="expand_card">
-    <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
-    <div class="flex-container">
-        <h3 id="title">{{ workout.title }}</h3>
-        <InputField 
-            :startEdit="editingTitle"   
-            :fontSize="'1.3rem'"
-            :fontWeight="'700'"
-            :initialValue="workout.title"
-            v-on:result="submitEdit"
-        />
-        <span class="icon-container" @click.stop="displayHover = true">
-            <fa class="dots" icon="ellipsis-v"></fa>
-        </span>
-        <HoverMenu 
-            :menuItems=hovMen 
-            :display=displayHover  
-            @option="handleOption"
-            @click.prevent
-        />
+    <div class="workout-item" @click.stop="expand_card">
+        <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
+            <transition name="fade" mode="out-in">
+                <div  v-if="contracted">
+                    <div class="flex-container">
+                        <h3 id="title">{{ workout.title }}</h3>
+                            <span class="icon-container" @click.stop="displayHover = true">
+                                <fa class="dots" icon="ellipsis-v"></fa>
+                            </span>
+                            <HoverMenu 
+                                :menuItems=hovMen 
+                                :display=displayHover  
+                                @option="handleOption"
+                                @click.prevent
+                            />
+                        </div>
+                        <p  class="description exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
+                        {{ nameWithComma(index) }}
+                        </p>
+                    </div>
+                <div v-else >
+                    <div class="flex-container">
+                        <InputField 
+                            :fontSize="'1.3rem'"
+                            :fontWeight="'700'"
+                            :initialValue="workout.title"
+                            v-on:result="submitEdit"
+                        />
+                    <span class="icon-container" @click.stop="displayHover = true">
+                        <fa class="dots" icon="ellipsis-v"></fa>
+                    </span>
+                    <HoverMenu 
+                        :menuItems=hovMen 
+                        :display=displayHover  
+                        @option="handleOption"
+                        @click.prevent
+                    />
+                </div>
+                <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
+                  <ExerciseItem 
+                    :exerciseItem="exercise"
+                    v-on:new-repetition="newRepetition"
+                    v-on:completed-rep-edit="changeRep"
+                    v-on:exercise-name="changeExerciseName"
+                    v-on:delete-exercise="deleteExercise"
+                    v-on:delete-rep="deleteRep"
+                    /> 
+                </div>
+                <NewExercise
+                    v-on:add-item="this.emitter.emit('add-item', this.workout._id)"
+                />
+            </div>
+        </transition>
     </div>
-    <transition name="fade" mode="out-in">
-      <div class="description" v-if="contracted">
-        <p class="exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
-        {{ nameWithComma(index) }}
-        </p>
-      </div>
-      <div v-else class="description-expand">
-        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
-          <ExerciseItem 
-            :exerciseItem="exercise"
-            v-on:new-repetition="newRepetition"
-            v-on:completed-rep-edit="changeRep"
-            v-on:exercise-name="changeExerciseName"
-            v-on:delete-exercise="deleteExercise"
-            v-on:delete-rep="deleteRep"
-        /> 
-        </div>
-        <NewExercise
-            v-on:add-item="this.emitter.emit('add-item', this.workout._id)"
-        />
-      </div>
-    </transition>
-  </div>
 </template>
 
 <script>

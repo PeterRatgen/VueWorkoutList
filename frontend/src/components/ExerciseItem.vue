@@ -1,40 +1,39 @@
 <template> 
     <div class="divder"></div>
     <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
-        <div class="item-header">
-            <div v-if="editing" >
-                <InputField
-                    :startEdit="editing"   
-                    :fontSize="'1rem'"
-                    :fontWeight="'700'"
-                    :initialValue="exerciseItem.name"
-                    v-on:result="titleSubmitEdit"
-                />
-            </div>
-            <div v-else>
-                <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
-            </div>
-            <span>  <span class="icon-container" @click.stop="editName" > 
-                        <fa 
-                            class="edit-icon"  
-                            v-bind:class="{ editiconactive : isHover }"  
-                            icon="pencil-alt" >
-                        </fa> 
-                    </span>
-                    <span class="icon-container" @click.stop="deleteExercise" >
-                        <fa 
-                            class="edit-icon" 
-                            v-bind:class="{ editiconactive : isHover }" 
-                            icon="trash-alt" >
-                        </fa> 
-                    </span>
-                    {{ exerciseItem.set.length }} sæt
-            </span>
-        </div>
         <transition name="fade" mode="out-in">
             <div class="description" v-if="contracted">
+                <div class="item-header">
+                    <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
+                    <span>  
+                        <span class="icon-container" @click.stop="deleteExercise" >
+                            <fa 
+                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                icon="trash-alt" >
+                            </fa> 
+                        </span>
+                    {{ exerciseItem.set.length }} sæt
+                    </span>
+                </div>
             </div>
             <div v-else>
+                <div class="item-header">
+                    <InputField
+                        :fontSize="'1rem'"
+                        :fontWeight="'700'"
+                        :initialValue="exerciseItem.name"
+                        v-on:result="titleSubmitEdit"
+                    />
+                    <span>  
+                        <span class="icon-container" @click.stop="deleteExercise" >
+                            <fa 
+                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                icon="trash-alt" >
+                            </fa> 
+                        </span>
+                        {{ exerciseItem.set.length }} sæt
+                    </span>
+                </div>
                 <div class="repetition-container">
                     <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
