@@ -23,6 +23,7 @@
                         :fontWeight="'700'"
                         :initialValue="exerciseItem.name"
                         v-on:result="titleSubmitEdit"
+                        @click.stop
                     />
                     <span>  
                         <span class="icon-container" @click.stop="deleteExercise" >
@@ -44,7 +45,6 @@
                             v-on:completed-rep-edit="repChange"
                         />
                     </div>
-                    <fa class="trash-rep" v-bind:class="{trashrepvisible : editing }" icon="trash-alt"></fa> 
                     <div class="repetition add-repetition"> 
                         <NewRepetition
                             v-on:new-repetition="newRepetition"
@@ -161,6 +161,9 @@ export default {
 
 .trash-rep {
     display: none;
+    position: relative;
+    right: 50px;
+    top: 20px;
     color: red;
 }
 

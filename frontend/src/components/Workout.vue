@@ -12,7 +12,7 @@
                                 :menuItems=hovMen 
                                 :display=displayHover  
                                 @option="handleOption"
-                                @click.prevent
+                                @click.stop
                             />
                         </div>
                         <p  class="description exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
@@ -26,6 +26,7 @@
                             :fontWeight="'700'"
                             :initialValue="workout.title"
                             v-on:result="submitEdit"
+                            @click.stop
                         />
                     <span class="icon-container" @click.stop="displayHover = true">
                         <fa class="dots" icon="ellipsis-v"></fa>

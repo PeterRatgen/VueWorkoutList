@@ -1,5 +1,5 @@
 <template> 
-    <div class="rep-container" >
+    <div class="rep-container">
         <div @click.stop="repetition_click()">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
@@ -33,6 +33,13 @@
             </div>
             </transition>
         </div>
+            <fa 
+                v-bind:class="{ trashrepvisible : isHover }"
+                @mouseover="isHover = true"
+                @mouseleave="isHover = false"
+                class="trash-rep" 
+                icon="trash-alt" >
+            </fa> 
     </div>
 </template>
 
@@ -48,6 +55,7 @@ export default {
             alignment: 'left',
             repItem: '',
             editing: false,
+            isHover: false
         }
     }, 
     created() {
