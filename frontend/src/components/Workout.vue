@@ -100,7 +100,13 @@ export default {
     data () {
         return {
             contracted: true,
+            /*
+                The items in the hovermenu
+            */
             hovMen: ["Change title", "Delete workout"],
+            /*
+                Is the dots menu hovering right now?
+            */
             displayHover: false,
             editingTitle : false
         }
