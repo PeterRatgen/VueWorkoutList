@@ -80,6 +80,9 @@ export default {
     */
     name: "Workout",
     props: {
+        /*
+            The workout to be displayed in this component
+        */
         ["workout"] : {
             type: Object,
             required: true,
