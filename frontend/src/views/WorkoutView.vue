@@ -22,9 +22,9 @@ import axios from 'axios'
 export default {
     name: 'Home',
         components: {
-        WorkoutList,
-        HelloHeader,
-        AddWorkout
+            WorkoutList,
+            HelloHeader,
+            AddWorkout
         },
         data() {
             return {
@@ -173,6 +173,7 @@ export default {
         this.emitter.on('add-item', this.addExercise)
         this.emitter.on('delete-rep', this.deleteRep)
         this.emitter.on('title-change', this.titleChange)
+        this.emitter.on('delete-workout', this.deleteWorkout)
     }
 }
 
