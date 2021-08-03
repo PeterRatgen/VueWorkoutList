@@ -13,22 +13,16 @@
 import Workout from './Workout.vue'
 
 export default {
-  name: "WorkoutList", 
-  components: {
-    Workout
-  },
-  props: ["workouts"],
-  emit: ['title-change', 'delete-workout'],
-  created() {
-  },
-    methods: {
-        emitTitleChange(id, name) {
-            this.$emit('title-change', id, name)            
-        },
-        emitDeleteWorkout(id){
-            this.$emit('delete-workout', id)
-        },
-    }
+    name: "WorkoutList", 
+    components: {
+        Workout
+    },
+    props: {
+        /**
+            A list of Workout Objects, to display in the application
+        */
+        workouts : Array
+    },
 }
 </script>
 
