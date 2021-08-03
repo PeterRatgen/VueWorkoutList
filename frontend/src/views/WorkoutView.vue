@@ -154,6 +154,9 @@ export default {
             })
             console.log(" response " + res.data)
         },
+        backgroundPressed() {
+            this.emitter.emit('pressed-background')
+        },
         async submitWorkout(data) {
             /**
                 Add a new workout to the user.
