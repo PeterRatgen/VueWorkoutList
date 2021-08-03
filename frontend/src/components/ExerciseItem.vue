@@ -62,38 +62,37 @@ import InputField from "./input_field/InputField";
 import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
-  name: "ExerciseItem",
-  props: ["exerciseItem", "edit"],
-  emits: ['new-repetition', 
-            'completed-rep-edit', 
-            'exercise-name',
-            'delete-exercise',
-            'delete-rep'],
-  components: {
-    Repetition,
-    InputField,
-    NewRepetition
-  },
-  data () {
-    return {
-      ex: '',
-      showWeight: false,
-      contracted: true,
-      editing: false,
-      isHover : false
-    }
-  }, 
+    name: "ExerciseItem",
+    props: ["exerciseItem", "edit"],
+    emits: ['new-repetition', 
+        'completed-rep-edit', 
+        'exercise-name',
+        'delete-exercise',
+        'delete-rep'],
+    components: {
+        Repetition,
+        InputField,
+        NewRepetition
+    },
+    data () {
+        return {
+            ex: '',
+            showWeight: false,
+            contracted: true,
+            editing: false,
+            isHover : false
+        }
+    }, 
     methods : {
         expand_card() {
-          if (this.contracted) {
+            if (this.contracted) {
                 this.contracted = false
-          } else {
+            } else {
                 this.contracted = true
-          }
-          this.emitter.emit('pressed-exerciseItem')
+            }
+            this.emitter.emit('pressed-exerciseItem')
         },
         titleSubmitEdit(result) {
-            //this.contracted = false
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         repChange(repItem) {
