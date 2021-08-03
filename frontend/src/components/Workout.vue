@@ -63,10 +63,23 @@ import InputField from "./input_field/InputField.vue";
 import NewExercise from "./NewExercise.vue"
 
 export default {
+    /**
+        Display a single workout. Provides functionality for modifying the
+        existing workout, though the child components.
+    */
     name: "Workout",
-    props: ["workout"],
-    emits: ["title-change", 
-            'delete-workout'],
+    props: {
+        ["workout"] : {
+            type: Object,
+            required: true,
+            validator: function(value) {
+                return ( typeof(value._id) == "string" &&
+                typeof(value.title) == "string" &&
+                typeof(value.exerciseList ) == "object"
+                ) === true
+            }
+        }
+    },
     components: {
         ExerciseItem,
         HoverMenu,
@@ -74,14 +87,18 @@ export default {
         NewExercise
     },
     data () {
-    return {
-        contracted: true,
-        hovMen: ["Change title", "Delete workout"],
-        displayHover: false,
-        editingTitle : false
-    }
+        return {
+            contracted: true,
+            hovMen: ["Change title", "Delete workout"],
+            displayHover: false,
+            editingTitle : false
+        }
     },
     methods : {
+        /*
+            Split the exercises contained in the workouts, and present them as a
+            summary.
+        */
         nameWithComma(index) {
             if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
                 return `${this.workout.exerciseList[index].name}, `
@@ -90,14 +107,19 @@ export default {
             }
         },
         expand_card() {
+            /*
+                Expand the workout card.
+            */
             if (this.contracted) {
                 this.contracted = false
             } else {
                 this.contracted = true
             }
-            this.emitter.emit('pressed-workout')
         },
         renameTitle(){
+            /*
+                Rename the title of the workout.
+            */
             if (!this.editingTitle) {
                 let title_element = this.$el.querySelector("#title")
                 title_element.style.display = "none"
@@ -106,6 +128,9 @@ export default {
             }
         },
         handleOption(item){
+            /*
+                Handle the option clicked in the HoverMenu component.
+            */
             switch(item) {
                 case "Change title":
                     this.renameTitle()        
@@ -116,6 +141,9 @@ export default {
             }
         },
         submitEdit(title) {
+            /*
+                Submit upon ending the editing of the title of the workout.
+            */
             this.emitter.emit('title-change', { workoutId : this.workout._id, title : title})
             if (this.editingTitle) {
                 let title_element = this.$el.querySelector("#title")
@@ -124,6 +152,9 @@ export default {
             }
         },
         editEnd(){
+            /*
+                End of edit
+            */
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
