@@ -2,7 +2,11 @@
     <div class="workout-item" @click.stop="expand_card">
         <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
             <transition name="fade" mode="out-in">
-                <div  v-if="contracted">
+                <div v-if="contracted">
+                    <!--
+                        Here the workout is contracted, the title cannot be
+                        edited.
+                    -->
                     <div class="flex-container">
                         <h3 id="title">{{ workout.title }}</h3>
                             <span class="icon-container" @click.stop="displayHover = true">
@@ -20,6 +24,10 @@
                         </p>
                     </div>
                 <div v-else >
+                    <!---
+                        The workout is expanded, we can edit the title, and the
+                        exercies can be view and edited.
+                    -->
                     <div class="flex-container">
                         <InputField 
                             :fontSize="'1.3rem'"
@@ -39,13 +47,16 @@
                     />
                 </div>
                 <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
-                  <ExerciseItem 
-                    :exerciseItem="exercise"
-                    v-on:new-repetition="newRepetition"
-                    v-on:completed-rep-edit="changeRep"
-                    v-on:exercise-name="changeExerciseName"
-                    v-on:delete-exercise="deleteExercise"
-                    v-on:delete-rep="deleteRep"
+                    <!--
+                        List all the exercises contained in the workout.
+                    -->
+                    <ExerciseItem 
+                        :exerciseItem="exercise"
+                        v-on:new-repetition="newRepetition"
+                        v-on:completed-rep-edit="changeRep"
+                        v-on:exercise-name="changeExerciseName"
+                        v-on:delete-exercise="deleteExercise"
+                        v-on:delete-rep="deleteRep"
                     /> 
                 </div>
                 <NewExercise
@@ -171,23 +182,32 @@ export default {
             )
         },
         changeExerciseName(data) {
+            /*
+                Change the name of an exercise
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('exercise-name-change', data)
         },
         deleteExercise(data) {
+            /*
+                Delete and exercise from the workout
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('delete-exercise', data)
         },
         deleteRep(data) {
+            /*
+                Delete a repetition of a an exercise of a workout.
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('delete-rep', data)
         }
     },
     created() {
+        // Contract the workout, then the background has been pressed.
         this.emitter.on('pressed-background', () => {
             this.contracted = true;
         })
-        this.emitter.on('')
     }
 }
 </script>
