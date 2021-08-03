@@ -111,7 +111,7 @@ export default {
                     this.renameTitle()        
                     break;
                 case "Delete workout":
-                    this.$emit('delete-workout', this.workout._id)
+                    this.emitter.emit('delete-workout', this.workout._id)
                     break;
             }
         },

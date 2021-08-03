@@ -3,10 +3,11 @@
     <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
-        <WorkoutList 
-            v-bind:workouts="workouts" 
-            v-on:delete-workout="deleteWorkout"
-        />
+          <div v-bind:key="workout" v-for="workout in workouts" >
+            <Workout 
+                v-bind:workout="workout" 
+            />
+          </div>
         <AddWorkout/>
       </div>
     </div>
@@ -16,13 +17,13 @@
 <script>
 import AddWorkout from '../components/AddWorkout'
 import HelloHeader from '../components/HelloHeader.vue'
-import WorkoutList from '../components/WorkoutList';
+import Workout from '../components/Workout'
 import axios from 'axios'
 
 export default {
     name: 'Home',
         components: {
-            WorkoutList,
+            Workout,
             HelloHeader,
             AddWorkout
         },
