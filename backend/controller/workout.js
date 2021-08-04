@@ -166,3 +166,39 @@ exports.workout_change_reps = function(req, res) {
         );
     });
 }
+
+exports.workout_add_exercise = function(req, res) {
+    mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        if (err) throw err;
+        let dbase = db.db("workout_db");
+
+        let new_exercise = {
+            id : new ObjectId(),
+            name : '',
+            set : []
+        }
+        let query = { _id: ObjectId(req.body.workoutId), userId: ObjectId(req.user["userId"])}
+        let newValues = {
+            $push : { 
+                "exerciseList.$" : new_exercise
+            }
+        }
+        dbase.collection("workouts").updateOne(
+            query, 
+            newValues, 
+            function(err, result) {
+                if (err) throw err;
+                console.log(JSON.stringify(result))
+                console.log(JSON.stringify(req.body))
+                db.close();
+                if (result.modifiedCount == 0) {
+                    res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
+                } else {
+                    res.send("Result modified")
+                }
+            }
+        );
+    });
+
+}
+
