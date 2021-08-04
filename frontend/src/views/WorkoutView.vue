@@ -136,9 +136,14 @@ export default {
                 exerciseList : workout["exerciseList"]
             })
         },
-        addExercise(id) {
-            let workout = this.workouts.find(element => element["_id"] == id)
-            workout["exerciseList"].push({ name: "", set: []})
+        addExercise(data) {
+            /*
+                @data contains 
+                    workoutId - for the workout where the exercise should be
+                    exerciseId - for the id of a new exercise 
+            */
+            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
+            workout["exerciseList"].push({id : data.exerciseId  , name: "", set: []})
         },
         deleteRep(data) {
             let workout = this.workouts.find(element => element["_id"] == data.workoutId)
@@ -170,7 +175,7 @@ export default {
         this.emitter.on('submit-new-workout', this.submitWorkout)
         this.emitter.on('exercise-name-change', this.changeExerciseName)
         this.emitter.on('delete-exercise', this.deleteExercise)
-        this.emitter.on('add-item', this.addExercise)
+        this.emitter.on('add-exercise', this.addExercise)
         this.emitter.on('delete-rep', this.deleteRep)
         this.emitter.on('title-change', this.titleChange)
     }

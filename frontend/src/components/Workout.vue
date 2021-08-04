@@ -49,7 +49,7 @@
                     /> 
                 </div>
                 <NewExercise
-                    v-on:add-item="this.emitter.emit('add-item', this.workout._id)"
+                    v-on:add-exercise="addExercise"
                 />
             </div>
         </transition>
@@ -148,8 +148,18 @@ export default {
             this.emitter.emit('delete-exercise', data)
         },
         deleteRep(data) {
+            /*
+                @data contains the id of the exercise being deleted.
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('delete-rep', data)
+        },
+        addExercise(data) {
+            /*
+                @data contains the id of the exercise being added.
+            */
+            data.workoutId = this.workout._id
+            this.emitter.emit('add-exercise', data)
         }
     },
     created() {
