@@ -10,30 +10,15 @@
 
 export default {
     name : 'InputField',
-    props: ["startEdit" , 'fontSize', 'fontWeight', 'initialValue', 'visibility'],
+    props: ['fontSize', 'fontWeight', 'initialValue', 'visibility'],
     emits: ['result'],
     methods: {
         acceptEdit(){
             const editValue = this.$refs.titleInput.value
             this.$emit('result', editValue)
         },
-        startEditing(){
-            this.display()
-            this.$refs.titleInput.focus()
-        },
-        hide(){
-            let title_editor = this.$el
-            title_editor.style.display = "none"
-        },
-        display() {
-            let title_editor = this.$el
-            title_editor.style.display = "flex"
-        }
     },
     mounted() {
-        if (this.startEdit){
-            this.startEditing()
-        }
         let title_input = this.$refs.titleInput
         console.log("Setting fontsize " + this.fontSize)
         title_input.style.fontSize = this.fontSize;
@@ -41,14 +26,6 @@ export default {
         title_input.value = this.initialValue
     },
     updated() {
-        if (this.startEdit){
-            this.startEditing()
-        }
-        if (!this.visibility) {
-            this.hide()
-        } else {
-            this.display()
-        }
     }
 }
 </script>
@@ -58,7 +35,7 @@ export default {
 @import '../../assets/variables.scss';
 
 .title-editor {
-    display: none;
+    display: inline;
 
     .header-input {
         font-weight: 700; 

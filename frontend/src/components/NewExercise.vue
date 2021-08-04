@@ -10,7 +10,9 @@ export default {
     name: "NewExercise",
     components : {
     },
-    emits: ['add-exercise'],
+    emits: {
+        ['add-exercise'] : null
+    },
     data() {
         return {
         }
@@ -18,7 +20,7 @@ export default {
     methods: {
         addExercise() {
             let newId = this.makeId()
-            this.$emit('add-exercise', newId)
+            this.$emit('add-exercise', { exerciseId : newId})
         },
         makeId() {
             let ID = "";

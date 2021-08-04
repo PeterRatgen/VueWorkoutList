@@ -3,10 +3,11 @@
     <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
-        <WorkoutList 
-            v-bind:workouts="workouts" 
-            v-on:delete-workout="deleteWorkout"
-        />
+          <div v-bind:key="workout" v-for="workout in workouts" >
+            <Workout 
+                v-bind:workout="workout" 
+            />
+          </div>
         <AddWorkout/>
       </div>
     </div>
@@ -16,33 +17,54 @@
 <script>
 import AddWorkout from '../components/AddWorkout'
 import HelloHeader from '../components/HelloHeader.vue'
-import WorkoutList from '../components/WorkoutList';
+import Workout from '../components/Workout'
 import axios from 'axios'
 
 export default {
-    name: 'Home',
+    /**
+        View of the workouts.
+    */
+    name: 'WorkoutView',
         components: {
-        WorkoutList,
-        HelloHeader,
-        AddWorkout
+            Workout,
+            HelloHeader,
+            AddWorkout
         },
         data() {
             return {
+                /*
+                    The user is the JWT Token, which stores the token of the
+                    user, which is logged in.
+                */
                 user: {},
                 headerItem : '',
                 email : 'peter@pratgen.dk',
                 password : 'safe',
+                /*
+                    Instance of the axios connection, where queries to the API
+                    can be performed.
+                */
                 apiInstance : '',
-                workouts : ''
+                /* 
+                   Array of the workouts 
+                */
+                workouts : []
             }
     },
     methods: {
         async init() {
+            /*
+                Init script, initializes the website with data, and API instances.
+            */
             await this.login()
             this.apiInstance = this.createInstance();  
             await this.getWorkout();
         },
         async login() {
+            /**
+                Logs in with the stored credentials, and stores the JSON Web
+                Token retured by the endpoint
+            */
             try {
                 let response = await axios.post("https://liftlog.app/api/login",
                 {
@@ -56,6 +78,10 @@ export default {
             }
         },
         createInstance() {
+            /**
+                Saves an instance of the API connection, as not to repeat the
+                Bearer Token
+            */
             const token = localStorage.getItem("user")
             return axios.create({
                 baseURL: "https://liftlog.app/api",
@@ -65,10 +91,16 @@ export default {
             })
         },
         async getWorkout() {
+            /**
+                Retrieve the workouts of the user, and save the response.
+            */
             const response = await this.apiInstance.get('/workout')
             this.workouts = JSON.parse(response.request.response)
         },
         async titleChange(data){
+            /**
+                Change the title of a workout.
+            */
             let res = await this.apiInstance.post('/workout/rename',
                 {
                     id : data["workoutId"],
@@ -80,12 +112,20 @@ export default {
             ele.title = data.title
         },
         deleteWorkout(workoutId) {
+            /**
+                Delete one workout. First on the database, and then in the data
+                stores locally.
+            */
             this.apiInstance.delete('/workout/' + workoutId )
             let ele = this.workouts.find(element => element["_id"] == workoutId)
             let index = this.workouts.indexOf(ele)
             this.workouts.splice(index, 1)
         },
         addRepetition(data){
+            /**
+                Add a repetition to a workout. If another repetition exists
+                before it, then add the same weight and reps to the new one.
+            */
             let workout = this.workouts.find(element => element["_id"] == data["id"])
             let exercise = workout["exerciseList"][data["index"]]
             const length = exercise["set"].length
@@ -98,6 +138,10 @@ export default {
             }
         },
         async changeRep(data){
+            /**
+                Change a rep of the workout. First in the local data, then in
+                the database.
+            */
             let workout = this.workouts.find(element => element._id == data.workoutId)
             let exercise =  workout.exerciseList.find(element => element.id == data.exerciseId)
             let rep = exercise.set.find(element => element.id == data.repItem.id)
@@ -114,11 +158,17 @@ export default {
             this.emitter.emit('pressed-background')
         },
         async submitWorkout(data) {
+            /**
+                Add a new workout to the user.
+            */
             const res = await this.apiInstance.post('/workout', data)
             data._id =  res.data
             this.workouts.push(data)
         },
         changeExerciseName(data) {
+            /**
+                Change the name of an exercise.
+            */
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
             let exercise =  workout["exerciseList"].find(element => element["id"] == data["exerciseId"])
             exercise.name = data["name"]
@@ -129,6 +179,9 @@ export default {
             })
         },
         deleteExercise(data) {
+            /*
+                Delete an exercise.
+            */
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
             workout["exerciseList"].splice(data["exerciseIndex"], 1)
             this.apiInstance.post('/workout/update_exercise', {
@@ -136,11 +189,19 @@ export default {
                 exerciseList : workout["exerciseList"]
             })
         },
-        addExercise(id) {
-            let workout = this.workouts.find(element => element["_id"] == id)
-            workout["exerciseList"].push({ name: "", set: []})
+        addExercise(data) {
+            /*
+                @data contains 
+                    workoutId - for the workout where the exercise should be
+                    exerciseId - for the id of a new exercise 
+            */
+            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
+            workout["exerciseList"].push({id : data.exerciseId  , name: "", set: []})
         },
         deleteRep(data) {
+            /*
+                Delete a repetition of an exercise in a workout.
+            */
             let workout = this.workouts.find(element => element["_id"] == data.workoutId)
             let exercise = workout.exerciseList[data.exerciseIndex]
             exercise.set.splice(data.repIndex, 1)
@@ -152,6 +213,9 @@ export default {
     },
     computed : {
         jwtData() {
+            /**
+                Get the data stored within the jwt token.         
+            */
             const token = localStorage.getItem("user")
             if (token) {
                         return JSON.parse(atob(token.split('.')[1]))
@@ -165,17 +229,20 @@ export default {
         this.init()
     },
     mounted() {
+        /**
+            Receiving emitted events
+        */
         this.emitter.on('new-repetition', this.addRepetition)
         this.emitter.on('completed-rep-edit', this.changeRep)
         this.emitter.on('submit-new-workout', this.submitWorkout)
         this.emitter.on('exercise-name-change', this.changeExerciseName)
         this.emitter.on('delete-exercise', this.deleteExercise)
-        this.emitter.on('add-item', this.addExercise)
+        this.emitter.on('add-exercise', this.addExercise)
         this.emitter.on('delete-rep', this.deleteRep)
         this.emitter.on('title-change', this.titleChange)
+        this.emitter.on('delete-workout', this.deleteWorkout)
     }
 }
-
 </script>
 
 <style lang="scss" >

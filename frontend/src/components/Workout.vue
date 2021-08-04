@@ -1,48 +1,70 @@
 <template>
-  <div class="workout-item" @click.stop="expand_card">
-    <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
-    <div class="flex-container">
-        <h3 id="title">{{ workout.title }}</h3>
-        <InputField 
-            :startEdit="editingTitle"   
-            :fontSize="'1.3rem'"
-            :fontWeight="'700'"
-            :initialValue="workout.title"
-            v-on:result="submitEdit"
-        />
-        <span class="icon-container" @click.stop="displayHover = true">
-            <fa class="dots" icon="ellipsis-v"></fa>
-        </span>
-        <HoverMenu 
-            :menuItems=hovMen 
-            :display=displayHover  
-            @option="handleOption"
-            @click.prevent
-        />
+    <div class="workout-item" @click.stop="expand_card">
+        <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
+            <transition name="fade" mode="out-in">
+                <div v-if="contracted">
+                    <!--
+                        Here the workout is contracted, the title cannot be
+                        edited.
+                    -->
+                    <div class="flex-container">
+                        <h3 id="title">{{ workout.title }}</h3>
+                            <span class="icon-container" @click.stop="displayHover = true">
+                                <fa class="dots" icon="ellipsis-v"></fa>
+                            </span>
+                            <HoverMenu 
+                                :menuItems=hovMen 
+                                :display=displayHover  
+                                @option="handleOption"
+                                @click.stop
+                            />
+                        </div>
+                        <p  class="description exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
+                        {{ nameWithComma(index) }}
+                        </p>
+                    </div>
+                <div v-else >
+                    <!---
+                        The workout is expanded, we can edit the title, and the
+                        exercies can be view and edited.
+                    -->
+                    <div class="flex-container">
+                        <InputField 
+                            :fontSize="'1.3rem'"
+                            :fontWeight="'700'"
+                            :initialValue="workout.title"
+                            v-on:result="submitEdit"
+                            @click.stop
+                        />
+                    <span class="icon-container" @click.stop="displayHover = true">
+                        <fa class="dots" icon="ellipsis-v"></fa>
+                    </span>
+                    <HoverMenu 
+                        :menuItems=hovMen 
+                        :display=displayHover  
+                        @option="handleOption"
+                        @click.prevent
+                    />
+                </div>
+                <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
+                    <!--
+                        List all the exercises contained in the workout.
+                    -->
+                    <ExerciseItem 
+                        :exerciseItem="exercise"
+                        v-on:new-repetition="newRepetition"
+                        v-on:completed-rep-edit="changeRep"
+                        v-on:exercise-name="changeExerciseName"
+                        v-on:delete-exercise="deleteExercise"
+                        v-on:delete-rep="deleteRep"
+                    /> 
+                </div>
+                <NewExercise
+                    v-on:add-exercise="addExercise"
+                />
+            </div>
+        </transition>
     </div>
-    <transition name="fade" mode="out-in">
-      <div class="description" v-if="contracted">
-        <p class="exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
-        {{ nameWithComma(index) }}
-        </p>
-      </div>
-      <div v-else class="description-expand">
-        <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
-          <ExerciseItem 
-            :exerciseItem="exercise"
-            v-on:new-repetition="newRepetition"
-            v-on:completed-rep-edit="changeRep"
-            v-on:exercise-name="changeExerciseName"
-            v-on:delete-exercise="deleteExercise"
-            v-on:delete-rep="deleteRep"
-        /> 
-        </div>
-        <NewExercise
-            v-on:add-item="this.emitter.emit('add-item', this.workout._id)"
-        />
-      </div>
-    </transition>
-  </div>
 </template>
 
 <script>
@@ -52,10 +74,26 @@ import InputField from "./input_field/InputField.vue";
 import NewExercise from "./NewExercise.vue"
 
 export default {
+    /**
+        Display a single workout. Provides functionality for modifying the
+        existing workout, though the child components.
+    */
     name: "Workout",
-    props: ["workout"],
-    emits: ["title-change", 
-            'delete-workout'],
+    props: {
+        /*
+            The workout to be displayed in this component
+        */
+        ["workout"] : {
+            type: Object,
+            required: true,
+            validator: function(value) {
+                return ( typeof(value._id) == "string" &&
+                typeof(value.title) == "string" &&
+                typeof(value.exerciseList ) == "object"
+                ) === true
+            }
+        }
+    },
     components: {
         ExerciseItem,
         HoverMenu,
@@ -63,14 +101,24 @@ export default {
         NewExercise
     },
     data () {
-    return {
-        contracted: true,
-        hovMen: ["Change title", "Delete workout"],
-        displayHover: false,
-        editingTitle : false
-    }
+        return {
+            contracted: true,
+            /*
+                The items in the hovermenu
+            */
+            hovMen: ["Change title", "Delete workout"],
+            /*
+                Is the dots menu hovering right now?
+            */
+            displayHover: false,
+            editingTitle : false
+        }
     },
     methods : {
+        /*
+            Split the exercises contained in the workouts, and present them as a
+            summary.
+        */
         nameWithComma(index) {
             if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
                 return `${this.workout.exerciseList[index].name}, `
@@ -79,14 +127,19 @@ export default {
             }
         },
         expand_card() {
+            /*
+                Expand the workout card.
+            */
             if (this.contracted) {
                 this.contracted = false
             } else {
                 this.contracted = true
             }
-            this.emitter.emit('pressed-workout')
         },
         renameTitle(){
+            /*
+                Rename the title of the workout.
+            */
             if (!this.editingTitle) {
                 let title_element = this.$el.querySelector("#title")
                 title_element.style.display = "none"
@@ -95,16 +148,22 @@ export default {
             }
         },
         handleOption(item){
+            /*
+                Handle the option clicked in the HoverMenu component.
+            */
             switch(item) {
                 case "Change title":
                     this.renameTitle()        
                     break;
                 case "Delete workout":
-                    this.$emit('delete-workout', this.workout._id)
+                    this.emitter.emit('delete-workout', this.workout._id)
                     break;
             }
         },
         submitEdit(title) {
+            /*
+                Submit upon ending the editing of the title of the workout.
+            */
             this.emitter.emit('title-change', { workoutId : this.workout._id, title : title})
             if (this.editingTitle) {
                 let title_element = this.$el.querySelector("#title")
@@ -113,6 +172,9 @@ export default {
             }
         },
         editEnd(){
+            /*
+                End of edit
+            */
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
@@ -129,23 +191,40 @@ export default {
             )
         },
         changeExerciseName(data) {
+            /*
+                Change the name of an exercise
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('exercise-name-change', data)
         },
         deleteExercise(data) {
+            /*
+                Delete and exercise from the workout
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('delete-exercise', data)
         },
         deleteRep(data) {
+            /*
+                Delete a repetition of a an exercise of a workout.
+                @data contains the id of the exercise being deleted.
+            */
             data.workoutId = this.workout._id
             this.emitter.emit('delete-rep', data)
+        },
+        addExercise(data) {
+            /*
+                @data contains the id of the exercise being added.
+            */
+            data.workoutId = this.workout._id
+            this.emitter.emit('add-exercise', data)
         }
     },
     created() {
+        // Contract the workout, then the background has been pressed.
         this.emitter.on('pressed-background', () => {
             this.contracted = true;
         })
-        this.emitter.on('')
     }
 }
 </script>

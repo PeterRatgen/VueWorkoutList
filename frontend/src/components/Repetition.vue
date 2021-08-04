@@ -1,5 +1,5 @@
 <template> 
-    <div class="rep-container" >
+    <div class="rep-container">
         <div @click.stop="repetition_click()">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
@@ -33,6 +33,13 @@
             </div>
             </transition>
         </div>
+            <fa 
+                v-bind:class="{ trashrepvisible : isHover }"
+                @mouseover="isHover = true"
+                @mouseleave="isHover = false"
+                class="trash-rep" 
+                icon="trash-alt" >
+            </fa> 
     </div>
 </template>
 
@@ -41,13 +48,37 @@
 export default {
     name: "Repetition",
     props: ["repetition", "delMode"],
-    emits : ["completed-rep-edit", "delete-rep"],
+    emits :  {
+        ["completed-rep-edit"] : Object, 
+        [ "delete-rep"] : ({ repObject }) => {
+            if (typeof(repObject) === "object" ) {
+                if (repObject.repId != undefined ) {
+                    if ( typeof(repObject.repId)  === "string"){
+                        return true
+                    }
+                    else {
+                        console.error("Wrong type in the id passed from Repetion to delete")
+                        return false
+                    }
+                }
+                else {
+                    console.error("No attribute repId was found in the object");
+                    return false
+                }
+            }
+            else {
+                console.error("Value to be emitted from Repetion was not of type object")
+                return false;
+            }
+        }
+    },
     data () {
         return {
             showWeight: false,
             alignment: 'left',
             repItem: '',
             editing: false,
+            isHover: false
         }
     }, 
     created() {
@@ -63,18 +94,16 @@ export default {
         })
     },
     methods: {
-        check (e) {
-          if (this.repItem.weight > 100) {
-            e.originalTarget.style.color = 'red'
-          }
-          if ( this.repItem.weight < 100) {
-            e.originalTarget.style.color = 'black'
-          }
-        },
         deleteRep() {
-           this.$emit('delete-rep', this.repItem.id) 
+            /**
+                Deleting a rep.
+            */
+           this.$emit('delete-rep', { repId  : this.repItem.id }) 
         },
         inc(target) {
+            /**
+                Increment the weight or reps.
+            */
             switch(target){
                 case "weight":
                     this.repItem.weight = this.repItem.weight + 1.25
@@ -85,6 +114,9 @@ export default {
             }
         },
         dec(target){
+            /**
+                Decremet the weight or rep.
+            */
             switch(target){
                 case "weight":
                     this.repItem.weight = this.repItem.weight - 1.25
@@ -95,6 +127,9 @@ export default {
             }
         },
         repetition_click(){
+            /**
+                What happens when a repetition is clicked.
+            */
             if (!this.delMode) {
                 let oldEdit = this.editing;
                 this.editing = !this.editing
@@ -113,6 +148,9 @@ export default {
             }
         },
         scrolledReps(event) {
+            /**
+                Scroll on reps.
+            */
             if (event.deltaY < 0){
                 this.inc("reps")
             } else {
@@ -120,15 +158,15 @@ export default {
             }
         },
         scrolledWeight(event) {
+            /** 
+                Scroll on weight.
+            */
             if (event.deltaY < 0){
                 this.inc("weight")
             } else {
                 this.dec("weight")
             }
         },
-    },
-    updated() {
-        console.log("state of delete " + this.delMode)
     }
 }
 
