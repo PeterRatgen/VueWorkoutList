@@ -136,8 +136,8 @@ export default {
         deleteExercise() {
             this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id}) 
         },
-        deleteRep(id) {
-            this.$emit('delete-rep', { repId: id , exerciseId: this.exerciseItem.id })
+        deleteRep(data) {
+            this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id })
         },
         saveEdit() {
             this.editing = false
