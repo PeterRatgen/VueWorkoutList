@@ -212,12 +212,11 @@ export default {
             data.workoutId = this.workout._id
             this.emitter.emit('delete-rep', data)
         },
-        addExercise(data) {
+        addExercise() {
             /*
                 @data contains the id of the exercise being added.
             */
-            data.workoutId = this.workout._id
-            this.emitter.emit('add-exercise', data)
+            this.emitter.emit('add-exercise', {workoutId : this.workout._id} )
         }
     },
     created() {
