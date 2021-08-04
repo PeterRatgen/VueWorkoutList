@@ -48,7 +48,30 @@
 export default {
     name: "Repetition",
     props: ["repetition", "delMode"],
-    emits : ["completed-rep-edit", "delete-rep"],
+    emits :  {
+        ["completed-rep-edit"] : Object, 
+        [ "delete-rep"] : ({ repObject }) => {
+            if (typeof(repObject) === "object" ) {
+                if (repObject.repId != undefined ) {
+                    if ( typeof(repObject.repId)  === "string"){
+                        return true
+                    }
+                    else {
+                        console.error("Wrong type in the id passed from Repetion to delete")
+                        return false
+                    }
+                }
+                else {
+                    console.error("No attribute repId was found in the object");
+                    return false
+                }
+            }
+            else {
+                console.error("Value to be emitted from Repetion was not of type object")
+                return false;
+            }
+        }
+    },
     data () {
         return {
             showWeight: false,
@@ -75,7 +98,7 @@ export default {
             /**
                 Deleting a rep.
             */
-           this.$emit('delete-rep', this.repItem.id) 
+           this.$emit('delete-rep', { repId  : this.repItem.id }) 
         },
         inc(target) {
             /**
