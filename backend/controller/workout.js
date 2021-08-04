@@ -133,6 +133,7 @@ exports.workout_put_exercise_name = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
+                console.log(body)
                 res.send(result)
             });
     });
