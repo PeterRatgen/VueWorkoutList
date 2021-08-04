@@ -178,8 +178,8 @@ export default {
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
-        newRepetition(id){
-            this.emitter.emit('new-repetition', {exerciseId : id, workoutId : this.workout._id}) 
+        newRepetition(){
+            this.emitter.emit('new-repetition', {workoutId : this.workout._id}) 
         },
         changeRep(repItem, exerciseId) {
             this.emitter.emit('completed-rep-edit', 

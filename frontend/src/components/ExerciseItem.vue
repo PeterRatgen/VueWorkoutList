@@ -125,7 +125,7 @@ export default {
             this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
         },
         newRepetition() {
-            this.$emit('new-repetition', this.exerciseItem.id)
+            this.$emit('new-repetition')
         }, 
         displayEdit() {
             this.isHover = true;        

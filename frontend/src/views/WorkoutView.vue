@@ -189,14 +189,17 @@ export default {
                 exerciseList : workout["exerciseList"]
             })
         },
-        addExercise(data) {
+        async addExercise(data) {
             /*
                 @data contains 
                     workoutId - for the workout where the exercise should be
                     exerciseId - for the id of a new exercise 
             */
+            let exerciseId = await this.apiInstance.post('/workout/add_exercise', {
+                workoutId : data.workoutId
+            })
             let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-            workout["exerciseList"].push({id : data.exerciseId  , name: "", set: []})
+            workout["exerciseList"].push({id : exerciseId  , name: "", set: []})
         },
         deleteRep(data) {
             /*
