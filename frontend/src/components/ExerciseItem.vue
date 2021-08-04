@@ -3,6 +3,9 @@
     <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
         <transition name="fade" mode="out-in">
             <div class="description" v-if="contracted">
+                <!--
+                    The ExerciseItem is contracted.
+                -->
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
                     <span>  
@@ -17,6 +20,9 @@
                 </div>
             </div>
             <div v-else>
+                <!--
+                    The ExerciseItem is expanded.
+                -->
                 <div class="item-header">
                     <InputField
                         :fontSize="'1rem'"
@@ -36,6 +42,9 @@
                     </span>
                 </div>
                 <div class="repetition-container">
+                    <!--
+                        In here all the repetitions are displayed
+                    -->
                     <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
                             v-bind:repetition="rep"
@@ -62,38 +71,53 @@ import InputField from "./input_field/InputField";
 import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
-  name: "ExerciseItem",
-  props: ["exerciseItem", "edit"],
-  emits: ['new-repetition', 
-            'completed-rep-edit', 
-            'exercise-name',
-            'delete-exercise',
-            'delete-rep'],
-  components: {
-    Repetition,
-    InputField,
-    NewRepetition
-  },
-  data () {
-    return {
-      ex: '',
-      showWeight: false,
-      contracted: true,
-      editing: false,
-      isHover : false
-    }
-  }, 
+    /*
+        Displays an exercise, and its repetitions.
+    */
+    name: "ExerciseItem",
+    props: {
+        ["exerciseItem"] : Object, 
+        ["edit"] : Boolean,
+    },
+    emits: {
+        ['new-repetition'] : null,
+        //On completion of the edting of a repetion
+        ['completed-rep-edit'] : null,
+        //On completion on the editing of an exercise name
+        ['exercise-name'] : null, 
+        ['delete-exercise'] : null,
+        ['delete-rep'] : null
+    },
+    components: {
+        Repetition,
+        InputField,
+        NewRepetition
+    },
+    data () {
+        return {
+            ex: '',
+            showWeight: false,
+            contracted: true,
+            editing: false,
+            isHover : false
+        }
+    }, 
     methods : {
         expand_card() {
-          if (this.contracted) {
+            /*
+                Expands the card of the ExerciseItem
+            */
+            if (this.contracted) {
                 this.contracted = false
-          } else {
+            } else {
                 this.contracted = true
-          }
-          this.emitter.emit('pressed-exerciseItem')
+            }
+            this.emitter.emit('pressed-exerciseItem')
         },
         titleSubmitEdit(result) {
-            //this.contracted = false
+            /*
+                Submit the new title of a workout.
+            */
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         repChange(repItem) {
@@ -112,8 +136,8 @@ export default {
         deleteExercise() {
             this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id}) 
         },
-        deleteRep(id) {
-            this.$emit('delete-rep', { repId: id , exerciseId: this.exerciseItem.id })
+        deleteRep(data) {
+            this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id })
         },
         saveEdit() {
             this.editing = false
