@@ -180,7 +180,7 @@ exports.workout_add_exercise = function(req, res) {
         let query = { _id: ObjectId(req.body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
             $push : { 
-                "exerciseList.$" : new_exercise
+                "exerciseList" : new_exercise
             }
         }
         dbase.collection("workouts").updateOne(
