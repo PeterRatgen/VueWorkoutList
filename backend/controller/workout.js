@@ -122,7 +122,7 @@ exports.workout_put_exercise_name = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId
+                    "el.id" : ObjectId(body.exerciseId)
                 } 
             ]
         }     
