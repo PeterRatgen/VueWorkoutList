@@ -86,10 +86,20 @@ exports.workout_post_update_exercise = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        dbase.collection("workouts").updateOne({ _id: ObjectId(req.body.id)}, {$set : { exerciseList : req.body.exerciseList}}, function(err, result) {
-            if (err) throw err;
-            db.close();
-        });
+        dbase.collection("workouts").updateOne(
+            {
+                _id: ObjectId(req.body.id)
+            }, 
+            {
+                $set : 
+                    { 
+                        exerciseList : req.body.exerciseList
+                    }
+            }, function(err, result) {
+                if (err) throw err;
+                db.close();
+            }
+        );
     });
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.send("document modified: " + req.body);
@@ -101,7 +111,9 @@ exports.workout_put_exercise_name = function(req, res) {
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
-        let query = { _id: ObjectId(req.body.id)}
+        let query = { 
+            _id: ObjectId(req.body.id)
+        }
         let newValues = {
             $set : { 
                 "exerciseList.$[el].name" : body.name
@@ -121,7 +133,7 @@ exports.workout_put_exercise_name = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
-                res.send("Completed successfully")
+                res.send(result)
             });
     });
 }
