@@ -3,6 +3,9 @@
     <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
         <transition name="fade" mode="out-in">
             <div class="description" v-if="contracted">
+                <!--
+                    The ExerciseItem is contracted.
+                -->
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
                     <span>  
@@ -17,6 +20,9 @@
                 </div>
             </div>
             <div v-else>
+                <!--
+                    The ExerciseItem is expanded.
+                -->
                 <div class="item-header">
                     <InputField
                         :fontSize="'1rem'"
@@ -36,6 +42,9 @@
                     </span>
                 </div>
                 <div class="repetition-container">
+                    <!--
+                        In here all the repetitions are displayed
+                    -->
                     <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
                             v-bind:repetition="rep"
@@ -106,6 +115,9 @@ export default {
             this.emitter.emit('pressed-exerciseItem')
         },
         titleSubmitEdit(result) {
+            /*
+                Submit the new title of a workout.
+            */
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         repChange(repItem) {

@@ -71,18 +71,16 @@ export default {
         })
     },
     methods: {
-        check (e) {
-          if (this.repItem.weight > 100) {
-            e.originalTarget.style.color = 'red'
-          }
-          if ( this.repItem.weight < 100) {
-            e.originalTarget.style.color = 'black'
-          }
-        },
         deleteRep() {
+            /**
+                Deleting a rep.
+            */
            this.$emit('delete-rep', this.repItem.id) 
         },
         inc(target) {
+            /**
+                Increment the weight or reps.
+            */
             switch(target){
                 case "weight":
                     this.repItem.weight = this.repItem.weight + 1.25
@@ -93,6 +91,9 @@ export default {
             }
         },
         dec(target){
+            /**
+                Decremet the weight or rep.
+            */
             switch(target){
                 case "weight":
                     this.repItem.weight = this.repItem.weight - 1.25
@@ -103,6 +104,9 @@ export default {
             }
         },
         repetition_click(){
+            /**
+                What happens when a repetition is clicked.
+            */
             if (!this.delMode) {
                 let oldEdit = this.editing;
                 this.editing = !this.editing
@@ -121,6 +125,9 @@ export default {
             }
         },
         scrolledReps(event) {
+            /**
+                Scroll on reps.
+            */
             if (event.deltaY < 0){
                 this.inc("reps")
             } else {
@@ -128,15 +135,15 @@ export default {
             }
         },
         scrolledWeight(event) {
+            /** 
+                Scroll on weight.
+            */
             if (event.deltaY < 0){
                 this.inc("weight")
             } else {
                 this.dec("weight")
             }
         },
-    },
-    updated() {
-        console.log("state of delete " + this.delMode)
     }
 }
 
