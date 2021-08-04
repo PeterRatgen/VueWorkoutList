@@ -62,13 +62,23 @@ import InputField from "./input_field/InputField";
 import NewRepetition from "./repetitions/NewRepetition"
 
 export default {
+    /*
+        Displays an exercise, and its repetitions.
+    */
     name: "ExerciseItem",
-    props: ["exerciseItem", "edit"],
-    emits: ['new-repetition', 
-        'completed-rep-edit', 
-        'exercise-name',
-        'delete-exercise',
-        'delete-rep'],
+    props: {
+        ["exerciseItem"] : Object, 
+        ["edit"] : Boolean,
+    },
+    emits: {
+        ['new-repetition'] : null,
+        //On completion of the edting of a repetion
+        ['completed-rep-edit'] : null,
+        //On completion on the editing of an exercise name
+        ['exercise-name'] : null, 
+        ['delete-exercise'] : null,
+        ['delete-rep'] : null
+    },
     components: {
         Repetition,
         InputField,
@@ -85,6 +95,9 @@ export default {
     }, 
     methods : {
         expand_card() {
+            /*
+                Expands the card of the ExerciseItem
+            */
             if (this.contracted) {
                 this.contracted = false
             } else {
