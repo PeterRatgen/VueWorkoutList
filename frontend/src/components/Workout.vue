@@ -61,6 +61,7 @@
                         v-on:delete-rep="deleteRep"
                     /> 
                 </div>
+                <div class="divder"></div>
                 <NewExercise
                     v-on:add-exercise="addExercise"
                 />
@@ -287,6 +288,10 @@ export default {
   }
 }
 
+.divder {
+  @include divider;
+  margin-bottom: 0.6rem;
+}
 
 .outside {
   width: 100vw;

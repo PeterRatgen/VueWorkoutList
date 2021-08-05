@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
   .add-exercise-button {
-    background-color: lighten($accent-color, 5%); 
+ /*   background-color: lighten($accent-color, 5%); */
     width: 5rem;
     height: 1.8rem;
     margin: auto;
@@ -41,14 +41,14 @@ export default {
     transition: background-color 0.2s;
 
     &:hover {
-        background-color: lighten($accent-color, 20%); 
+        background-color: $divider-color;
         cursor: pointer;
     }
-  }
+}
 
-  .plus-icon {
-    transform: scale(1.2);
-    color: white;
-  }
+.plus-icon {
+    transform: scale(1.6);
+    color: lighten($accent-color, 5%);
+}
     
 </style>

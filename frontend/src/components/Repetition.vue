@@ -52,7 +52,7 @@
 
 export default {
     name: "Repetition",
-    props: ["repetition", "delMode"],
+    props: ["repetition"],
     emits :  {
         ["completed-rep-edit"] : Object, 
         [ "delete-rep"] : ( repObject ) => {
@@ -135,21 +135,15 @@ export default {
             /**
                 What happens when a repetition is clicked.
             */
-            if (!this.delMode) {
-                let oldEdit = this.editing;
-                this.editing = !this.editing
-                this.emitter.emit('pressed-repetition')
-                console.log("Pressed the repetition")
-                if (oldEdit == false) {
-                    this.editing = true;
-                } else {
-                    this.editing = false;
-                    this.$emit('completed-rep-edit', this.repItem)
-                }
+            let oldEdit = this.editing;
+            this.editing = !this.editing
+            this.emitter.emit('pressed-repetition')
+            console.log("Pressed the repetition")
+            if (oldEdit == false) {
+                this.editing = true;
             } else {
-                let element = this.$el;
-                element.style.border = "2px solid #000"
-                console.log("delMode true")
+                this.editing = false;
+                this.$emit('completed-rep-edit', this.repItem)
             }
         },
         scrolledReps(event) {

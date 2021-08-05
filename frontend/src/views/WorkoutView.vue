@@ -142,6 +142,7 @@ export default {
             data.repetition = rep
             let res = await this.apiInstance.put('/workout/add_repetition', data)
             rep.id = res.data
+            console.log("new rep " + JSON.stringify(rep))
             exercise.set.push(rep) 
         },
         async changeRep(data){
@@ -192,7 +193,9 @@ export default {
                 Delete an exercise.
             */
             let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            workout["exerciseList"].splice(data["exerciseIndex"], 1)
+            let exercise = this.workouts.find(element => element.id == data.exerciseId)
+            let index =  this.workouts.indexOf(exercise);
+            workout["exerciseList"].splice(index, 1)
             this.apiInstance.post('/workout/update_exercise', {
                 id: data["workoutId"],
                 exerciseList : workout["exerciseList"]
