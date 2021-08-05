@@ -219,6 +219,7 @@ exports.workout_add_repetition = function(req, res) {
     let body = req.body
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
+        body.repetition.id = new ObjectId
         let dbase = db.db("workout_db");
         let query = { _id: ObjectId(body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
