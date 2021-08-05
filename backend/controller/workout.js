@@ -141,6 +141,7 @@ exports.workout_put_exercise_name = function(req, res) {
 
 exports.workout_change_reps = function(req, res) {
     let body = req.body
+    console.log(req.body)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
