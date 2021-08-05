@@ -244,11 +244,7 @@ exports.workout_add_repetition = function(req, res) {
                 console.log(JSON.stringify(result))
                 console.log(JSON.stringify(req.body))
                 db.close();
-                if (result.modifiedCount == 0) {
-                    res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
-                } else {
-                    res.send(body.repetition.id)
-                }
+                res.send(body.repetition.id)
             }
         );
     });
