@@ -215,3 +215,39 @@ exports.workout_add_exercise = function(req, res) {
 
 }
 
+exports.workout_add_repetition = function(req, res) {
+    let body = req.body
+    mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        if (err) throw err;
+        let dbase = db.db("workout_db");
+        let query = { _id: ObjectId(body.workoutId), userId: ObjectId(req.user["userId"])}
+        let newValues = {
+            $push : { 
+                "exerciseList.$[el].set" : body.repetition,
+            }
+        }
+        let options = { 
+            arrayFilters : [
+                { 
+                    "el.id" : ObjectId(body.exerciseId),
+                }, 
+            ]
+        }     
+        dbase.collection("workouts").updateOne(
+            query, 
+            newValues, 
+            options,
+            function(err, result) {
+                if (err) throw err;
+                console.log(JSON.stringify(result))
+                console.log(JSON.stringify(req.body))
+                db.close();
+                if (result.modifiedCount == 0) {
+                    res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
+                } else {
+                    res.send("Result modified")
+                }
+            }
+        );
+    });
+}
