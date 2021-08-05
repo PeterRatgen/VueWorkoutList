@@ -16,6 +16,6 @@ router.post("/workout/update_exercise", cors.allow_all, authentication.authentic
 router.put("/workout/rename_exercise", cors.allow_all, authentication.authenticate_token, workout_controller.workout_put_exercise_name)
 router.put("/workout/rep_change", cors.allow_all, authentication.authenticate_token, workout_controller.workout_change_reps)
 
-router.post("/workout/add_exercise", cors.allow_all, authentication.authenticate_token, workout_controller.workout_add_exercise)
+router.put("/workout/add_exercise", cors.allow_all, authentication.authenticate_token, workout_controller.workout_add_exercise)
 
 module.exports = router
