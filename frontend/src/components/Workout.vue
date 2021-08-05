@@ -19,8 +19,10 @@
                                 @click.stop
                             />
                         </div>
-                        <p  class="description exercise-desc" v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
-                        {{ nameWithComma(index) }}
+                        <p class="description "> 
+                            <span v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
+                                {{ nameWithComma(index) }}
+                            </span>
                         </p>
                     </div>
                 <div v-else >
@@ -178,8 +180,12 @@ export default {
             let title_element = this.$el.querySelector("#title")
             title_element.style.display = "block"
         },
-        newRepetition(){
-            this.emitter.emit('new-repetition', {workoutId : this.workout._id}) 
+        newRepetition(data){
+            /*
+                @data contains the exerciseId of where to add a repetition
+            */
+            data.workoutId = this.workout._id
+            this.emitter.emit('new-repetition', data) 
         },
         changeRep(repItem, exerciseId) {
             this.emitter.emit('completed-rep-edit', 

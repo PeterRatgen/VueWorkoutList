@@ -125,7 +125,7 @@ export default {
             this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
         },
         newRepetition() {
-            this.$emit('new-repetition')
+            this.$emit('new-repetition', {exerciseId : this.exerciseItem.id})
         }, 
         displayEdit() {
             this.isHover = true;        
@@ -181,6 +181,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: fit-content;
+    position: relative;
 }
 
 .trash-rep {

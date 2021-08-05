@@ -1,5 +1,8 @@
 <template> 
-    <div class="rep-container">
+    <div class="rep-container" 
+        @mouseover="isHover = true"
+        @mouseleave="isHover = false"
+    >
         <div @click.stop="repetition_click()">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
@@ -33,13 +36,15 @@
             </div>
             </transition>
         </div>
+        <div class="trash-container"
+                v-bind:class="{ trashrephover : isHover }"
+                @click="deleteRep"
+            >
             <fa 
-                v-bind:class="{ trashrepvisible : isHover }"
-                @mouseover="isHover = true"
-                @mouseleave="isHover = false"
                 class="trash-rep" 
                 icon="trash-alt" >
             </fa> 
+        </div>
     </div>
 </template>
 
@@ -50,7 +55,7 @@ export default {
     props: ["repetition", "delMode"],
     emits :  {
         ["completed-rep-edit"] : Object, 
-        [ "delete-rep"] : ({ repObject }) => {
+        [ "delete-rep"] : ( repObject ) => {
             if (typeof(repObject) === "object" ) {
                 if (repObject.repId != undefined ) {
                     if ( typeof(repObject.repId)  === "string"){
@@ -218,6 +223,27 @@ export default {
     max-height: 600px;
     opacity: 1;
   }
+}
+
+.trash-container {
+    display: none;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    color: $delete-color;
+    background-color: white;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid $divider-color;
+    border-radius: 50px;
+}
+
+.trash-rep {
+    font-size: 0.8rem;
+}
+
+.trashrephover {
+    display: inline;
 }
 
 @media only screen and (max-width: 1350px) {
