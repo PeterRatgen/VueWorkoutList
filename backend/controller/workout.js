@@ -141,6 +141,12 @@ exports.workout_put_exercise_name = function(req, res) {
 
 exports.workout_change_reps = function(req, res) {
     let body = req.body
+        console.log(" ")
+        console.log("Changeing a repetition")
+        console.log(" ")
+        console.log("To the workout " + body.workoutId)
+        console.log("To the exercise " + body.exerciseId)
+        console.log("The new repItem " + JSON.stringify(body.repItem))
     console.log(req.body)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
