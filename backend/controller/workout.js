@@ -161,10 +161,10 @@ exports.workout_change_reps = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : ObjectId(body.exerciseId)
+                    "el.id" : body.exerciseId
                 }, 
                 {
-                    "rep.id" : ObjectId(body.repItem.id)
+                    "rep.id" : body.repItem.id
                 }
             ]
         }     
@@ -175,7 +175,6 @@ exports.workout_change_reps = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
-                console.log(result)
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
