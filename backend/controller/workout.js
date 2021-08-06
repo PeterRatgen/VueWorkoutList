@@ -237,7 +237,7 @@ exports.workout_add_repetition = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId),
+                    "el.id" : body.exerciseId
                 }, 
             ]
         }     
