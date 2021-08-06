@@ -219,13 +219,19 @@ exports.workout_add_exercise = function(req, res) {
 exports.workout_add_repetition = function(req, res) {
     let body = req.body
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        console.log(" ")
+        console.log("Adding a new repetition")
+        console.log(" ")
+        console.log("To the workout " + body.workoutId)
+        console.log("To the exercise " + body.exerciseId)
+        console.log("The new repetition " + body.repItem)
         if (err) throw err;
         body.repetition.id = new ObjectId()
         let dbase = db.db("workout_db");
         let query = { _id: ObjectId(body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
             $push : { 
-                "exerciseList.$[el].set" : body.repetition,
+                "exerciseList.$[el].set" : body.repItem,
             }
         }
         let options = { 
@@ -241,8 +247,6 @@ exports.workout_add_repetition = function(req, res) {
             options,
             function(err, result) {
                 if (err) throw err;
-                console.log(JSON.stringify(result))
-                console.log(JSON.stringify(req.body))
                 db.close();
                 res.send(body.repetition.id)
             }
