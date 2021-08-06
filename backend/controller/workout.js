@@ -175,6 +175,7 @@ exports.workout_change_reps = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
+                console.log(result)
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
