@@ -155,12 +155,11 @@ export default {
             let rep = exercise.set.find(element => element.id == data.repItem.id)
             rep.repetitions = data.repItem.repetitions
             rep.weight = data.repItem.weight
-            let res = await this.apiInstance.put('/workout/rep_change', {
+            this.apiInstance.put('/workout/rep_change', {
                 workoutId: data["workoutId"],
                 exerciseId : data["exerciseId"],
                 repItem: data["repItem"]
             })
-            console.log(" response " + res.data)
         },
         backgroundPressed() {
             this.emitter.emit('pressed-background')
@@ -205,13 +204,21 @@ export default {
             /*
                 @data contains 
                     workoutId - for the workout where the exercise should be
-                    exerciseId - for the id of a new exercise 
             */
-            let res = await this.apiInstance.put('/workout/add_exercise', {
+            let response = await this.apiInstance.put('/workout/add_exercise', {
                 workoutId : data.workoutId
             })
-            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-            workout["exerciseList"].push({id : res.data  , name: "", set: []})
+            let exerciseId = response.data
+            if(typeof(exerciseId) == "string") {
+                if (exerciseId.length == 24){
+                    let workout = this.workouts.find(element => element["_id"] == data.workoutId)
+                    workout["exerciseList"].push({id :  exerciseId, name: "", set: []})
+                } else {
+                    console.warn("Server did not return an id of correct length")
+                }
+            } else {
+                console.warn("Server did not return a proper id")
+            }
         },
         deleteRep(data) {
             /*

@@ -29,8 +29,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
-  .add-exercise-button {
- /*   background-color: lighten($accent-color, 5%); */
+
+.add-exercise-button {
     width: 5rem;
     height: 1.8rem;
     margin: auto;

@@ -25,6 +25,7 @@
                 -->
                 <div class="item-header">
                     <InputField
+                        id="exerciseTitle"
                         :fontSize="'1rem'"
                         :fontWeight="'700'"
                         :initialValue="exerciseItem.name"
@@ -49,7 +50,6 @@
                         <Repetition  
                             v-bind:repetition="rep"
                             v-bind:index="index"
-                            v-bind:delMode="editing"
                             v-on:delete-rep="deleteRep"
                             v-on:completed-rep-edit="repChange"
                         />
@@ -95,10 +95,8 @@ export default {
     },
     data () {
         return {
-            ex: '',
             showWeight: false,
             contracted: true,
-            editing: false,
             isHover : false
         }
     }, 
@@ -121,7 +119,6 @@ export default {
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
         repChange(repItem) {
-            console.log("change some rep of ex: " + this.exerciseItem.id)
             this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
         },
         newRepetition() {
@@ -130,25 +127,17 @@ export default {
         displayEdit() {
             this.isHover = true;        
         },
-        editName() {
-            this.editing = true;
-        },
         deleteExercise() {
             this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id}) 
         },
         deleteRep(data) {
             this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id })
         },
-        saveEdit() {
-            this.editing = false
-
-        }
-    },
-    created() {
-        this.ex = this.exerciseItem;
-        this.editing = this.edit;
     },
     mounted() {
+        if (this.exerciseItem.name === '') {
+            this.contracted = false
+        }
     }
 }
   

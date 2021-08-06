@@ -111,10 +111,14 @@ export default {
             */
             switch(target){
                 case "weight":
-                    this.repItem.weight = this.repItem.weight + 1.25
+                    if (this.repItem != 0 ) {
+                        this.repItem.weight = this.repItem.weight + 2.5
+                    }
                     break;
                 case "reps":
-                    this.repItem.repetitions = this.repItem.repetitions  + 1
+                    if (this.repItem != 0) {
+                        this.repItem.repetitions = this.repItem.repetitions  + 1
+                    }
                     break;
             }
         },
@@ -124,10 +128,14 @@ export default {
             */
             switch(target){
                 case "weight":
-                    this.repItem.weight = this.repItem.weight - 1.25
+                    if (this.repItem != 0) {
+                        this.repItem.weight = this.repItem.weight - 2.5
+                    }
                     break;
                 case "reps":
-                    this.repItem.repetitions = this.repItem.repetitions  - 1
+                    if (this.repItem.repetitions != 0) {
+                        this.repItem.repetitions = this.repItem.repetitions  - 1
+                    }
                     break;
             }
         },
