@@ -226,7 +226,7 @@ exports.workout_add_repetition = function(req, res) {
         console.log("To the exercise " + body.exerciseId)
         console.log("The new repetition " + JSON.stringify(body.repetitions))
         if (err) throw err;
-        body.repetition.id = new ObjectId()
+        body.repetitions.id = new ObjectId()
         let dbase = db.db("workout_db");
         let query = { _id: ObjectId(body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
@@ -248,7 +248,7 @@ exports.workout_add_repetition = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
-                res.send(body.repetition.id)
+                res.send(body.repetitions.id)
             }
         );
     });
