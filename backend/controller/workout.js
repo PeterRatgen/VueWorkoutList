@@ -212,6 +212,7 @@ exports.workout_add_exercise = function(req, res) {
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
+                    console.log("returning " + new_exercise.id)
                     res.send(new_exercise.id)
                 }
             }
