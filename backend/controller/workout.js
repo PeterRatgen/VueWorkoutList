@@ -224,7 +224,7 @@ exports.workout_add_repetition = function(req, res) {
         console.log(" ")
         console.log("To the workout " + body.workoutId)
         console.log("To the exercise " + body.exerciseId)
-        console.log("The new repetition " + body.repetitions)
+        console.log("The new repetition " + JSON.stringify(body.repetitions))
         if (err) throw err;
         body.repetition.id = new ObjectId()
         let dbase = db.db("workout_db");
