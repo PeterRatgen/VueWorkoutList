@@ -224,14 +224,14 @@ exports.workout_add_repetition = function(req, res) {
         console.log(" ")
         console.log("To the workout " + body.workoutId)
         console.log("To the exercise " + body.exerciseId)
-        console.log("The new repetition " + body.repItem)
+        console.log("The new repetition " + body.repetitions)
         if (err) throw err;
         body.repetition.id = new ObjectId()
         let dbase = db.db("workout_db");
         let query = { _id: ObjectId(body.workoutId), userId: ObjectId(req.user["userId"])}
         let newValues = {
             $push : { 
-                "exerciseList.$[el].set" : body.repItem,
+                "exerciseList.$[el].set" : body.repetitions,
             }
         }
         let options = { 

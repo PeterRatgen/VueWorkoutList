@@ -158,8 +158,9 @@ export default {
             this.apiInstance.put('/workout/rep_change', {
                 workoutId: data["workoutId"],
                 exerciseId : data["exerciseId"],
-                repItem: data["repItem"]
+                repetitions: data["repetitions"]
             })
+            console.log("changed rep to " + JSON.stringify(data["repItem"]))
         },
         backgroundPressed() {
             this.emitter.emit('pressed-background')
