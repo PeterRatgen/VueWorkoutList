@@ -161,10 +161,10 @@ exports.workout_change_reps = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId
+                    "el.id" : ObjectId(body.exerciseId)
                 }, 
                 {
-                    "rep.id" : body.repItem.id
+                    "rep.id" : ObjectId(body.repItem.id)
                 }
             ]
         }     
