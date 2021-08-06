@@ -146,7 +146,7 @@ exports.workout_change_reps = function(req, res) {
         console.log(" ")
         console.log("To the workout " + body.workoutId)
         console.log("To the exercise " + body.exerciseId)
-        console.log("The new repItem " + JSON.stringify(body.repItem))
+        console.log("The new repItem" + JSON.stringify(body.repItem))
     console.log(req.body)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
@@ -212,7 +212,7 @@ exports.workout_add_exercise = function(req, res) {
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
-                    console.log("returning " + new_exercise.id)
+                    console.log("returning ")
                     res.send(new_exercise.id)
                 }
             }
@@ -253,6 +253,7 @@ exports.workout_add_repetition = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
+                console.log("the new id " + body.repItem.id)
                 res.send(body.repItem.id)
             }
         );
