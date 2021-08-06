@@ -125,25 +125,25 @@ export default {
             /**
                 Add a repetition to a workout. If another repetition exists
                 before it, then add the same weight and reps to the new one.
+                
+                @exerciseId - id of the exercise
+                @workoutId - id of the workout
             */
-            console.log(data)
             let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-            console.log(workout)
             let exercise = workout.exerciseList.find(element => element.id == data.exerciseId)
             const length = exercise.set.length
-            let rep = {}
+            let repItem = {}
             if (length > 0) {
                 const weight = exercise.set[length - 1].weight;
                 const reps = exercise.set[length - 1].repetitions;
-                rep = {repetitions : reps, weight : weight}
+                repItem = {repetitions : reps, weight : weight}
             } else {
-                rep = {repetitions : 0, weight : 0}
+                repItem = {repetitions : 0, weight : 0}
             }
-            data.repetition = rep
+            data.repItem = repItem
             let res = await this.apiInstance.put('/workout/add_repetition', data)
-            rep.id = res.data
-            console.log("new rep " + JSON.stringify(rep))
-            exercise.set.push(rep) 
+            repItem.id = res.data
+            exercise.set.push(repItem) 
         },
         async changeRep(data){
             /**
@@ -158,7 +158,7 @@ export default {
             this.apiInstance.put('/workout/rep_change', {
                 workoutId: data["workoutId"],
                 exerciseId : data["exerciseId"],
-                repetitions: data["repetitions"]
+                repetitions: data["repItem"]
             })
             console.log("changed rep to " + JSON.stringify(data["repItem"]))
         },
