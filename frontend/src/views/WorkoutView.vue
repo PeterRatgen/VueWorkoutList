@@ -158,7 +158,7 @@ export default {
             this.apiInstance.put('/workout/rep_change', {
                 workoutId: data["workoutId"],
                 exerciseId : data["exerciseId"],
-                repetitions: data["repItem"]
+                repItem: data["repItem"]
             })
             console.log("changed rep to " + JSON.stringify(data["repItem"]))
         },

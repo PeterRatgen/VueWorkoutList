@@ -111,14 +111,10 @@ export default {
             */
             switch(target){
                 case "weight":
-                    if (this.repItem != 0 ) {
-                        this.repItem.weight = this.repItem.weight + 2.5
-                    }
+                    this.repItem.weight = this.repItem.weight + 2.5
                     break;
                 case "reps":
-                    if (this.repItem != 0) {
-                        this.repItem.repetitions = this.repItem.repetitions  + 1
-                    }
+                    this.repItem.repetitions = this.repItem.repetitions  + 1
                     break;
             }
         },
@@ -128,7 +124,7 @@ export default {
             */
             switch(target){
                 case "weight":
-                    if (this.repItem != 0) {
+                    if (this.repItem.weight != 0) {
                         this.repItem.weight = this.repItem.weight - 2.5
                     }
                     break;
