@@ -66,7 +66,7 @@ export default {
                 Token retured by the endpoint
             */
             try {
-                let response = await this.apiInstance.post("/login",
+                let response = await this.apiInstance.post('/login',
                 {
                     email : this.email, 
                     password: this.password
@@ -82,9 +82,10 @@ export default {
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
+            console.log(" api url " + process.env.VUE_APP_API_URL)
             const token = localStorage.getItem("user")
             return axios.create({
-                baseURL: process.env.API_URL,
+                baseURL: process.env.VUE_APP_API_URL,
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
