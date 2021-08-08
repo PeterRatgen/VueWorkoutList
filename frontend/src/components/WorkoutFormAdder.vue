@@ -43,14 +43,14 @@ export default {
         checkHeader() {
             this.$emit('workout-header', this.workoutHeader)
         },
-        newRepetition(id) {
-            this.$emit('new-repetition', id)
+        newRepetition(data) {
+            this.$emit('new-repetition', data)
         },
         changeExerciseName(data) {
             this.$emit('exercise-name', data)
         },
-        addExercise(id) {
-            this.$emit('add-exercise', id)
+        addExercise() {
+            this.$emit('add-exercise')
         }
     }
 }

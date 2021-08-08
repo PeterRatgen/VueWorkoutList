@@ -53,8 +53,9 @@ export default {
         this.addCardColor = "#fff"
       }
     },
-    newRepetition(id){
-        let exercise = this.exerciseList.find(element => element.id == id)
+    newRepetition(data){
+        console.log("finding id " + data.exerciseId)
+        let exercise = this.exerciseList.find(element => element.id == data.exerciseId)
         const length = exercise["set"].length
         if (length > 0) {
             const weight = exercise["set"][length - 1]["weight"];
@@ -64,7 +65,8 @@ export default {
             exercise["set"].push({repetitions : 0, weight : 0}) 
         }
     },
-    addExercise(identifier) {
+    addExercise() {
+        let identifier = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         let newExercise = {
             id: identifier,  
             name: "", 
