@@ -56,8 +56,8 @@ export default {
             /*
                 Init script, initializes the website with data, and API instances.
             */
-            await this.login()
             this.apiInstance = this.createInstance();  
+            await this.login()
             await this.getWorkout();
         },
         async login() {
