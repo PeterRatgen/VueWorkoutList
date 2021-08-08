@@ -45,6 +45,7 @@ export default {
         color: $text-color; 
         border: none;
         outline: none;
+        width: 100%;
         @include input-field;
     }
 }

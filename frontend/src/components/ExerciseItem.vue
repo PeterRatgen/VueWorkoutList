@@ -9,13 +9,14 @@
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
                     <span>  
+                        <nobr>
                         <span class="icon-container" @click.stop="deleteExercise" >
                             <fa 
                                 class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
                                 icon="trash-alt" >
                             </fa> 
                         </span>
-                    {{ exerciseItem.set.length }} sæt
+                        {{ exerciseItem.set.length }} sæt </nobr>
                     </span>
                 </div>
             </div>
@@ -33,13 +34,15 @@
                         @click.stop
                     />
                     <span>  
-                        <span class="icon-container" @click.stop="deleteExercise" >
-                            <fa 
-                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
-                                icon="trash-alt" >
-                            </fa> 
-                        </span>
-                        {{ exerciseItem.set.length }} sæt
+                        <nobr>
+                            <span class="icon-container" @click.stop="deleteExercise" >
+                                <fa 
+                                    class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                    icon="trash-alt" >
+                                </fa> 
+                            </span>
+                            {{ exerciseItem.set.length }} sæt 
+                        </nobr>
                     </span>
                 </div>
                 <div class="repetition-container">
