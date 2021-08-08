@@ -107,6 +107,7 @@ exports.workout_post_update_exercise = function(req, res) {
 
 
 exports.workout_put_exercise_name = function(req, res) {
+    console.log("Changing the name of an exercise")
     let body = req.body
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
@@ -122,7 +123,7 @@ exports.workout_put_exercise_name = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId
+                    "el.id" : ObjectId(body.exerciseId)
                 } 
             ]
         }     
@@ -133,21 +134,14 @@ exports.workout_put_exercise_name = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
-                console.log(body)
                 res.send(result)
             });
     });
 }
 
 exports.workout_change_reps = function(req, res) {
+    console.log("Changing repetitions.")
     let body = req.body
-        console.log(" ")
-        console.log("Changeing a repetition")
-        console.log(" ")
-        console.log("To the workout " + body.workoutId)
-        console.log("To the exercise " + body.exerciseId)
-        console.log("The new repItem" + JSON.stringify(body.repItem))
-    console.log(req.body)
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
@@ -161,10 +155,10 @@ exports.workout_change_reps = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId
+                    "el.id" : ObjectId(body.exerciseId)
                 }, 
                 {
-                    "rep.id" : body.repItem.id
+                    "rep.id" : ObjectId(body.repItem.id)
                 }
             ]
         }     
@@ -177,8 +171,10 @@ exports.workout_change_reps = function(req, res) {
                 db.close();
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
+                    console.log("none modified")
                 } else {
                     res.send("Result modified")
+                    console.log("modified")
                 }
             }
         );
@@ -186,6 +182,7 @@ exports.workout_change_reps = function(req, res) {
 }
 
 exports.workout_add_exercise = function(req, res) {
+    console.log("Adding an exercise.")
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
         if (err) throw err;
         let dbase = db.db("workout_db");
@@ -206,13 +203,10 @@ exports.workout_add_exercise = function(req, res) {
             newValues, 
             function(err, result) {
                 if (err) throw err;
-                console.log(JSON.stringify(result))
-                console.log(JSON.stringify(req.body))
                 db.close();
                 if (result.modifiedCount == 0) {
                     res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
                 } else {
-                    console.log("returning ")
                     res.send(new_exercise.id)
                 }
             }
@@ -222,14 +216,9 @@ exports.workout_add_exercise = function(req, res) {
 }
 
 exports.workout_add_repetition = function(req, res) {
+    console.log("Adding a repetition.")
     let body = req.body
     mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
-        console.log(" ")
-        console.log("Adding a new repetition")
-        console.log(" ")
-        console.log("To the workout " + body.workoutId)
-        console.log("To the exercise " + body.exerciseId)
-        console.log("The new repItem " + JSON.stringify(body.repItem))
         if (err) throw err;
         body.repItem.id = new ObjectId()
         let dbase = db.db("workout_db");
@@ -242,7 +231,7 @@ exports.workout_add_repetition = function(req, res) {
         let options = { 
             arrayFilters : [
                 { 
-                    "el.id" : body.exerciseId
+                    "el.id" : ObjectId(body.exerciseId)
                 }, 
             ]
         }     
@@ -253,7 +242,6 @@ exports.workout_add_repetition = function(req, res) {
             function(err, result) {
                 if (err) throw err;
                 db.close();
-                console.log("the new id " + body.repItem.id)
                 res.send(body.repItem.id)
             }
         );
