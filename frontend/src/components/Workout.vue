@@ -188,11 +188,11 @@ export default {
             data.workoutId = this.workout._id
             this.emitter.emit('new-repetition', data) 
         },
-        changeRep(repItem, exerciseId) {
+        changeRep(data) {
             this.emitter.emit('completed-rep-edit', 
                 {
-                    repItem : repItem, 
-                    exerciseId: exerciseId,
+                    repItem : data.repItem, 
+                    exerciseId: data.exerciseId,
                     workoutId: this.workout._id
                 }
             )

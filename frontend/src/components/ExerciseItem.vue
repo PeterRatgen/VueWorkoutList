@@ -80,7 +80,15 @@ export default {
         ["edit"] : Boolean,
     },
     emits: {
-        ['new-repetition'] : null,
+        ['new-repetition'] : (idObject) => {
+            if (typeof(idObject.exerciseId) == "string" 
+                    && idObject.exerciseId.length > 0 ) {
+                return true
+            } else {
+                console.error("The exerciseId was not of correct length, or type.")
+                return false
+            }
+        },
         //On completion of the edting of a repetion
         ['completed-rep-edit'] : null,
         //On completion on the editing of an exercise name
@@ -118,8 +126,9 @@ export default {
             */
             this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
         },
-        repChange(repItem) {
-            this.$emit('completed-rep-edit', repItem, this.exerciseItem.id)             
+        repChange(data) {
+            data.exerciseId = this.exerciseItem.id
+            this.$emit('completed-rep-edit', data)             
         },
         newRepetition() {
             this.$emit('new-repetition', {exerciseId : this.exerciseItem.id})

@@ -147,7 +147,7 @@ export default {
                 this.editing = true;
             } else {
                 this.editing = false;
-                this.$emit('completed-rep-edit', this.repItem)
+                this.$emit('completed-rep-edit', {repItem : this.repItem})
             }
         },
         scrolledReps(event) {
