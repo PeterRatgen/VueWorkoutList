@@ -66,7 +66,7 @@ export default {
                 Token retured by the endpoint
             */
             try {
-                let response = await axios.post("https://liftlog.app/api/login",
+                let response = await axios.post("http://localhost:3001/login",
                 {
                     email : this.email, 
                     password: this.password
@@ -84,7 +84,7 @@ export default {
             */
             const token = localStorage.getItem("user")
             return axios.create({
-                baseURL: "https://liftlog.app/api",
+                baseURL: "http://localhost:3001",
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
