@@ -1,23 +1,29 @@
 <template>
-  <div @click="backgroundPressed()">
-    <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
-    <div class="todo-block">
-      <div class="todo">
-          <div v-bind:key="workout" v-for="workout in workouts" >
-            <Workout 
-                v-bind:workout="workout" 
-            />
-          </div>
-        <AddWorkout/>
-      </div>
+    <div @click="backgroundPressed()"  v-show="!workingOut">
+        <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
+        <div class="todo-block">
+            <div class="todo">
+                <div v-bind:key="workout" v-for="workout in workouts" >
+                    <Workout 
+                        v-bind:workout="workout" 
+                    />
+                </div>
+                <AddWorkout/>
+            </div>
+        </div>
+        <BeginWorkout 
+            v-bind:workouts="workouts"
+            v-on:select-workout="selectedWorkout"/>
     </div>
-  </div>
+    <WorkoutProcess v-bind:workout="currentWorkout" v-show="workingOut" />
 </template>
 
 <script>
 import AddWorkout from '../components/AddWorkout'
 import HelloHeader from '../components/HelloHeader.vue'
 import Workout from '../components/Workout'
+import BeginWorkout from '../components/BeginWorkout'
+import WorkoutProcess from '../views/WorkoutProcess.vue'
 import axios from 'axios'
 
 export default {
@@ -25,31 +31,35 @@ export default {
         View of the workouts.
     */
     name: 'WorkoutView',
-        components: {
-            Workout,
-            HelloHeader,
-            AddWorkout
-        },
-        data() {
-            return {
-                /*
-                    The user is the JWT Token, which stores the token of the
-                    user, which is logged in.
-                */
-                user: {},
-                headerItem : '',
-                email : 'peter@pratgen.dk',
-                password : 'safe',
-                /*
-                    Instance of the axios connection, where queries to the API
-                    can be performed.
-                */
-                apiInstance : '',
-                /* 
-                   Array of the workouts 
-                */
-                workouts : []
-            }
+    components: {
+        Workout,
+        HelloHeader,
+        AddWorkout,
+        BeginWorkout,
+        WorkoutProcess
+    },
+    data() {
+        return {
+            /*
+                The user is the JWT Token, which stores the token of the
+                user, which is logged in.
+            */
+            user: {},
+            headerItem : '',
+            email : 'peter@pratgen.dk',
+            password : 'safe',
+            /*
+                Instance of the axios connection, where queries to the API
+                can be performed.
+            */
+            apiInstance : '',
+            /* 
+               Array of the workouts 
+            */
+            workouts : [],
+            workingOut : false,
+            currentWorkout : {}
+        }
     },
     methods: {
         async init() {
@@ -233,6 +243,10 @@ export default {
                 id: data.workoutId,
                 exerciseList : workout.exerciseList
             })
+        },
+        selectedWorkout(workout) {
+            this.workingOut = true;
+            this.currentWorkout = workout;
         }
     },
     computed : {
@@ -308,9 +322,10 @@ body {
 }
 
 .hello-header {
-  width: calc(#{$content-width} - 2%);
-  margin: 0 auto;
+    width: calc(#{$content-width} - 2%);
+    margin: 0 auto;
 }
+
 
 @media only screen and (max-width: 1400px) {
   .todo-block {
@@ -323,12 +338,16 @@ body {
 
 
 @media only screen and (max-width: 1000px) {
-  .todo-block {
-    width: 80%;
-  }
-  .hello-header {
-    width: 80%;
-  }
+    .todo-block {
+        width: 80%;
+    }
+    .hello-header {
+        width: 80%;
+    }
+    .start-workout {
+        width: 40%;
+        left: calc((100% - 40%) / 2);
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -337,6 +356,10 @@ body {
   }
   .hello-header {
     width: 95%;
+  }
+  .start-workout {
+        width: 90%;
+        left: 5%;
   }
 }
 

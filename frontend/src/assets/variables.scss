@@ -4,6 +4,7 @@ $divider-color: #ebebeb;
 $text-color: #2c3e50;
 $background-color: #EFEFEF; 
 $delete-color: #c42938;
+$go-color: #3bc61b;
 
 @mixin workout-card {
     padding: 1.5rem 1.5rem;
@@ -68,6 +69,11 @@ input.datepicker {
     @include input-field;
     text-align: right;
     max-width: 4.5rem;
+}
+
+@mixin header {
+    text-align: left;
+    font-weight: 800;
 }
 
 

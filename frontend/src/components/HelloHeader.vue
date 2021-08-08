@@ -28,8 +28,7 @@ export default {
   @import '../assets/variables.scss';
 
   h1 {
-    text-align: left;
-    font-weight: 800;
+      @include header;
   }
 
   .accent-divider {
