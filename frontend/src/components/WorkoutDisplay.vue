@@ -14,7 +14,7 @@
                 <td class="set">{{ index + 1 }}</td>
                 <td>{{ set.weight }}</td>
                 <td>{{ set.repetitions }}</td>
-                <td class="set"><fa icon="check"></fa></td>
+                <td class="set" @click="approveWorkout(set, exercise.id)"><fa icon="check"></fa></td>
             </tr>
         </table>
     </div>
@@ -33,6 +33,7 @@ export default {
         ["exercise"] : Object
     },
     emits : {
+        ["send-rep"] : Object
     },
     data() {
         return {
@@ -41,6 +42,9 @@ export default {
     computed: {
     },
     methods : {
+        approveWorkout(set, exerciseId) {
+            this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
+        }
     },
     mounted() {
     }

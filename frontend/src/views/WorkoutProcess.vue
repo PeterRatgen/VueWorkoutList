@@ -12,6 +12,7 @@
     <div class="workout-section" v-for="exercise in workout.exerciseList" :key="exercise.id"> <!-- Exercise section -->
         <WorkoutDisplay 
             v-bind:exercise="exercise"
+            v-on:send-rep="sendRep"
         />
     </div>
 </template>
@@ -57,10 +58,24 @@ export default {
         },
         async startWorkout () {
             console.log(this.work)
+            let a = []
+            for (let i of  this.work.exerciseList) {
+                a.push(i.id) 
+            }
             let res = await this.apiInstance.post('/workout_history', {
-                workoutId : this.work._id
+                workoutId : this.work._id,
+                exerciseList : a
             })
-            this.work.history_id = res.data
+            this.work.historyId = res.data
+            console.log(res.data)
+        },
+        async sendRep(data){
+            let res = await this.apiInstance.post('/workout_history/send_rep', {
+                historyId : this.work.historyId,
+                exerciseId : data.exerciseId,
+                repetitions : data.set.repetitions,
+                weight : data.set.weight
+            }) 
             console.log(res.data)
         }
     },
