@@ -1,5 +1,5 @@
 <template>
-    <div @click="backgroundPressed()"  v-show="!workingOut">
+    <div @click="backgroundPressed()"  v-if="!workingOut">
         <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
         <div class="todo-block">
             <div class="todo">
@@ -15,7 +15,10 @@
             v-bind:workouts="workouts"
             v-on:select-workout="selectedWorkout"/>
     </div>
-    <WorkoutProcess v-bind:workout="currentWorkout" v-show="workingOut" />
+    <WorkoutProcess v-else 
+        v-bind:workout="currentWorkout"  
+        v-on:back="workingOut = false"
+    />
 </template>
 
 <script>
