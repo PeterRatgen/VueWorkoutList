@@ -5,10 +5,10 @@
         </div>
         <table class="rep-table">
             <tr>
-                <th >Set</th>
+                <th>Set</th>
                 <th>Vægt</th>
                 <th>Reps</th>
-                <th>Done</th>
+                <th>Status</th>
             </tr>
             <tr class="repetition-row" v-for="(set, index) in exercise.set" :key="set.id">
                 <td class="set">{{ index + 1 }}</td>
@@ -56,12 +56,18 @@ export default {
     @include workout-card
 }
 
+.exercise-name {
+    margin-bottom: 0.4rem;
+}
+
 .repetition-row {
 }
 
 .rep-table {
     margin: auto;
     width: 90%;
+
+    border-spacing: 0.5rem 0.4rem;
 
 
     & > tr {
