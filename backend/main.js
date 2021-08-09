@@ -18,8 +18,10 @@ const PORT = process.env.PORT;
 
 const userRoute = require('./routes/users.js')
 const workoutRoute = require('./routes/workouts.js')
+const historyRoute = require('./routes/workout_history.js')
 app.use(userRoute)
 app.use(workoutRoute)
+app.use(historyRoute)
 
 app.use(serveStatic("../frontend/dist"));
 
