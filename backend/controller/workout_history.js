@@ -56,7 +56,7 @@ exports.send_rep = function(req, res) {
             ]
         }     
         console.log(req.body)
-		dbase.collection("workout_history").insertOne(
+		dbase.collection("workout_history").updateOne(
             query,
             newValues,
             options
