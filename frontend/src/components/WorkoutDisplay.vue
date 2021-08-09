@@ -1,22 +1,39 @@
 <template>
     <div class="workout-card">
         <div class="exercise-name">
-            <h3>{{ exercise.name }}</h3>
+            <h3>{{ work.name }}</h3>
         </div>
-        <table class="rep-table">
-            <tr>
-                <th>Set</th>
-                <th>Vægt</th>
-                <th>Reps</th>
-                <th>Status</th>
-            </tr>
-            <tr class="repetition-row" v-for="(set, index) in exercise.set" :key="set.id">
-                <td class="set">{{ index + 1 }}</td>
-                <td>{{ set.weight }}</td>
-                <td>{{ set.repetitions }}</td>
-                <td class="set" @click="approveWorkout(set, exercise.id)"><fa icon="check"></fa></td>
-            </tr>
-        </table>
+        <div class="rep-table">
+            <div class="top-row">
+                <div class="table-header">Set</div>
+                <div class="table-header">Vægt</div>
+                <div class="table-header">Reps</div>
+                <div class="table-header">Status</div>
+            </div>
+            <div v-for="(set, index) in work.set" :key="set.id">
+                <div  class="repetition-row"
+                    v-bind:class="{repetitionRowCompleted : set.completed}" >
+                    <div class="table-content set" >{{ index + 1 }}</div>
+                    <div 
+                        class="table-content" 
+                        v-bind:class="{tableContentCompleted : set.completed}"
+                    >
+                        {{ set.weight }}
+                    </div>
+                    <div
+                        class="table-content" 
+                        v-bind:class="{tableContentCompleted : set.completed}"
+                    >
+                        {{ set.repetitions }}
+                    </div>
+                    <div 
+                        class="table-content set" 
+                        @click="approveWorkout(set, work.id)"
+                    ><fa icon="check"></fa></div>
+                </div>
+                <div class="divder"></div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -43,6 +60,7 @@ export default {
     },
     methods : {
         approveWorkout(set, exerciseId) {
+            set.completed = true
             this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
         }
     },
@@ -64,27 +82,54 @@ export default {
     margin-bottom: 0.4rem;
 }
 
-.repetition-row {
+.divder {
+  @include divider;
 }
 
 .rep-table {
-    margin: auto;
-    width: 90%;
+    display: table;
+    width: 100%;
+    padding: 0 0.5rem;
 
-    border-spacing: 0.5rem 0.4rem;
-
-
-    & > tr {
-        & > td {
-            padding: 0.2rem;
-            background-color: $background-color;
-            border-radius: 4px;
-        }
-        & > td.set {
-            background-color: transparent;
+    .top-row {
+        display: flex; 
+        justify-content: space-between;
+        .table-header {
+            flex: 1;
+            padding: 0.3rem 0;
+            font-weight: 700;
         }
     }
 
+    .repetition-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.25rem 0;
+        border-radius: 4px;
+
+        .table-content {
+            flex: 1;
+            padding: 0.25rem 1.25rem;
+            margin: 0 0.5rem; 
+            background-color: $background-color;
+            border-radius: 4px;
+        }
+
+        .table-content.set {
+            background-color: transparent;
+        }
+
+
+        .tableContentCompleted {
+            background-color: transparent;
+        }
+
+    }
 }
+
+.repetitionRowCompleted {
+    background-color: lighten($go-color, 30%);
+}
+
 
 </style>
