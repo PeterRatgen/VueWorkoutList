@@ -9,12 +9,22 @@
         <h1 class="header">{{ workout.title }}</h1>
         <div class="accent-divider"></div>
     </div>
+    <div class="workout-section" v-for="exercise in workout.exerciseList" :key="exercise.id"> <!-- Exercise section -->
+        <WorkoutDisplay 
+            v-bind:exercise="exercise"
+        />
+    </div>
 </template>
 
 
 <script>
+import WorkoutDisplay from '../components/WorkoutDisplay'
+
 export default {
     name : 'WorkoutProcess',
+    components : {
+        WorkoutDisplay
+    },
     props : {
         ["workout"] : Object
     },
@@ -58,10 +68,11 @@ export default {
 .header-container {
     width: 95%;
     margin: auto;
+    margin-top: 3.2rem;
+    margin-bottom: 1rem;
     .header {
         @include header;
     }
-
 }
 
 .accent-divider {
@@ -73,36 +84,45 @@ export default {
 
 
 .top-bar {
-    width: 95%;
+    width: 100%;
     margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
 
     .back-button {
         display: inline-block;
         position: relative;
-        width: 3rem;
-        height: 3rem;
+        width: 2.5rem;
+        height: 2.5rem;
         background-color: #fff;
         border: 2px #ddd solid;
         border-radius: 50%;
+
+        .arrow {
+            font-size: 1.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     .timer {
         display: inline;
         font-weight: 600;
         font-size: 1.2rem;
-        margin-right: 10%;
     }
 }
 
-.arrow {
-    font-size: 1.5rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.workout-section {
+
 }
+
 
 </style>

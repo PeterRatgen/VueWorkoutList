@@ -71,9 +71,9 @@ export default {
     top: 45%;
     transform: translate(0, -50%);
     z-index: 5;
-    width: 90%;
+    width: 25%;
     max-height: 75%;
-    left: 5%;
+    left: calc(75% / 2);
     box-shadow: none;
 
 
@@ -148,7 +148,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1025px) {
     .todo-block {
         width: 80%;
     }
@@ -159,6 +159,10 @@ export default {
         width: 40%;
         left: calc((100% - 40%) / 2);
     }
+      .workout-selector-container {
+            width: 50%;
+            left: 25%;
+      }
 }
 
 @media only screen and (max-width: 600px) {
@@ -169,6 +173,10 @@ export default {
     width: 95%;
   }
   .start-workout {
+        width: 90%;
+        left: 5%;
+  }
+  .workout-selector-container {
         width: 90%;
         left: 5%;
   }
