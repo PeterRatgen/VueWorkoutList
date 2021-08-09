@@ -26,14 +26,16 @@ export default {
         WorkoutDisplay
     },
     props : {
-        ["workout"] : Object
+        ["workout"] : Object,
+        ["apiInstance"] : Function
     },
     emits : {
         ["back"] : undefined
     },
     data() {
         return {
-            timeSinceStart : ''
+            timeSinceStart : '',
+            work : {}
         }
     },
     computed: {
@@ -52,10 +54,20 @@ export default {
                 let print = date.getMinutes() + ':' + secs
                 this.timeSinceStart = print
             }, 1000)
+        },
+        async startWorkout () {
+            console.log(this.work)
+            let res = await this.apiInstance.post('/workout_history', {
+                workoutId : this.work._id
+            })
+            this.work.history_id = res.data
+            console.log(res.data)
         }
     },
     mounted() {
         this.calcTime()
+        this.work = this.workout
+        this.startWorkout()
     }
 }
 </script>

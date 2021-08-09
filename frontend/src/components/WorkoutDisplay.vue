@@ -14,7 +14,7 @@
                 <td class="set">{{ index + 1 }}</td>
                 <td>{{ set.weight }}</td>
                 <td>{{ set.repetitions }}</td>
-                <th><fa icon="check"></fa></th>
+                <td class="set"><fa icon="check"></fa></td>
             </tr>
         </table>
     </div>

@@ -16,7 +16,8 @@
             v-on:select-workout="selectedWorkout"/>
     </div>
     <WorkoutProcess v-else 
-        v-bind:workout="currentWorkout"  
+        :workout="currentWorkout"  
+        :apiInstance="apiInstance"
         v-on:back="workingOut = false"
     />
 </template>
@@ -72,6 +73,7 @@ export default {
             this.apiInstance = this.createInstance();  
             await this.login()
             await this.getWorkout();
+            console.log(this.workouts)
         },
         async login() {
             /**
