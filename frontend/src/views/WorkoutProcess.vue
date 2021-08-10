@@ -15,16 +15,19 @@
             v-on:send-rep="sendRep"
         />
     </div>
+    <Picker/>
 </template>
 
 
 <script>
 import WorkoutDisplay from '../components/WorkoutDisplay'
+import Picker from '../components/Picker.vue'
 
 export default {
     name : 'WorkoutProcess',
     components : {
-        WorkoutDisplay
+        WorkoutDisplay,
+        Picker
     },
     props : {
         ["workout"] : Object,

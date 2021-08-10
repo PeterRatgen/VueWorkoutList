@@ -17,12 +17,14 @@
                     <div 
                         class="table-content" 
                         v-bind:class="{tableContentCompleted : set.completed}"
+                        @click="weightPicker(set)"
                     >
                         {{ set.weight }}
                     </div>
                     <div
                         class="table-content" 
                         v-bind:class="{tableContentCompleted : set.completed}"
+                        @click="repPicker(set)"
                     >
                         {{ set.repetitions }}
                     </div>
@@ -72,6 +74,12 @@ export default {
                 set.completed = true
                 this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
             }
+        },
+        repPicker(set){
+            this.emitter.emit('picker', set)
+        },
+        weightPicker(set){
+            console.log(set)
         }
     },
     mounted() {
@@ -137,6 +145,7 @@ export default {
 
     }
 }
+
 
 .repetitionRowCompleted {
     background-color: lighten($go-color, 30%);
