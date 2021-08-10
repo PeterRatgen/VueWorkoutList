@@ -3,7 +3,7 @@
         <div class="exercise-name">
             <h3>{{ work.name }}</h3>
         </div>
-        <div class="rep-table">
+        <div class="rep-table" v-if="!allApproved">
             <div class="top-row">
                 <div class="table-header">Set</div>
                 <div class="table-header">Vægt</div>
@@ -36,6 +36,9 @@
                 <div class="divder"></div>
             </div>
         </div>
+        <div v-else >
+            <p>Completed</p>
+        </div>
     </div>
 </template>
 
@@ -56,7 +59,8 @@ export default {
     },
     data() {
         return {
-            work : {}
+            work : {},
+            allApproved : false
         }
     },
     computed: {
@@ -81,6 +85,16 @@ export default {
         weightPicker(set){
             console.log(set)
         }
+    },
+    updated() {
+        let allApproved = true
+        for (let set of this.work.set) {
+            console.log(set.completed == undefined)
+            if(set.completed != true || set.completed === undefined){
+                allApproved = false
+            }
+        }
+        this.allApproved = allApproved;
     },
     mounted() {
         this.work = this.exercise
