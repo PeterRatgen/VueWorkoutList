@@ -28,7 +28,7 @@
                     </div>
                     <div 
                         class="table-content set" 
-                        @click="approveWorkout(set, work.id)"
+                        @click="approveWorkout(set, index, work.id)"
                     ><fa icon="check"></fa></div>
                 </div>
                 <div class="divder"></div>
@@ -54,17 +54,28 @@ export default {
     },
     data() {
         return {
+            work : {}
         }
     },
     computed: {
     },
     methods : {
-        approveWorkout(set, exerciseId) {
-            set.completed = true
-            this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
+        approveWorkout(set, index, exerciseId) {
+            let allApproved = true
+            for (let i = 0; i < index; i++) {
+                if (this.work.set[i].completed != true) {
+                    allApproved = false 
+                    break;
+                }
+            }
+            if (allApproved)  {
+                set.completed = true
+                this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
+            }
         }
     },
     mounted() {
+        this.work = this.exercise
     }
 }
 </script>
