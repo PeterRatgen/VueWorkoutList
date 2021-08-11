@@ -1,12 +1,16 @@
 <template>
     <div class="picker" ref="picker">
-        <span class="icon-container"  @click.stop="dec('weight')">
-            <fa class="icon" icon=minus  ></fa>
-        </span>
-        {{ data }}
-        <span class="icon-container"  @click.stop="inc('weight')">
-            <fa class="icon" icon=plus  ></fa>
-        </span>
+        <div class="picker-container">
+            <span class="icon-container"  @click.stop="dec()">
+                <fa class="icon" icon="minus"  ></fa>
+            </span>
+            {{ data }} {{ unit }}
+            <span class="icon-container"  @click.stop="inc()">
+                <fa class="icon" icon="plus"  ></fa>
+            </span>
+        </div>
+        <button class="button" @click="cancel()"><fa class="cross" icon="plus"></fa></button>
+        <button class="button" @click="submit()"><fa icon="check"></fa></button>
     </div>
 </template>
 
@@ -17,14 +21,31 @@ export default {
     name : "Picker",
     data() {
         return { 
-            data : {}
+            data : 0,
+            unit : "",
+            steps : 1
         }
     },
     methods : {
         showPicker(data) {
+            console.log(this.$refs)
             this.$refs.picker.style.display = "block"
-            this.data = data.weight
-            console.log(data)
+            this.data = data.number
+            this.unit = data.unit
+            this.steps = data.steps
+        },
+        cancel() {
+            this.$refs.picker.style.display = "none"
+        },
+        inc() {
+            this.data = this.data + this.steps
+        },
+        dec () {
+            this.data = this.data - this.steps
+        },
+        submit() {
+            this.emitter.emit('picker-completed', this.data)
+            this.$refs.picker.style.display = "none"
         }
     },
     mounted() {
@@ -39,22 +60,42 @@ export default {
 
 .picker {
     @include workout-card;
-    position: absolute;
+    position: fixed;
     top: 50%;
-    left: 30%;
-    width: 40%; 
+    transform: translate(0, -50%);
+    left: 25%;
+    width: 50%; 
     display: none;
+
+    .button {
+        @include button;
+
+        padding: 0.25rem 1rem;
+        margin: 0.5rem;
+
+        .cross {
+            transform: rotate(45deg);
+        }
+    }
+
+    .picker-container {
+        display: flex;
+        justify-content: space-between;
+
+        margin: 1rem 0.25rem;
+
+        .icon-container {
+            display: inline;
+            width: 1.75rem;
+            justify-content: center;
+            align-items: center;
+
+            .icon {
+                color: lighten($text-color, 5%);
+            }
+        }
+    }
 }
 
-.icon {
-    color: lighten($text-color, 5%);
-}
 
-.icon-container {
-    display: flex;
-    width: 1.75rem;
-    height: 2rem;
-    justify-content: center;
-    align-items: center;
-}
 </style>

@@ -32,14 +32,14 @@
                         <div 
                             class="table-content" 
                             v-bind:class="{tableContentCompleted : set.completed}"
-                            @click="weightPicker(set)"
+                            @click="weightPicker(index, set)"
                         >
                             {{ set.weight }}
                         </div>
                         <div
                             class="table-content" 
                             v-bind:class="{tableContentCompleted : set.completed}"
-                            @click="repPicker(set)"
+                            @click="repPicker(index, set)"
                         >
                             {{ set.repetitions }}
                         </div>
@@ -55,8 +55,11 @@
             <div class="exercise-summary" v-else-if="work.skipped">
                 <p >Øvelse sprunget over.</p>
             </div>
+            <div class="exercise-summary" v-else-if="allApproved">
+                <p >Øvelse færdig, {{ avgWeight }} kg x {{ work.set.length }} sæt</p>
+            </div>
             <div class="exercise-summary" v-else>
-                <p >Øvelse færdig, {{ avgWeight }} kg (gns.) x {{ work.set.length }} sæt</p>
+                <p>{{ avgWeight }} kg x {{ work.set.length }} sæt</p>
             </div>
         </transition>
     </div>
@@ -87,7 +90,8 @@ export default {
             work : {},
             contracted : false,
             hovMen: ["Skip exercise"],
-            displayHover: false
+            displayHover: false,
+            allApproved : false
         }
     },
     computed: {
@@ -96,7 +100,7 @@ export default {
             for (let set of this.work.set){
                 amount = amount + set.weight 
             }
-            return amount / this.work.set.length
+            return Math.round(amount / this.work.set.length)
         }
     },
     methods : {
@@ -113,14 +117,32 @@ export default {
                 this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
                 if (index == this.work.set.length - 1) {
                     this.contracted = true
+                    this.allApproved = true
                 }
             }
         },
-        repPicker(set){
-            this.emitter.emit('picker', set)
+        repPicker(index, set){
+            this.emitter.emit('picker', {
+                number : set.repetitions, 
+                unit : "reps", 
+                steps : 1
+            } )
+            this.emitter.on('picker-completed', (data) => {
+                this.onCompleteReps(data, index)
+                this.emitter.off('picker-completed')
+            })
         },
-        weightPicker(set){
-            console.log(set)
+        weightPicker(index, set){
+            this.emitter.emit('picker', {
+                number : set.weight, 
+                unit : "kg",
+                steps : 2.5
+            }
+            )
+            this.emitter.on('picker-completed', (data) => {
+                this.onCompleteWeight(data, index)
+                this.emitter.off('picker-completed')
+            })
         },
         handleOption(item){
             /*
@@ -133,10 +155,29 @@ export default {
                     this.$emit("skipped", {exerciseId : this.work.id } )
                     break;
             }
+        },
+        checkAllApproved() {
+            let allApproved = true
+            for (let i = 0; i < this.work.set.length - 1; i++) {
+                if (this.work.set[i].completed != true) {
+                    allApproved = false 
+                    break;
+                }
+            }
+            return allApproved
+        },
+        onCompleteWeight(data, index) {
+            console.log("index " + index)
+            this.work.set[index].weight = data
+        },
+        onCompleteReps(data, index) {
+            console.log("index " + index)
+            this.work.set[index].repetitions = data
         }
     },
     updated() {
         this.contracted = !this.expand
+        this.allApproved = this.checkAllApproved()
     },
     mounted() {
         this.work = this.exercise

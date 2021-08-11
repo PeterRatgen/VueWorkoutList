@@ -8,15 +8,14 @@
                 -->
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
-                    <span>  
-                        <nobr>
-                        <span class="icon-container" @click.stop="deleteExercise" >
-                            <fa 
-                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
-                                icon="trash-alt" >
-                            </fa> 
-                        </span>
-                        {{ exerciseItem.set.length }} sæt </nobr>
+                    <span >  
+                            <span class="icon-container" @click.stop="deleteExercise" >
+                                <fa 
+                                    class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                    icon="trash-alt" >
+                                </fa> 
+                            </span>
+                            {{ exerciseItem.set.length }} sæt 
                     </span>
                 </div>
             </div>
@@ -33,8 +32,7 @@
                         v-on:result="titleSubmitEdit"
                         @click.stop
                     />
-                    <span>  
-                        <nobr>
+                    <span >  
                             <span class="icon-container" @click.stop="deleteExercise" >
                                 <fa 
                                     class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
@@ -42,7 +40,6 @@
                                 </fa> 
                             </span>
                             {{ exerciseItem.set.length }} sæt 
-                        </nobr>
                     </span>
                 </div>
                 <div class="repetition-container">
@@ -206,6 +203,7 @@ export default {
 .item-header {
     display: flex;
     justify-content: space-between;
+    white-space: nowrap;
 
     h4 {
         display: inline;

@@ -67,7 +67,7 @@ export default {
 
 .workout-selector-container {
     @include workout-card;
-    position: absolute;
+    position: fixed;
     top: 45%;
     transform: translate(0, -50%);
     z-index: 5;
@@ -109,7 +109,7 @@ export default {
  
 .start-workout {
     @include workout-card;
-    position: absolute;  
+    position: fixed;  
     bottom: 2rem;
     height: 3rem;
     width: 30%;
