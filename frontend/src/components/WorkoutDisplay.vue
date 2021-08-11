@@ -3,42 +3,44 @@
         <div class="exercise-name">
             <h3>{{ work.name }}</h3>
         </div>
-        <div class="rep-table" v-if="!allApproved">
-            <div class="top-row">
-                <div class="table-header">Set</div>
-                <div class="table-header">Vægt</div>
-                <div class="table-header">Reps</div>
-                <div class="table-header">Status</div>
-            </div>
-            <div v-for="(set, index) in work.set" :key="set.id">
-                <div  class="repetition-row"
-                    v-bind:class="{repetitionRowCompleted : set.completed}" >
-                    <div class="table-content set" >{{ index + 1 }}</div>
-                    <div 
-                        class="table-content" 
-                        v-bind:class="{tableContentCompleted : set.completed}"
-                        @click="weightPicker(set)"
-                    >
-                        {{ set.weight }}
-                    </div>
-                    <div
-                        class="table-content" 
-                        v-bind:class="{tableContentCompleted : set.completed}"
-                        @click="repPicker(set)"
-                    >
-                        {{ set.repetitions }}
-                    </div>
-                    <div 
-                        class="table-content set" 
-                        @click="approveWorkout(set, index, work.id)"
-                    ><fa icon="check"></fa></div>
+        <transition name="fade" mode="out-in">
+            <div class="rep-table" v-if="!contracted">
+                <div class="top-row">
+                    <div class="table-header">Set</div>
+                    <div class="table-header">Vægt</div>
+                    <div class="table-header">Reps</div>
+                    <div class="table-header">Status</div>
                 </div>
-                <div class="divder"></div>
+                <div v-for="(set, index) in work.set" :key="set.id">
+                    <div  class="repetition-row"
+                        v-bind:class="{repetitionRowCompleted : set.completed}" >
+                        <div class="table-content set" >{{ index + 1 }}</div>
+                        <div 
+                            class="table-content" 
+                            v-bind:class="{tableContentCompleted : set.completed}"
+                            @click="weightPicker(set)"
+                        >
+                            {{ set.weight }}
+                        </div>
+                        <div
+                            class="table-content" 
+                            v-bind:class="{tableContentCompleted : set.completed}"
+                            @click="repPicker(set)"
+                        >
+                            {{ set.repetitions }}
+                        </div>
+                        <div 
+                            class="table-content set" 
+                            @click="approveWorkout(set, index, work.id)"
+                        ><fa icon="check"></fa></div>
+                    </div>
+                    <div class="divder"></div>
+                </div>
             </div>
-        </div>
-        <div v-else >
-            <p>Completed</p>
-        </div>
+            <div class="exercise-summary" v-else>
+                <p >Øvelse færdig, {{ avgWeight }} kg (gns.) x {{ work.set.length }} sæt</p>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -60,10 +62,17 @@ export default {
     data() {
         return {
             work : {},
-            allApproved : false
+            contracted : false
         }
     },
     computed: {
+        avgWeight() {
+            let amount = 0
+            for (let set of this.work.set){
+                amount = amount + set.weight 
+            }
+            return amount / this.work.set.length
+        }
     },
     methods : {
         approveWorkout(set, index, exerciseId) {
@@ -77,6 +86,9 @@ export default {
             if (allApproved)  {
                 set.completed = true
                 this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
+                if (index == this.work.set.length - 1) {
+                    this.contracted = true
+                }
             }
         },
         repPicker(set){
@@ -87,14 +99,6 @@ export default {
         }
     },
     updated() {
-        let allApproved = true
-        for (let set of this.work.set) {
-            console.log(set.completed == undefined)
-            if(set.completed != true || set.completed === undefined){
-                allApproved = false
-            }
-        }
-        this.allApproved = allApproved;
     },
     mounted() {
         this.work = this.exercise
@@ -112,11 +116,20 @@ export default {
 }
 
 .exercise-name {
-    margin-bottom: 0.4rem;
+    margin-bottom: 1rem;
 }
 
 .divder {
   @include divider;
+}
+
+.exercise-summary {
+
+
+    
+    & > p {
+        text-align: left;
+    }
 }
 
 .rep-table {
@@ -160,6 +173,24 @@ export default {
     }
 }
 
+.fade-enter-active {
+  animation: move-list 0.4s linear;
+}
+
+.fade-leave-active {
+  animation: move-list 0.2s linear reverse;
+}
+
+@keyframes move-list {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 600px;
+    opacity: 1;
+  }
+}
 
 .repetitionRowCompleted {
     background-color: lighten($go-color, 30%);

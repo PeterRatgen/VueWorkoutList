@@ -73,13 +73,12 @@ export default {
             console.log(res.data)
         },
         async sendRep(data){
-            let res = await this.apiInstance.post('/workout_history/send_rep', {
+            await this.apiInstance.post('/workout_history/send_rep', {
                 historyId : this.work.historyId,
                 exerciseId : data.exerciseId,
                 repetitions : data.set.repetitions,
                 weight : data.set.weight
             }) 
-            console.log(res.data)
         }
     },
     mounted() {
