@@ -15,7 +15,7 @@ import HoverMenuItem from "./HoverMenuItem.vue"
 export default {
     name: "HoverMenu",
     props: [ "menuItems", "display" ], 
-    emits: [ "option" ],
+    emits: [ "option" , "minimize"],
     components: {
         HoverMenuItem
     },
@@ -45,8 +45,8 @@ $menu-width: 13rem;
     background-color: lighten($background-color, 5%);
     width: $menu-width;
     z-index: 5;
-    top: 3.5rem;
-    right: 0.5rem;
+    top: 1.5rem;
+    right: -0.5rem;
     box-shadow: 4px 2px 8px #b2b2b2;
     border-radius: 4px;
     overflow: visible;
@@ -61,6 +61,16 @@ $menu-width: 13rem;
   @include divider;
   width: 90%;
   margin: auto;
+}
+
+.outside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 4;
+    background-color: black;
 }
 
 

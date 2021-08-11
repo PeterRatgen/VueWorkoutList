@@ -9,16 +9,16 @@
                     -->
                     <div class="flex-container">
                         <h3 id="title">{{ workout.title }}</h3>
-                            <span class="icon-container" @click.stop="displayHover = true">
-                                <fa class="dots" icon="ellipsis-v"></fa>
-                            </span>
-                            <HoverMenu 
-                                :menuItems=hovMen 
-                                :display=displayHover  
-                                @option="handleOption"
-                                @click.stop
-                            />
-                        </div>
+                        <span class="icon-container" @click.stop="displayHover = true">
+                            <fa class="dots" icon="ellipsis-v"></fa>
+                        </span>
+                        <HoverMenu 
+                            :menuItems=hovMen 
+                            :display=displayHover  
+                            @option="handleOption"
+                            @click.stop
+                        />
+                    </div>
                         <p class="description "> 
                             <span v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
                                 {{ nameWithComma(index) }}
@@ -245,6 +245,7 @@ export default {
 
   .flex-container {
     display: flex;
+    position: relative;
     flex-direction: row;  
     justify-content: space-between;
     align-items: center;

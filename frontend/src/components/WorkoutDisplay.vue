@@ -1,7 +1,17 @@
 <template>
     <div class="workout-card">
-        <div class="exercise-name">
+        <div class="flex-container">
             <h3>{{ work.name }}</h3>
+            <span class="icon-container" @click.stop="displayHover = !displayHover">
+                <fa class="dots" icon="ellipsis-v"></fa>
+            </span>
+            <HoverMenu 
+                :menuItems=hovMen 
+                :display=displayHover  
+                @option="handleOption"
+                @minimize="displayHover = false"
+                @click.stop
+            />
         </div>
         <transition name="fade" mode="out-in">
             <div class="rep-table" v-if="!contracted">
@@ -14,7 +24,11 @@
                 <div v-for="(set, index) in work.set" :key="set.id">
                     <div  class="repetition-row"
                         v-bind:class="{repetitionRowCompleted : set.completed}" >
-                        <div class="table-content set" >{{ index + 1 }}</div>
+                        <div 
+                            class="table-content set" 
+                            v-bind:class="{tableContentCompleted : set.completed}"
+                        >{{ index + 1 }}
+                        </div>
                         <div 
                             class="table-content" 
                             v-bind:class="{tableContentCompleted : set.completed}"
@@ -31,11 +45,15 @@
                         </div>
                         <div 
                             class="table-content set" 
+                            v-bind:class="{tableContentCompleted : set.completed}"
                             @click="approveWorkout(set, index, work.id)"
                         ><fa icon="check"></fa></div>
                     </div>
                     <div class="divder"></div>
                 </div>
+            </div>
+            <div class="exercise-summary" v-else-if="work.skipped">
+                <p >Øvelse sprunget over.</p>
             </div>
             <div class="exercise-summary" v-else>
                 <p >Øvelse færdig, {{ avgWeight }} kg (gns.) x {{ work.set.length }} sæt</p>
@@ -46,23 +64,30 @@
 
 
 <script>
+import HoverMenu from "../components/HoverMenu/HoverMenu.vue"
+
 export default {
     /*
         A workout is displayed in the context of an ongoing workout.
     */
     name : 'WorkoutDisplay',
     components : {
+        HoverMenu
     },
     props : {
-        ["exercise"] : Object
+        ["exercise"] : Object,
+        ["expand"] : Boolean
     },
     emits : {
-        ["send-rep"] : Object
+        ["send-rep"] : Object,
+        ["skipped"] : Object
     },
     data() {
         return {
             work : {},
-            contracted : false
+            contracted : false,
+            hovMen: ["Skip exercise"],
+            displayHover: false
         }
     },
     computed: {
@@ -96,9 +121,22 @@ export default {
         },
         weightPicker(set){
             console.log(set)
+        },
+        handleOption(item){
+            /*
+                Handle the option clicked in the HoverMenu component.
+            */
+            switch(item) {
+                case this.hovMen[0]:
+                    this.contracted = true;
+                    this.work.skipped = true;
+                    this.$emit("skipped", {exerciseId : this.work.id } )
+                    break;
+            }
         }
     },
     updated() {
+        this.contracted = !this.expand
     },
     mounted() {
         this.work = this.exercise
@@ -115,8 +153,39 @@ export default {
     @include workout-card
 }
 
-.exercise-name {
+
+.flex-container {
+    display: flex;
+    position: relative;
+    flex-direction: row;  
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
+    width: 100%;
+
+    h3 {
+        font-weight: 700; 
+        text-align: left;
+        font-size: 1.3rem;
+    }
+
+    #title:hover {
+        cursor: pointer;
+    }
+
+
+    .icon-container {
+        width: 2rem;
+    }
+
+    .dots {
+        color: lighten($text-color, 30%);
+
+        &:hover {
+            color: $text-color; 
+            cursor: pointer;
+        }
+    }
 }
 
 .divder {
@@ -168,6 +237,7 @@ export default {
 
         .tableContentCompleted {
             background-color: transparent;
+            color: white;
         }
 
     }
@@ -193,7 +263,7 @@ export default {
 }
 
 .repetitionRowCompleted {
-    background-color: lighten($go-color, 30%);
+    background-color: lighten( $accent-color , 40%);
 }
 
 

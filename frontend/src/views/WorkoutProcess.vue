@@ -6,13 +6,15 @@
         <p class="timer">{{ timeSinceStart }}</p>
     </div>
     <div class="header-container"> <!-- Header -->
-        <h1 class="header">{{ workout.title }}</h1>
+        <h1 class="header">{{ work.title }}</h1>
         <div class="accent-divider"></div>
     </div>
-    <div class="workout-section" v-for="exercise in workout.exerciseList" :key="exercise.id"> <!-- Exercise section -->
+    <div class="workout-section" v-for="(exercise, index) in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
         <WorkoutDisplay 
             v-bind:exercise="exercise"
+            v-bind:expand="currentExercise == index"
             v-on:send-rep="sendRep"
+            @skipped="skippedExercise"
         />
     </div>
     <Picker/>
@@ -43,6 +45,21 @@ export default {
         }
     },
     computed: {
+        currentExercise () {
+            /*
+                Returns the index of the current exercise
+            */
+            let currentEx = 0
+            for (let ex of this.work.exerciseList) {
+                for (let set of ex.set) {
+                    if (set.completed == undefined || set.completed == false) {
+                        return currentEx
+                    }
+                }
+                currentEx = currentEx + 1
+            }
+            return currentEx
+        }
     },
     methods : {
         calcTime() {
@@ -73,12 +90,26 @@ export default {
             console.log(res.data)
         },
         async sendRep(data){
+            let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+            for (let set of ex.set) {
+                if (set.completed == undefined || set.computed == false) {
+                    set.repetitions = data.set.repetitions
+                    set.weight = data.set.weight
+                    set.completed 
+                }
+            }
             await this.apiInstance.post('/workout_history/send_rep', {
                 historyId : this.work.historyId,
                 exerciseId : data.exerciseId,
                 repetitions : data.set.repetitions,
                 weight : data.set.weight
             }) 
+        },
+        async skippedExercise(data) {
+            await this.apiInstance.put('/workout_history/skip_exercise', {
+                historyId : this.work.historyId,
+                exerciseId : data.exerciseId
+            })
         }
     },
     mounted() {
