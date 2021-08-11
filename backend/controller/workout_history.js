@@ -73,3 +73,39 @@ exports.send_rep = function(req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
+exports.skip_exercise = function(req, res) {
+	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+		if (err) throw err;
+		let dbase = db.db("workout_db");
+        let query = {
+            _id : ObjectId(req.body.historyId)
+        }
+        let newValues = {
+            $set : { 
+                "exerciseList.$[el].skipped" : true
+            }
+        }
+        let options = { 
+            arrayFilters : [
+                { 
+                    "el.exercise_type" : ObjectId(req.body.exerciseId)
+                }, 
+            ]
+        }     
+        console.log(req.body)
+		dbase.collection("workout_history").updateOne(
+            query,
+            newValues,
+            options
+            , function(err, result) {
+			if (err) {
+                console.log(err)
+                throw err;
+                
+            }
+            res.send(result.insertedId)
+			db.close();
+		});
+	});
+	res.setHeader('Access-Control-Allow-Origin', '*')
+}
