@@ -83,7 +83,8 @@ export default {
     },
     emits : {
         ["send-rep"] : Object,
-        ["skipped"] : Object
+        ["skipped"] : Object,
+        ["change-set"] : Object
     },
     data() {
         return {
@@ -105,6 +106,7 @@ export default {
     },
     methods : {
         approveWorkout(set, index, exerciseId) {
+            console.log(this.work)
             let allApproved = true
             for (let i = 0; i < index; i++) {
                 if (this.work.set[i].completed != true) {
@@ -167,12 +169,20 @@ export default {
             return allApproved
         },
         onCompleteWeight(data, index) {
-            console.log("index " + index)
             this.work.set[index].weight = data
+            this.$emit('change-set', {
+                newSet : this.work.set[index],
+                index : index,
+                exerciseId : this.work.id
+            })
         },
         onCompleteReps(data, index) {
-            console.log("index " + index)
             this.work.set[index].repetitions = data
+            this.$emit('change-set', {
+                newSet : this.work.set[index],
+                index : index,
+                exerciseId : this.work.id
+            })
         }
     },
     updated() {

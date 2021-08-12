@@ -14,6 +14,7 @@
             v-bind:exercise="exercise"
             v-bind:expand="currentExercise == index"
             v-on:send-rep="sendRep"
+            v-on:change-set="changeSet"
             @skipped="skippedExercise"
         />
     </div>
@@ -90,30 +91,36 @@ export default {
             console.log(res.data)
         },
         async sendRep(data){
+            console.log("received send rep")
             let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+            console.log(ex)
             for (let set of ex.set) {
-                if (set.completed == undefined || set.computed == false) {
-                    set.repetitions = data.set.repetitions
-                    set.weight = data.set.weight
-                    set.completed 
-                }
+                if (set.completed == undefined || set.completed == false) {
+                    await this.apiInstance.post('/workout_history/send_rep', {
+                        historyId : this.work.historyId,
+                        exerciseId : data.exerciseId,
+                        repetitions : data.set.repetitions,
+                        weight : data.set.weight
+                    }) 
+                    break;
+                } 
             }
-            await this.apiInstance.post('/workout_history/send_rep', {
-                historyId : this.work.historyId,
-                exerciseId : data.exerciseId,
-                repetitions : data.set.repetitions,
-                weight : data.set.weight
-            }) 
         },
         async skippedExercise(data) {
             await this.apiInstance.put('/workout_history/skip_exercise', {
                 historyId : this.work.historyId,
                 exerciseId : data.exerciseId
             })
+        },
+        changeSet(data) {
+            let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+            ex.set[data.index] = data.newSet
+            console.log(ex)
         }
     },
     mounted() {
         this.calcTime()
+        console.log("re-mounted")
         this.work = this.workout
         this.startWorkout()
     }
