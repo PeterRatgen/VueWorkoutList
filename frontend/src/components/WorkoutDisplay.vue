@@ -1,7 +1,7 @@
 <template>
     <div class="workout-card">
         <div class="flex-container">
-            <h3>{{ work.name }}</h3>
+            <h3>{{ exercise.name }}</h3>
             <span class="icon-container" @click.stop="displayHover = !displayHover">
                 <fa class="dots" icon="ellipsis-v"></fa>
             </span>
@@ -21,7 +21,7 @@
                     <div class="table-header">Reps</div>
                     <div class="table-header">Status</div>
                 </div>
-                <div v-for="(set, index) in work.set" :key="set.id">
+                <div v-for="(set, index) in exercise.set" :key="set.id">
                     <div  class="repetition-row"
                         v-bind:class="{repetitionRowCompleted : set.completed}" >
                         <div 
@@ -46,20 +46,20 @@
                         <div 
                             class="table-content set" 
                             v-bind:class="{tableContentCompleted : set.completed}"
-                            @click="approveWorkout(set, index, work.id)"
+                            @click="approveWorkout(set, index, exercise.id)"
                         ><fa icon="check"></fa></div>
                     </div>
                     <div class="divder"></div>
                 </div>
             </div>
-            <div class="exercise-summary" v-else-if="work.skipped">
+            <div class="exercise-summary" v-else-if="exercise.skipped">
                 <p >Øvelse sprunget over.</p>
             </div>
             <div class="exercise-summary" v-else-if="allApproved">
-                <p >Øvelse færdig, {{ avgWeight }} kg x {{ work.set.length }} sæt</p>
+                <p >Øvelse færdig, {{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
             </div>
             <div class="exercise-summary" v-else>
-                <p>{{ avgWeight }} kg x {{ work.set.length }} sæt</p>
+                <p>{{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
             </div>
         </transition>
     </div>
@@ -88,7 +88,6 @@ export default {
     },
     data() {
         return {
-            work : {},
             contracted : false,
             hovMen: ["Skip exercise"],
             displayHover: false,
@@ -98,18 +97,17 @@ export default {
     computed: {
         avgWeight() {
             let amount = 0
-            for (let set of this.work.set){
+            for (let set of this.exercise.set){
                 amount = amount + set.weight 
             }
-            return Math.round(amount / this.work.set.length)
+            return Math.round(amount / this.exercise.set.length)
         }
     },
     methods : {
         approveWorkout(set, index, exerciseId) {
-            console.log(this.work)
             let allApproved = true
             for (let i = 0; i < index; i++) {
-                if (this.work.set[i].completed != true) {
+                if (this.exercise.set[i].completed != true) {
                     allApproved = false 
                     break;
                 }
@@ -117,7 +115,7 @@ export default {
             if (allApproved)  {
                 set.completed = true
                 this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
-                if (index == this.work.set.length - 1) {
+                if (index == this.exercise.set.length - 1) {
                     this.contracted = true
                     this.allApproved = true
                 }
@@ -153,15 +151,14 @@ export default {
             switch(item) {
                 case this.hovMen[0]:
                     this.contracted = true;
-                    this.work.skipped = true;
-                    this.$emit("skipped", {exerciseId : this.work.id } )
+                    this.$emit("skipped", {exerciseId : this.exercise.id } )
                     break;
             }
         },
         checkAllApproved() {
             let allApproved = true
-            for (let i = 0; i < this.work.set.length - 1; i++) {
-                if (this.work.set[i].completed != true) {
+            for (let i = 0; i < this.exercise.set.length - 1; i++) {
+                if (this.exercise.set[i].completed != true) {
                     allApproved = false 
                     break;
                 }
@@ -169,19 +166,17 @@ export default {
             return allApproved
         },
         onCompleteWeight(data, index) {
-            this.work.set[index].weight = data
             this.$emit('change-set', {
-                newSet : this.work.set[index],
+                newSet : this.exercise.set[index],
                 index : index,
-                exerciseId : this.work.id
+                exerciseId : this.exercise.id
             })
         },
         onCompleteReps(data, index) {
-            this.work.set[index].repetitions = data
             this.$emit('change-set', {
-                newSet : this.work.set[index],
+                newSet : this.exercise.set[index],
                 index : index,
-                exerciseId : this.work.id
+                exerciseId : this.exercise.id
             })
         }
     },
@@ -190,7 +185,7 @@ export default {
         this.allApproved = this.checkAllApproved()
     },
     mounted() {
-        this.work = this.exercise
+
     }
 }
 </script>

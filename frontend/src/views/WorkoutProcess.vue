@@ -1,11 +1,11 @@
 <template>
     <div class="top-bar"> <!-- Top bar -->
-        <div class="back-button" @click="$emit('back')"> 
+        <div class="back-button" @click="returnToFront"> 
             <fa class="arrow" icon="arrow-left"  ></fa>
         </div>
         <div class="right-flex">
             <p class="timer">{{ timeSinceStart }}</p>
-            <button class="stop-button" @click="endWorkout()">Afslut</button>
+            <button class="stop-button" @click="endWorkout()">Slut</button>
         </div>
     </div>
     <div class="workout-block"> 
@@ -47,7 +47,7 @@ export default {
     data() {
         return {
             timeSinceStart : '',
-            work : {}
+            work : {},
         }
     },
     computed: {
@@ -69,10 +69,17 @@ export default {
     },
     methods : {
         calcTime() {
-            let timeOfStart = new Date()
+            let startTime = 0
+            if(this.work.timeOfStart == undefined)  {
+                let time = new Date();
+                this.work.timeOfStart = time.valueOf()
+                startTime = time.valueOf()
+            } else {
+                startTime = this.work.timeOfStart
+            }
             setInterval(() => {
                 let a = new Date()
-                let toExpired = a.valueOf() - timeOfStart.valueOf()
+                let toExpired = a.valueOf() - startTime
                 let date = new Date(toExpired)
                 let secs = date.getSeconds()
                 if (secs < 10) {
@@ -83,7 +90,6 @@ export default {
             }, 1000)
         },
         async startWorkout () {
-            console.log(this.work)
             let a = []
             for (let i of  this.work.exerciseList) {
                 a.push(i.id) 
@@ -93,12 +99,9 @@ export default {
                 exerciseList : a
             })
             this.work.historyId = res.data
-            console.log(res.data)
         },
         async sendRep(data){
-            console.log("received send rep")
             let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
-            console.log(ex)
             for (let set of ex.set) {
                 if (set.completed == undefined || set.completed == false) {
                     await this.apiInstance.post('/workout_history/send_rep', {
@@ -112,6 +115,8 @@ export default {
             }
         },
         async skippedExercise(data) {
+            let ele = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+            ele.skipped = true
             await this.apiInstance.put('/workout_history/skip_exercise', {
                 historyId : this.work.historyId,
                 exerciseId : data.exerciseId
@@ -120,20 +125,37 @@ export default {
         changeSet(data) {
             let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
             ex.set[data.index] = data.newSet
-            console.log(ex)
         },
         async endWorkout() {
             await this.apiInstance.put('/workout_history/end_exercise', {
                 historyId: this.work.historyId
             })
+            localStorage.removeItem('onGoingWorkout')
+            this.work = {}
+            console.log('state of work')
+            console.log(this.work)
+            this.$emit('back')
+        },
+        returnToFront() {
+            localStorage.setItem('onGoingWorkout', JSON.stringify(this.work))
             this.$emit('back')
         }
     },
     mounted() {
+        let onGoingWorkout = localStorage.getItem('onGoingWorkout')
+        if (onGoingWorkout  != undefined) {
+            this.work = JSON.parse(onGoingWorkout)
+        } else {
+            console.log("state of workout")
+            console.log(this.workout)
+            this.work = this.workout
+        }
         this.calcTime()
-        console.log("re-mounted")
-        this.work = this.workout
         this.startWorkout()
+    },
+    updated() {
+        console.log("state of workout")
+        console.log(this.workout)
     }
 }
 </script>

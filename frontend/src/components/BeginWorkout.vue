@@ -1,6 +1,11 @@
 <template>
     <transition name="fade" mode="out-in">
-        <div v-if="displayPicker"  class="workout-selector-container"
+        <div v-if="onGoingWorkout" class="start-workout" @click="continueWorkout">
+            <div>
+                <p class="start-workout-text">Fortsæt træning</p>
+            </div>
+        </div>
+        <div v-else-if="displayPicker"  class="workout-selector-container"
         id="workout-picker" >
             <div class="workout-selector">
                 <span class="cross-container" @click="displayPicker = false"  >
@@ -27,7 +32,8 @@
 export default {
     name : 'BeginWorkout',
     emits : {
-       ["select-workout"] : String
+       ["select-workout"] : String,
+       ["continue-workout"] : undefined
     },
     props : {
         ["workouts"] : Object
@@ -44,6 +50,17 @@ export default {
         },
         workoutPicker(workout) {
             this.$emit("select-workout", workout)
+        },
+        continueWorkout() {
+            this.$emit("continue-workout")
+        }
+    },
+    computed : {
+        onGoingWorkout() {
+            if (localStorage.getItem('onGoingWorkout') != undefined){
+                return true
+            }
+            return false
         }
     }
 }

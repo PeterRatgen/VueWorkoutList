@@ -13,7 +13,9 @@
         </div>
         <BeginWorkout 
             v-bind:workouts="workouts"
-            v-on:select-workout="selectedWorkout"/>
+            v-on:select-workout="selectedWorkout"
+            v-on:continue-workout="continueWorkout"
+        />
     </div>
     <WorkoutProcess v-else 
         :workout="currentWorkout"  
@@ -252,6 +254,10 @@ export default {
         selectedWorkout(workout) {
             this.workingOut = true;
             this.currentWorkout = workout;
+        },
+        continueWorkout() {
+            this.currentWorkout = {}
+            this.workingOut = true;
         }
     },
     computed : {
