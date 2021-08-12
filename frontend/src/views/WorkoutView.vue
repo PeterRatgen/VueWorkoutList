@@ -75,7 +75,6 @@ export default {
             this.apiInstance = this.createInstance();  
             await this.login()
             await this.getWorkout();
-            console.log(this.workouts)
         },
         async login() {
             /**
@@ -290,6 +289,10 @@ export default {
         this.emitter.on('delete-rep', this.deleteRep)
         this.emitter.on('title-change', this.titleChange)
         this.emitter.on('delete-workout', this.deleteWorkout)
+    },
+    updated() {
+        console.log("currentWorkout")
+        console.log(this.currentWorkout)
     }
 }
 </script>

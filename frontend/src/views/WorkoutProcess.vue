@@ -141,10 +141,18 @@ export default {
     },
     mounted() {
         let onGoingWorkout = localStorage.getItem('onGoingWorkout')
-        if (onGoingWorkout  != undefined) {
+        if (onGoingWorkout != undefined) {
             this.work = JSON.parse(onGoingWorkout)
         } else {
-            this.work = this.workout
+            let tempWork = this.workout
+            tempWork.timeOfStart = undefined
+            for (let ex of tempWork.exerciseList) {
+                for (let set of ex.set) {
+                    set.completed = undefined
+                }
+            }
+            console.log(tempWork)
+            this.work = tempWork
         }
         this.calcTime()
         this.startWorkout()

@@ -1,6 +1,6 @@
 <template>
     <transition name="fade" mode="out-in">
-        <div v-if="onGoingWorkout" class="start-workout" @click="continueWorkout">
+        <div v-if="onGoingWorkout" class="start-workout ongoing" @click="continueWorkout">
             <div>
                 <p class="start-workout-text">Fortsæt træning</p>
             </div>
@@ -135,6 +135,10 @@ export default {
     padding: 12px;
     left: calc((100% - 30%) / 2);
     margin: 0;
+
+    &.ongoing {
+        background-color: orange;
+    }
 
     &:hover {
         background-color: darken($go-color, 6%);
