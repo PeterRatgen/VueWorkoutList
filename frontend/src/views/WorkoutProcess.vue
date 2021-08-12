@@ -3,20 +3,25 @@
         <div class="back-button" @click="$emit('back')"> 
             <fa class="arrow" icon="arrow-left"  ></fa>
         </div>
-        <p class="timer">{{ timeSinceStart }}</p>
+        <div class="right-flex">
+            <p class="timer">{{ timeSinceStart }}</p>
+            <button class="stop-button" @click="endWorkout()">Afslut</button>
+        </div>
     </div>
-    <div class="header-container"> <!-- Header -->
-        <h1 class="header">{{ work.title }}</h1>
-        <div class="accent-divider"></div>
-    </div>
-    <div class="workout-section" v-for="(exercise, index) in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
-        <WorkoutDisplay 
-            v-bind:exercise="exercise"
-            v-bind:expand="currentExercise == index"
-            v-on:send-rep="sendRep"
-            v-on:change-set="changeSet"
-            @skipped="skippedExercise"
-        />
+    <div class="workout-block"> 
+        <div class="header-container"> <!-- Header -->
+            <h1 class="header">{{ work.title }}</h1>
+            <div class="accent-divider"></div>
+        </div>
+        <div class="workout-section" v-for="(exercise, index) in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
+            <WorkoutDisplay 
+                v-bind:exercise="exercise"
+                v-bind:expand="currentExercise == index"
+                v-on:send-rep="sendRep"
+                v-on:change-set="changeSet"
+                @skipped="skippedExercise"
+            />
+        </div>
     </div>
     <Picker/>
 </template>
@@ -116,6 +121,12 @@ export default {
             let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
             ex.set[data.index] = data.newSet
             console.log(ex)
+        },
+        async endWorkout() {
+            await this.apiInstance.put('/workout_history/end_exercise', {
+                historyId: this.work.historyId
+            })
+            this.$emit('back')
         }
     },
     mounted() {
@@ -180,16 +191,60 @@ export default {
         }
     }
 
-    .timer {
-        display: inline;
-        font-weight: 600;
-        font-size: 1.2rem;
+    .right-flex {
+        display: flex;
+        width: 9rem;
+        align-items: center;
+        justify-content: space-between;
+
+        .timer {
+            display: inline;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .stop-button {
+            @include button;
+            background-color: $delete-color; 
+            color: white;
+            border-color: $delete-color;
+            font-weight: 600;
+            padding:  0.35rem 0.5rem;
+        }
+    }
+
+}
+
+.workout-block {
+    width: $content-width;
+    margin: auto;
+}
+
+@media only screen and (max-width: 1000px) {
+    .workout-block {
+        width: 80%;
+
+    }
+    .hello-header {
+        width: 80%;
+    }
+    .start-workout {
+        width: 40%;
+        left: calc((100% - 40%) / 2);
     }
 }
 
-.workout-section {
-
+@media only screen and (max-width: 600px) {
+  .workout-block {
+    width: 100%;
+  }
+  .hello-header {
+    width: 95%;
+  }
+  .start-workout {
+        width: 90%;
+        left: 5%;
+  }
 }
-
 
 </style>
