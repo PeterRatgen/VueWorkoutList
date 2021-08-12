@@ -5,7 +5,7 @@
         </div>
         <div class="right-flex">
             <p class="timer">{{ timeSinceStart }}</p>
-            <button class="stop-button" @click="endWorkout()">Slut</button>
+            <button class="stop-button" @click="endWorkout()">Afslut</button>
         </div>
     </div>
     <div class="workout-block"> 
@@ -132,8 +132,6 @@ export default {
             })
             localStorage.removeItem('onGoingWorkout')
             this.work = {}
-            console.log('state of work')
-            console.log(this.work)
             this.$emit('back')
         },
         returnToFront() {
@@ -146,16 +144,12 @@ export default {
         if (onGoingWorkout  != undefined) {
             this.work = JSON.parse(onGoingWorkout)
         } else {
-            console.log("state of workout")
-            console.log(this.workout)
             this.work = this.workout
         }
         this.calcTime()
         this.startWorkout()
     },
     updated() {
-        console.log("state of workout")
-        console.log(this.workout)
     }
 }
 </script>
