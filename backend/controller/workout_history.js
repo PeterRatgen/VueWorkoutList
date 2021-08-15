@@ -19,7 +19,7 @@ exports.start_workout = function(req, res) {
 		dbase.collection("workout_history").insertOne({
             workoutId: ObjectId(req.body.workoutId),
             userId : ObjectId(req.user.userId),
-            startTime : date.valueOf(),
+            startTime : date.getTime(),
             exerciseList : exerciseList
         }, function(err, result) {
 			if (err) {
@@ -121,7 +121,7 @@ exports.end_exercise = function(req, res) {
         }
         let newValues = {
             $set : { 
-                "endTime" : date.valueOf()
+                "endTime" : date.getTime()
             }
         }
 		dbase.collection("workout_history").updateOne(
@@ -133,7 +133,7 @@ exports.end_exercise = function(req, res) {
                 throw err;
                 
             }
-            res.send(result.insertedId)
+            res.send(date.getTime().toString())
 			db.close();
 		});
 	});

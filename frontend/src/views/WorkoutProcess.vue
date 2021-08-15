@@ -5,7 +5,7 @@
         </div>
         <div class="right-flex">
             <p class="timer">{{ timeSinceStart }}</p>
-            <button class="stop-button" @click="endWorkout()">Afslut</button>
+            <button class="stop-button" @click="showEndCard">Afslut</button>
         </div>
     </div>
     <div class="workout-block"> 
@@ -24,17 +24,22 @@
         </div>
     </div>
     <Picker/>
+    <WorkoutResult
+        @ended="endWorkout"
+    />
 </template>
 
 
 <script>
 import WorkoutDisplay from '../components/WorkoutDisplay'
+import WorkoutResult from '../components/WorkoutResult.vue'
 import Picker from '../components/Picker.vue'
 
 export default {
     name : 'WorkoutProcess',
     components : {
         WorkoutDisplay,
+        WorkoutResult,
         Picker
     },
     props : {
@@ -72,16 +77,23 @@ export default {
             let startTime = 0
             if(this.work.timeOfStart == undefined)  {
                 let time = new Date();
-                this.work.timeOfStart = time.valueOf()
-                startTime = time.valueOf()
+                this.work.timeOfStart = time.getTime()
+                startTime = time.getTime()
             } else {
                 startTime = this.work.timeOfStart
             }
             setInterval(() => {
-                let a = new Date()
-                let toExpired = a.valueOf() - startTime
-                let date = new Date(toExpired)
-                let secs = date.getSeconds()
+                let date = ""
+                let secs = ""
+                if (this.work.timeOfEnd == undefined) {
+                    let now = new Date().getTime()
+                    date = new Date(now - startTime)
+                    secs = date.getSeconds()
+                    console.log(date + " " + secs)
+                } else {
+                    date = new Date(this.work.timeOfEnd - startTime)
+                    secs = date.getSeconds()
+                }
                 if (secs < 10) {
                     secs = "0" + secs
                 } 
@@ -126,10 +138,19 @@ export default {
             let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
             ex.set[data.index] = data.newSet
         },
-        async endWorkout() {
-            await this.apiInstance.put('/workout_history/end_exercise', {
+        async showEndCard() {
+            let res = await this.apiInstance.put('/workout_history/end_exercise', {
                 historyId: this.work.historyId
             })
+            this.work.timeOfEnd = res.data
+            this.emitter.emit('workout-completed', {
+                timeOfStart : this.work.timeOfStart,
+                timeOfEnd : res.data,
+                workout : this.work
+            })
+
+        },
+        async endWorkout() {
             localStorage.removeItem('onGoingWorkout')
             this.work = {}
             this.$emit('back')
@@ -234,6 +255,11 @@ export default {
             border-color: $delete-color;
             font-weight: 600;
             padding:  0.35rem 0.5rem;
+            
+            &:hover {
+                background-color: darken($delete-color, 5%)
+            }
+
         }
     }
 
