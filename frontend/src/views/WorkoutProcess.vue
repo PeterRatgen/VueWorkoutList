@@ -89,7 +89,6 @@ export default {
                     let now = new Date().getTime()
                     date = new Date(now - startTime)
                     secs = date.getSeconds()
-                    console.log(date + " " + secs)
                 } else {
                     date = new Date(this.work.timeOfEnd - startTime)
                     secs = date.getSeconds()
@@ -172,7 +171,6 @@ export default {
                     set.completed = undefined
                 }
             }
-            console.log(tempWork)
             this.work = tempWork
         }
         this.calcTime()

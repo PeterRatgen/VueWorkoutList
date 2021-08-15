@@ -166,15 +166,19 @@ export default {
             return allApproved
         },
         onCompleteWeight(data, index) {
+            let set = this.exercise.set[index]
+            set.weight = data
             this.$emit('change-set', {
-                newSet : this.exercise.set[index],
+                newSet : set,
                 index : index,
                 exerciseId : this.exercise.id
             })
         },
         onCompleteReps(data, index) {
+            let set = this.exercise.set[index]
+            set.repetitions = data
             this.$emit('change-set', {
-                newSet : this.exercise.set[index],
+                newSet : set,
                 index : index,
                 exerciseId : this.exercise.id
             })
