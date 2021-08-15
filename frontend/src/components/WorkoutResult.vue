@@ -1,14 +1,20 @@
 <template>
     <div class="end-card" ref="endCard">
-        <div class="header">
-            <h3>Træning afsluttet</h3>
-        </div>
-        <div v-for="stat in statArr" :key="stat.title">
-            <div class="divder"></div>
-            <div class="row">
-                <div class="content-cell title">{{ stat.title }} </div> 
-                <div class="content-cell">{{ stat.value }}</div> 
-                
+        <div class="end-card-content">
+            <fa 
+                class="cross" 
+                icon="plus"
+                @click="removeEndCard"
+                ></fa>
+            <div class="header">
+                <h3>Træning afsluttet</h3>
+            </div>
+            <div v-for="stat in statArr" :key="stat.title">
+                <div class="divder"></div>
+                <div class="row">
+                    <div class="content-cell title">{{ stat.title }} </div> 
+                    <div class="content-cell">{{ stat.value }}</div> 
+                </div>
             </div>
         </div>
     </div>
@@ -33,6 +39,9 @@ export default {
         })
     },
     methods : {
+        removeEndCard() {
+            this.$emit("ended")
+        },
         endWorkout () {
 
         }, 
@@ -86,22 +95,32 @@ export default {
     width: 95%;
     top: 30%;
 
-    .header {
-        margin-bottom: 1rem;
-    }
+    .end-card-content {
+        position: relative; 
+        .header {
+            margin-bottom: 1rem;
+        }
 
-    .row {
-        width: 80%;
-        margin: 0.25rem auto;
-        padding: 0 10%;
-        display: flex;
-        justify-content: space-between;
-        .content-cell {
-            padding: 0.25rem 1.25rem;
-            text-align: left;
+        .cross {
+            position: absolute;
+            right: 0.5rem;
+            top: 0rem;
+            transform: rotate(45deg);
+        }
 
-            &.title{
-                font-weight: 700;
+        .row {
+            width: 80%;
+            margin: 0.25rem auto;
+            padding: 0 10%;
+            display: flex;
+            justify-content: space-between;
+            .content-cell {
+                padding: 0.25rem 1.25rem;
+                text-align: left;
+
+                &.title{
+                    font-weight: 700;
+                }
             }
         }
     }
