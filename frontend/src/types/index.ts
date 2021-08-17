@@ -1,19 +1,19 @@
-export interface Repetition {
+export interface IRepetition {
     id : string,
     repetitions : number,
     weight : number
 }
 
-export interface Exercise {
+export interface IExercise {
     name : string,
-    set : Repetition[],
+    set : IRepetition[],
     id : string
 }
 
-export interface Workout {
+export interface IWorkout {
     _id : string,
     title : string,
-    exerciseList : Exercise[],
+    exerciseList : IExercise[],
     dateCreated : number,
     userId : string
 }

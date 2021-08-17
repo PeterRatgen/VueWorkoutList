@@ -50,44 +50,28 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import { Repetition } from '../types';
+import { IRepetition } from '../types';
 
 export default defineComponent({
     name: "Repetition",
     props: {
         repetition : {
-            type : Object as () => Repetition
+            type : Object as () => IRepetition
         }
     },
     emits :  {
-        ["completed-rep-edit"] : Object, 
-        [ "delete-rep"] : ( repObject : any) => {
-            if (typeof(repObject) === "object" ) {
-                if (repObject.repId != undefined ) {
-                    if ( typeof(repObject.repId)  === "string"){
-                        return true;
-                    }
-                    else {
-                        console.error("Wrong type in the id passed from Repetion to delete");
-                        return false;
-                    }
-                }
-                else {
-                    console.error("No attribute repId was found in the object");
-                    return false;
-                }
-            }
-            else {
-                console.error("Value to be emitted from Repetion was not of type object");
-                return false;
-            }
+        ["completed-rep-edit"] : ( data : {repItem : IRepetition }) => {
+            return data.repItem.weight > 0 && data.repItem.repetitions > 0;
+        },
+        ["delete-rep"] : ( payload : { repId : string  }) => {
+                return payload.repId != '';
         }
     },
     data () {
         return {
             showWeight: false,
             alignment: 'left',
-            repItem: {} as Repetition,
+            repItem: {} as IRepetition,
             editing: false,
             isHover: false
         };
@@ -158,7 +142,7 @@ export default defineComponent({
                 this.editing = true;
             } else {
                 this.editing = false;
-                this.$emit('completed-rep-edit', {repItem : this.repItem});
+                this.$emit("completed-rep-edit", { repItem : this.repItem });
             }
         },
         scrolledReps(event : any) {
