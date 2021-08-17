@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { inject } from 'vue'
+
 import AddWorkout from '../components/AddWorkout'
 import HelloHeader from '../components/HelloHeader.vue'
 import Workout from '../components/Workout'
@@ -280,15 +282,17 @@ export default {
         /**
             Receiving emitted events
         */
-        this.emitter.on('new-repetition', this.addRepetition)
-        this.emitter.on('completed-rep-edit', this.changeRep)
-        this.emitter.on('submit-new-workout', this.submitWorkout)
-        this.emitter.on('exercise-name-change', this.changeExerciseName)
-        this.emitter.on('delete-exercise', this.deleteExercise)
-        this.emitter.on('add-exercise', this.addExercise)
-        this.emitter.on('delete-rep', this.deleteRep)
-        this.emitter.on('title-change', this.titleChange)
-        this.emitter.on('delete-workout', this.deleteWorkout)
+        const emitter = inject("emitter"); // Inject `emitter`
+
+        emitter.on('new-repetition', this.addRepetition)
+        emitter.on('completed-rep-edit', this.changeRep)
+        emitter.on('submit-new-workout', this.submitWorkout)
+        emitter.on('exercise-name-change', this.changeExerciseName)
+        emitter.on('delete-exercise', this.deleteExercise)
+        emitter.on('add-exercise', this.addExercise)
+        emitter.on('delete-rep', this.deleteRep)
+        emitter.on('title-change', this.titleChange)
+        emitter.on('delete-workout', this.deleteWorkout)
     },
     updated() {
         console.log("currentWorkout")

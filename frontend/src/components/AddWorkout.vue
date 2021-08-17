@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import WorkoutFormAdder from './WorkoutFormAdder'
 
 export default {
@@ -99,8 +100,9 @@ export default {
     }
   },
   mounted() {
-        this.emitter.on('exercise-name', this.addName)
-        this.emitter.on('title-edit-end', this.titleEditEnd)
+        const emitter = inject("emitter"); // Inject `emitter`
+        emitter.on('exercise-name', this.addName)
+        emitter.on('title-edit-end', this.titleEditEnd)
   }
 }
 </script>

@@ -19,7 +19,7 @@ library.add(faArrowLeft)
 
 const app = createApp(App)
 
-app.config.globalProperties.emitter = emitter;
+app.provide('emitter', emitter);
 
 app.use(router)
 .component("fa", FontAwesomeIcon)

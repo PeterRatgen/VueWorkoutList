@@ -65,36 +65,63 @@
     </div>
 </template>
 
-<script>
-import Repetition from './Repetition'
-import InputField from "./input_field/InputField";
-import NewRepetition from "./repetitions/NewRepetition"
+<script lang="ts">
+import { defineComponent, inject } from 'vue';
 
-export default {
+import Repetition from './Repetition.vue';
+import InputField from "./input_field/InputField.vue";
+import NewRepetition from "./repetitions/NewRepetition.vue";
+
+import { IExercise, IRepetition } from '../types';
+
+export default defineComponent({
     /*
         Displays an exercise, and its repetitions.
     */
     name: "ExerciseItem",
     props: {
-        ["exerciseItem"] : Object, 
+        ["exerciseItem"] : Object as () => IExercise, 
         ["edit"] : Boolean,
     },
     emits: {
-        ['new-repetition'] : (idObject) => {
-            if (typeof(idObject.exerciseId) == "string" 
-                    && idObject.exerciseId.length > 0 ) {
-                return true
+        ['new-repetition'] : (data : { exerciseId : string }) => {
+            if (data.exerciseId.length > 0 ) {
+                return true;
             } else {
-                console.error("The exerciseId was not of correct length, or type.")
-                return false
+                console.error("The exerciseId was not of correct length.");
+                return false;
             }
         },
         //On completion of the edting of a repetion
-        ['completed-rep-edit'] : null,
+        ['completed-rep-edit'] : (data : {
+            exerciseId : string,
+            repItem : IRepetition}) => { 
+            if(data.exerciseId != ''){
+                return true;
+            }
+        },
         //On completion on the editing of an exercise name
-        ['exercise-name'] : null, 
-        ['delete-exercise'] : null,
-        ['delete-rep'] : null
+        ['exercise-name'] : (data : {
+            exerciseId : string,
+            name : string}) => {
+            if (data.name != '' && data.exerciseId != ''){
+                return true;
+            }
+        },
+        ['delete-exercise'] : (data : {
+            exerciseId : string}) => {
+            if(data.exerciseId != ''){
+                return true;
+            }
+        }
+        ,
+        ['delete-rep'] : (data: {
+            exerciseId : string,
+            repId: string}) => {
+            if(data.exerciseId != '' && data.repId != ''){
+                return true;
+            }
+        }
     },
     components: {
         Repetition,
@@ -106,49 +133,66 @@ export default {
             showWeight: false,
             contracted: true,
             isHover : false
-        }
+        };
     }, 
     methods : {
         expand_card() {
+            const emitter : any = inject("emitter"); // Inject `emitter`
             /*
                 Expands the card of the ExerciseItem
             */
             if (this.contracted) {
-                this.contracted = false
+                this.contracted = false;
             } else {
-                this.contracted = true
+                this.contracted = true;
             }
-            this.emitter.emit('pressed-exerciseItem')
+            emitter.emit('pressed-exerciseItem');
         },
-        titleSubmitEdit(result) {
+        titleSubmitEdit(result : string) {
             /*
                 Submit the new title of a workout.
             */
-            this.$emit('exercise-name', { exerciseId :  this.exerciseItem.id, name : result })
+            if (this.exerciseItem != undefined) {
+                this.$emit('exercise-name', { 
+                    exerciseId : this.exerciseItem.id, 
+                    name : result 
+                    }
+                );
+            }
         },
-        repChange(data) {
-            data.exerciseId = this.exerciseItem.id
-            this.$emit('completed-rep-edit', data)             
+        repChange(data : any ) {
+            if (this.exerciseItem != undefined) {
+                data.exerciseId = this.exerciseItem.id;
+                this.$emit('completed-rep-edit', data);
+            }
         },
         newRepetition() {
-            this.$emit('new-repetition', {exerciseId : this.exerciseItem.id})
+            if (this.exerciseItem != undefined) {
+                this.$emit('new-repetition', {exerciseId : this.exerciseItem.id});
+            }
         }, 
         displayEdit() {
             this.isHover = true;        
         },
         deleteExercise() {
-            this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id}) 
+            if (this.exerciseItem != undefined) {
+                this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id});
+            }
         },
-        deleteRep(data) {
-            this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id })
+        deleteRep(data : any) {
+            if (this.exerciseItem != undefined) {
+                this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id });
+            }
         },
     },
     mounted() {
-        if (this.exerciseItem.name === '') {
-            this.contracted = false
+        if (this.exerciseItem != undefined) {
+            if (this.exerciseItem.name === '') {
+                this.contracted = false;
+            }
         }
     }
-}
+});
   
 
 </script>
