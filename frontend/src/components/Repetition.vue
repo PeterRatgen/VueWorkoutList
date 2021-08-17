@@ -48,31 +48,37 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, inject } from 'vue';
+import { Repetition } from '../types';
 
-export default {
+export default defineComponent({
     name: "Repetition",
-    props: ["repetition"],
+    props: {
+        repetition : {
+            type : Object as () => Repetition
+        }
+    },
     emits :  {
         ["completed-rep-edit"] : Object, 
-        [ "delete-rep"] : ( repObject ) => {
+        [ "delete-rep"] : ( repObject : any) => {
             if (typeof(repObject) === "object" ) {
                 if (repObject.repId != undefined ) {
                     if ( typeof(repObject.repId)  === "string"){
-                        return true
+                        return true;
                     }
                     else {
-                        console.error("Wrong type in the id passed from Repetion to delete")
-                        return false
+                        console.error("Wrong type in the id passed from Repetion to delete");
+                        return false;
                     }
                 }
                 else {
                     console.error("No attribute repId was found in the object");
-                    return false
+                    return false;
                 }
             }
             else {
-                console.error("Value to be emitted from Repetion was not of type object")
+                console.error("Value to be emitted from Repetion was not of type object");
                 return false;
             }
         }
@@ -81,98 +87,102 @@ export default {
         return {
             showWeight: false,
             alignment: 'left',
-            repItem: '',
+            repItem: {} as Repetition,
             editing: false,
             isHover: false
-        }
+        };
     }, 
-    created() {
-        if (this.repetition.weight) {
-            this.showWeight = true;
+    created() : void {
+        const emitter : any = inject("emitter"); // Inject `emitter`
+        if (this.repetition != undefined) {
+            if (this.repetition.weight) {
+                this.showWeight = true;
+            }
+            if (!this.showWeight) {
+                this.alignment = 'right';
+            }
+            this.repItem = this.repetition;
+            emitter.on('pressed-repetition', () => {
+                this.editing = false;
+            });
+
         }
-        if (!this.showWeight) {
-            this.alignment = 'right'
-        }
-        this.repItem = this.repetition
-        this.emitter.on('pressed-repetition', () => {
-            this.editing = false
-        })
     },
     methods: {
         deleteRep() {
             /**
                 Deleting a rep.
             */
-           this.$emit('delete-rep', { repId  : this.repItem.id }) 
+           this.$emit('delete-rep', { repId  : this.repItem.id });
         },
-        inc(target) {
+        inc(target : string) {
             /**
                 Increment the weight or reps.
             */
             switch(target){
                 case "weight":
-                    this.repItem.weight = this.repItem.weight + 2.5
+                    this.repItem.weight = this.repItem.weight + 2.5;
                     break;
                 case "reps":
-                    this.repItem.repetitions = this.repItem.repetitions  + 1
+                    this.repItem.repetitions = this.repItem.repetitions  + 1;
                     break;
             }
         },
-        dec(target){
+        dec(target : string){
             /**
                 Decremet the weight or rep.
             */
             switch(target){
                 case "weight":
                     if (this.repItem.weight != 0) {
-                        this.repItem.weight = this.repItem.weight - 2.5
+                        this.repItem.weight = this.repItem.weight - 2.5;
                     }
                     break;
                 case "reps":
                     if (this.repItem.repetitions != 0) {
-                        this.repItem.repetitions = this.repItem.repetitions  - 1
+                        this.repItem.repetitions = this.repItem.repetitions  - 1;
                     }
                     break;
             }
         },
         repetition_click(){
+            const emitter : any = inject("emitter"); // Inject `emitter`
             /**
                 What happens when a repetition is clicked.
             */
             let oldEdit = this.editing;
-            this.editing = !this.editing
-            this.emitter.emit('pressed-repetition')
-            console.log("Pressed the repetition")
+            this.editing = !this.editing;
+            emitter.emit('pressed-repetition');
+            console.log("Pressed the repetition");
             if (oldEdit == false) {
                 this.editing = true;
             } else {
                 this.editing = false;
-                this.$emit('completed-rep-edit', {repItem : this.repItem})
+                this.$emit('completed-rep-edit', {repItem : this.repItem});
             }
         },
-        scrolledReps(event) {
+        scrolledReps(event : any) {
             /**
                 Scroll on reps.
             */
             if (event.deltaY < 0){
-                this.inc("reps")
+                this.inc("reps");
             } else {
-                this.dec("reps")
+                this.dec("reps");
             }
         },
-        scrolledWeight(event) {
+        scrolledWeight(event : any) {
             /** 
                 Scroll on weight.
             */
             if (event.deltaY < 0){
-                this.inc("weight")
+                this.inc("weight");
             } else {
-                this.dec("weight")
+                this.dec("weight");
             }
         },
     }
-}
-
+});
   
 </script>
 

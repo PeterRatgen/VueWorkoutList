@@ -70,7 +70,9 @@
     </div>
 </template>
 
-<script>
+<script >
+import { inject } from 'vue'
+
 import ExerciseItem from "./ExerciseItem"
 import HoverMenu from "./HoverMenu/HoverMenu.vue"
 import InputField from "./input_field/InputField.vue";
@@ -228,7 +230,8 @@ export default {
     },
     created() {
         // Contract the workout, then the background has been pressed.
-        this.emitter.on('pressed-background', () => {
+        const emitter = inject("emitter"); // Inject `emitter`
+        emitter.on('pressed-background', () => {
             this.contracted = true;
         })
     }
