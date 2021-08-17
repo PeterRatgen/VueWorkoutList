@@ -1,5 +1,5 @@
 export interface IRepetition {
-    id : string,
+    id? : string,
     repetitions : number,
     weight : number
 }

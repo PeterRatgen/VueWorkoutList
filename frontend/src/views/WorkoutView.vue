@@ -24,17 +24,20 @@
     />
 </template>
 
-<script>
-import { inject } from 'vue'
+<script lang="ts">
+import { inject, defineComponent } from 'vue';
 
-import AddWorkout from '../components/AddWorkout'
-import HelloHeader from '../components/HelloHeader.vue'
-import Workout from '../components/Workout'
-import BeginWorkout from '../components/BeginWorkout'
-import WorkoutProcess from '../views/WorkoutProcess.vue'
-import axios from 'axios'
+import AddWorkout from '../components/AddWorkout.vue';
+import HelloHeader from '../components/HelloHeader.vue';
+import Workout from '../components/Workout.vue';
+import BeginWorkout from '../components/BeginWorkout.vue';
+import WorkoutProcess from '../views/WorkoutProcess.vue';
+import axios, {AxiosInstance} from 'axios';
 
-export default {
+import { IWorkout, IExercise, IRepetition } from '../types';
+
+
+export default defineComponent({
     /**
         View of the workouts.
     */
@@ -60,14 +63,14 @@ export default {
                 Instance of the axios connection, where queries to the API
                 can be performed.
             */
-            apiInstance : '',
+            apiInstance : {} as AxiosInstance,
             /* 
                Array of the workouts 
             */
             workouts : [],
             workingOut : false,
             currentWorkout : {}
-        }
+        };
     },
     methods: {
         async init() {
@@ -75,7 +78,7 @@ export default {
                 Init script, initializes the website with data, and API instances.
             */
             this.apiInstance = this.createInstance();  
-            await this.login()
+            await this.login();
             await this.getWorkout();
         },
         async login() {
@@ -88,11 +91,11 @@ export default {
                 {
                     email : this.email, 
                     password: this.password
-                })
-                let token = response.data
-                localStorage.setItem("user", token)
+                });
+                let token = response.data;
+                localStorage.setItem("user", token);
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         },
         createInstance() {
@@ -100,47 +103,52 @@ export default {
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            console.log(" api url " + process.env.VUE_APP_API_URL)
-            const token = localStorage.getItem("user")
+            console.log(" api url " + process.env.VUE_APP_API_URL);
+            const token = localStorage.getItem("user");
             return axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
-            })
+            });
         },
         async getWorkout() {
             /**
                 Retrieve the workouts of the user, and save the response.
             */
-            const response = await this.apiInstance.get('/workout')
-            this.workouts = JSON.parse(response.request.response)
+            const response = await this.apiInstance.get('/workout');
+            this.workouts = JSON.parse(response.request.response);
         },
-        async titleChange(data){
+        async titleChange(data : any){
             /**
                 Change the title of a workout.
             */
-            let res = await this.apiInstance.post('/workout/rename',
+            await this.apiInstance.post('/workout/rename',
                 {
-                    id : data["workoutId"],
-                    title : data["title"]
+                    id : data.workoutId,
+                    title : data.title
                 }
-            )
-            console.log(res)
-            let ele = this.workouts.find(element => element._id == data.workoutId)
-            ele.title = data.title
+            );
+            const ele: any = this.workouts.find((element : any) => element._id == data.workoutId);
+            if (ele != undefined) {
+                ele.title = data.title;
+            }
         },
-        deleteWorkout(workoutId) {
+        deleteWorkout(workoutId : any) {
             /**
                 Delete one workout. First on the database, and then in the data
                 stores locally.
             */
-            this.apiInstance.delete('/workout/' + workoutId )
-            let ele = this.workouts.find(element => element["_id"] == workoutId)
-            let index = this.workouts.indexOf(ele)
-            this.workouts.splice(index, 1)
+            this.apiInstance.delete('/workout/' + workoutId );
+            let ele: IWorkout | undefined = this.workouts.find(element => element["_id"] == workoutId);
+            if (ele != undefined) {
+                let index: number = this.workouts.indexOf(ele);
+                if (index != -1 ) {
+                    this.workouts.splice(index, 1);
+                }
+            }
         },
-        async addRepetition(data){
+        async addRepetition(data : any){
             /**
                 Add a repetition to a workout. If another repetition exists
                 before it, then add the same weight and reps to the new one.
@@ -148,116 +156,136 @@ export default {
                 @exerciseId - id of the exercise
                 @workoutId - id of the workout
             */
-            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-            let exercise = workout.exerciseList.find(element => element.id == data.exerciseId)
-            const length = exercise.set.length
-            let repItem = {}
-            if (length > 0) {
-                const weight = exercise.set[length - 1].weight;
-                const reps = exercise.set[length - 1].repetitions;
-                repItem = {repetitions : reps, weight : weight}
-            } else {
-                repItem = {repetitions : 0, weight : 0}
+            const workout: IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
+            if (workout != undefined) {
+                const exercise: IExercise | undefined = (workout as IWorkout).exerciseList.find((element: any) => element.id == data.exerciseId);
+                if (exercise != undefined ) {
+                    const length = exercise.set.length;
+                    let weight = 0;
+                    let repetitions = 0; 
+                    if (length > 0) {
+                        weight = exercise.set[length - 1].weight;
+                        repetitions = exercise.set[length - 1].repetitions;
+                    } else {
+                        weight = 0;
+                        repetitions = 0;
+                    }
+                    let repItem : IRepetition = {
+                        weight : weight,
+                        repetitions : repetitions
+                    };
+                    data.repItem = repItem;
+                    let res = await this.apiInstance.put('/workout/add_repetition', data);
+                    repItem.id = res.data;
+                    exercise.set.push(repItem);
+                }
             }
-            data.repItem = repItem
-            let res = await this.apiInstance.put('/workout/add_repetition', data)
-            repItem.id = res.data
-            exercise.set.push(repItem) 
         },
-        async changeRep(data){
+        async changeRep(data : any){
             /**
                 Change a rep of the workout. First in the local data, then in
                 the database.
             */
-            let workout = this.workouts.find(element => element._id == data.workoutId)
-            let exercise =  workout.exerciseList.find(element => element.id == data.exerciseId)
-            let rep = exercise.set.find(element => element.id == data.repItem.id)
-            rep.repetitions = data.repItem.repetitions
-            rep.weight = data.repItem.weight
-            this.apiInstance.put('/workout/rep_change', {
-                workoutId: data["workoutId"],
-                exerciseId : data["exerciseId"],
-                repItem: data["repItem"]
-            })
-            console.log("changed rep to " + JSON.stringify(data["repItem"]))
+            let workout : IWorkout | undefined = this.workouts.find((element : IWorkout) => element._id == data.workoutId);
+            if (workout != undefined) {
+                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
+                if (exercise != undefined) {
+                    let rep : IRepetition | undefined = exercise.set.find(element => element.id == data.repItem.id);
+                    if (rep != undefined) {
+                        rep.repetitions = data.repItem.repetitions;
+                        rep.weight = data.repItem.weight;
+                        this.apiInstance.put('/workout/rep_change', {
+                            workoutId: data["workoutId"],
+                            exerciseId : data["exerciseId"],
+                            repItem: data["repItem"]
+                        });
+                        console.log("changed rep to " + JSON.stringify(data["repItem"]));
+                    }
+                }
+            }
         },
         backgroundPressed() {
-            this.emitter.emit('pressed-background')
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('pressed-background');
         },
-        async submitWorkout(data) {
+        async submitWorkout(data : any) {
             /**
                 Add a new workout to the user.
             */
-            const res = await this.apiInstance.post('/workout', data)
-            data._id =  res.data
-            this.workouts.push(data)
+            const res = await this.apiInstance.post('/workout', data);
+            data._id =  res.data;
+            this.workouts.push((data as never));
         },
-        async changeExerciseName(data) {
+        async changeExerciseName(data : any) {
             /**
                 Change the name of an exercise.
             */
-            console.log(data)
-            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            let exercise =  workout["exerciseList"].find(element => element["id"] == data["exerciseId"])
-            exercise.name = data["name"]
-            let res = await this.apiInstance.put('/workout/rename_exercise', {
-                id: data["workoutId"],
-                exerciseId : data["exerciseId"],
-                name : data["name"]
-            })
-            console.log(res)
+            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data["workoutId"]);
+            if (workout != undefined) {
+                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element["id"] == data["exerciseId"]);
+                if (exercise != undefined) {
+                    exercise.name = data["name"];
+                    await this.apiInstance.put('/workout/rename_exercise', {
+                        id: data["workoutId"],
+                        exerciseId : data["exerciseId"],
+                        name : data["name"]
+                    });
+                }
+            }
         },
-        deleteExercise(data) {
+        deleteExercise(data : any) {
             /*
                 Delete an exercise.
             */
-            let workout = this.workouts.find(element => element["_id"] == data["workoutId"])
-            let exercise = this.workouts.find(element => element.id == data.exerciseId)
-            let index =  this.workouts.indexOf(exercise);
-            workout["exerciseList"].splice(index, 1)
-            this.apiInstance.post('/workout/update_exercise', {
-                id: data["workoutId"],
-                exerciseList : workout["exerciseList"]
-            })
+            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data["workoutId"]);
+            if ( workout != undefined) {
+                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
+                if (exercise != undefined) {
+                    let index : number =  (workout as IWorkout).exerciseList.indexOf(exercise);
+                    (workout as IWorkout).exerciseList.splice(index, 1);
+                    this.apiInstance.post('/workout/update_exercise', {
+                        id: data["workoutId"],
+                        exerciseList : workout["exerciseList"]
+                    });
+                }
+            }
         },
-        async addExercise(data) {
+        async addExercise(data : any) {
             /*
                 @data contains 
                     workoutId - for the workout where the exercise should be
             */
             let response = await this.apiInstance.put('/workout/add_exercise', {
                 workoutId : data.workoutId
-            })
-            let exerciseId = response.data
-            if(typeof(exerciseId) == "string") {
-                if (exerciseId.length == 24){
-                    let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-                    workout["exerciseList"].push({id :  exerciseId, name: "", set: []})
-                } else {
-                    console.warn("Server did not return an id of correct length")
-                }
-            } else {
-                console.warn("Server did not return a proper id")
+            });
+            let exerciseId = response.data;
+            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
+            if (workout != undefined) {
+                (workout as IWorkout)["exerciseList"].push({id :  exerciseId, name: "", set: []});
             }
         },
-        deleteRep(data) {
+        deleteRep(data : any) {
             /*
                 Delete a repetition of an exercise in a workout.
             */
-            let workout = this.workouts.find(element => element["_id"] == data.workoutId)
-            let exercise = workout.exerciseList.find(element => element.id == data.exerciseId)
-            exercise.set.splice(data.repIndex, 1)
-            this.apiInstance.post('/workout/update_exercise', {
-                id: data.workoutId,
-                exerciseList : workout.exerciseList
-            })
+            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
+            if (workout != undefined) {
+                let exercise = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
+                if (exercise != undefined) {
+                    exercise.set.splice(data.repIndex, 1);
+                    this.apiInstance.post('/workout/update_exercise', {
+                        id: data.workoutId,
+                        exerciseList : (workout as IWorkout).exerciseList
+                    });
+                }
+            }
         },
-        selectedWorkout(workout) {
+        selectedWorkout(workout : IWorkout) {
             this.workingOut = true;
             this.currentWorkout = workout;
         },
         continueWorkout() {
-            this.currentWorkout = {}
+            this.currentWorkout = {};
             this.workingOut = true;
         }
     },
@@ -266,9 +294,9 @@ export default {
             /**
                 Get the data stored within the jwt token.         
             */
-            const token = localStorage.getItem("user")
+            const token = localStorage.getItem("user");
             if (token) {
-                        return JSON.parse(atob(token.split('.')[1]))
+                        return JSON.parse(atob(token.split('.')[1]));
             }
             else {
                 return {};
@@ -276,29 +304,29 @@ export default {
         }
     },
     created() {
-        this.init()
+        this.init();
     },
     mounted() {
         /**
             Receiving emitted events
         */
-        const emitter = inject("emitter"); // Inject `emitter`
+        const emitter : any = inject("emitter"); // Inject `emitter`
 
-        emitter.on('new-repetition', this.addRepetition)
-        emitter.on('completed-rep-edit', this.changeRep)
-        emitter.on('submit-new-workout', this.submitWorkout)
-        emitter.on('exercise-name-change', this.changeExerciseName)
-        emitter.on('delete-exercise', this.deleteExercise)
-        emitter.on('add-exercise', this.addExercise)
-        emitter.on('delete-rep', this.deleteRep)
-        emitter.on('title-change', this.titleChange)
-        emitter.on('delete-workout', this.deleteWorkout)
+        emitter.on('new-repetition', this.addRepetition);
+        emitter.on('completed-rep-edit', this.changeRep);
+        emitter.on('submit-new-workout', this.submitWorkout);
+        emitter.on('exercise-name-change', this.changeExerciseName);
+        emitter.on('delete-exercise', this.deleteExercise);
+        emitter.on('add-exercise', this.addExercise);
+        emitter.on('delete-rep', this.deleteRep);
+        emitter.on('title-change', this.titleChange);
+        emitter.on('delete-workout', this.deleteWorkout);
     },
     updated() {
-        console.log("currentWorkout")
-        console.log(this.currentWorkout)
+        console.log("currentWorkout");
+        console.log(this.currentWorkout);
     }
-}
+});
 </script>
 
 <style lang="scss" >

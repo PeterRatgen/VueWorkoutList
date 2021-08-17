@@ -97,7 +97,9 @@ export default defineComponent({
             /**
                 Deleting a rep.
             */
-           this.$emit('delete-rep', { repId  : this.repItem.id });
+            if(this.repItem.id != undefined) {
+                this.$emit('delete-rep', { repId  : this.repItem.id });
+            }
         },
         inc(target : string) {
             /**
