@@ -296,10 +296,12 @@ export default defineComponent({
             */
             const token = localStorage.getItem("user");
             if (token) {
-                        return JSON.parse(atob(token.split('.')[1]));
+                return JSON.parse(atob(token.split('.')[1]));
             }
             else {
-                return {};
+                return {
+                    name : ''
+                };
             }
         }
     },

@@ -38,6 +38,7 @@
     "testMatch": [
         "**/tests/**/*.test.[jt]s"
     ],
+    "setupFiles" : [ "<rootDir>/tests/setup-tests.ts" ],
     "transform": {
       "^.+\\.js$": "babel-jest",
       "^.+\\.vue$": "vue-jest",
