@@ -28,18 +28,21 @@
     "vue-router": "^4.0.0-0"
   },
   "jest": {
+    "preset": "@vue/cli-plugin-unit-jest",
     "moduleFileExtensions": [
       "js",
       "json",
+      "ts",
       "vue"
+    ],
+    "testMatch": [
+        "**/tests/**/*.test.[jt]s"
     ],
     "transform": {
       "^.+\\.js$": "babel-jest",
-      "^.+\\.vue$": "vue-jest"
-    },
-    "testMatch": [
-        "./tests/unit/*.test.ts"
-    ]
+      "^.+\\.vue$": "vue-jest",
+      "^.+\\.ts$": "ts-jest"
+    }
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",

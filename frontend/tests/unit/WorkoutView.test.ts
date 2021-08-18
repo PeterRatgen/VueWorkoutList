@@ -1,3 +1,4 @@
+import 'jest';
 import { mount } from '@vue/test-utils';
 import WorkoutView from '../../src/views/WorkoutView.vue';
 
@@ -7,10 +8,11 @@ describe('WorkoutView', () => {
     });
 });
 
-describe('Mounted App', () => {
+
+describe('Mount the WorkoutView', () => {
   const wrapper = mount(WorkoutView);
 
-  test('is a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy()
-  })
-})
+  test('Has wokrout', () => {
+    expect(wrapper.getComponent("Workout")).toBeTruthy();
+  });
+});
