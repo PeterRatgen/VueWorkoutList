@@ -1,7 +1,6 @@
 <template>
     <div class="hover-menu" v-bind:class="{ hoverVisible : display }" >
         <div class="hover-menu-content" v-for="item in items" :key="item">
-            <HoverMenuItem :item="item" @option="emitOption"/> 
             <div @click.stop="emitOption(item)" class="menu-item">
                 <p>{{ item }}</p>
             </div>
