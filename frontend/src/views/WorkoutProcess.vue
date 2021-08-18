@@ -16,7 +16,7 @@
         <div class="workout-section" v-for="(exercise, index) in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
             <WorkoutDisplay 
                 v-bind:exercise="exercise"
-                v-bind:expand="currentExercise == index"
+                v-bind:expand="currentExercise(work.exerciseList) == index"
                 v-on:send-rep="sendRep"
                 v-on:change-set="changeSet"
                 @skipped="skippedExercise"
@@ -30,12 +30,17 @@
 </template>
 
 
-<script>
-import WorkoutDisplay from '../components/WorkoutDisplay'
-import WorkoutResult from '../components/WorkoutResult.vue'
-import Picker from '../components/Picker.vue'
+<script lang="ts">
+import { defineComponent, inject } from 'vue';
 
-export default {
+import WorkoutDisplay from '../components/WorkoutDisplay.vue';
+import WorkoutResult from '../components/WorkoutResult.vue';
+import Picker from '../components/Picker.vue';
+
+import { IWorkout, IExercise} from '../types';
+import {AxiosInstance} from 'axios';
+
+export default defineComponent ({
     name : 'WorkoutProcess',
     components : {
         WorkoutDisplay,
@@ -44,141 +49,153 @@ export default {
     },
     props : {
         ["workout"] : Object,
-        ["apiInstance"] : Function
-    },
-    emits : {
-        ["back"] : undefined
+        ["apiInstance"] : Object as () => AxiosInstance,
     },
     data() {
         return {
             timeSinceStart : '',
-            work : {},
-        }
+            work : {} as IWorkout,
+        };
     },
     computed: {
-        currentExercise () {
+        currentExercise(exerciseList : IExercise[]) : number {
             /*
                 Returns the index of the current exercise
             */
-            let currentEx = 0
-            for (let ex of this.work.exerciseList) {
+            let currentEx = 0;
+            for (let ex of exerciseList) {
                 for (let set of ex.set) {
                     if (set.completed == undefined || set.completed == false) {
-                        return currentEx
+                        return currentEx;
                     }
                 }
-                currentEx = currentEx + 1
+                currentEx = currentEx + 1;
             }
-            return currentEx
+            return currentEx;
         }
     },
     methods : {
         calcTime() {
-            let startTime = 0
+            let startTime = 0;
             if(this.work.timeOfStart == undefined)  {
                 let time = new Date();
-                this.work.timeOfStart = time.getTime()
-                startTime = time.getTime()
+                this.work.timeOfStart = time.getTime();
+                startTime = time.getTime();
             } else {
-                startTime = this.work.timeOfStart
+                startTime = this.work.timeOfStart;
             }
             setInterval(() => {
-                let date = ""
-                let secs = ""
+                let date : Date;
+                let secs : number;
                 if (this.work.timeOfEnd == undefined) {
-                    let now = new Date().getTime()
-                    date = new Date(now - startTime)
-                    secs = date.getSeconds()
+                    let now = new Date().getTime();
+                    date = new Date(now - startTime);
+                    secs = date.getSeconds();
                 } else {
-                    date = new Date(this.work.timeOfEnd - startTime)
-                    secs = date.getSeconds()
+                    date = new Date(this.work.timeOfEnd - startTime);
+                    secs = date.getSeconds();
                 }
+                let secPrint : string;
                 if (secs < 10) {
-                    secs = "0" + secs
-                } 
-                let print = date.getMinutes() + ':' + secs
-                this.timeSinceStart = print
-            }, 1000)
+                    secPrint = "0" + secs.toString();
+                } else {
+                    secPrint = secs.toString();
+                }
+                let print = date.getMinutes().toString() + ':' + secPrint;
+                this.timeSinceStart = print;
+            }, 1000);
         },
         async startWorkout () {
-            let a = []
+            let a = [];
             for (let i of  this.work.exerciseList) {
-                a.push(i.id) 
+                a.push(i.id);
             }
-            let res = await this.apiInstance.post('/workout_history', {
-                workoutId : this.work._id,
-                exerciseList : a
-            })
-            this.work.historyId = res.data
-        },
-        async sendRep(data){
-            let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
-            for (let set of ex.set) {
-                if (set.completed == undefined || set.completed == false) {
-                    await this.apiInstance.post('/workout_history/send_rep', {
-                        historyId : this.work.historyId,
-                        exerciseId : data.exerciseId,
-                        repetitions : data.set.repetitions,
-                        weight : data.set.weight
-                    }) 
-                    break;
-                } 
+            if ( this.apiInstance != undefined) {
+                let res = await this.apiInstance.post('/workout_history', {
+                    workoutId : this.work._id,
+                    exerciseList : a
+                });
+                this.work.historyId = res.data;
             }
         },
-        async skippedExercise(data) {
-            let ele = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
-            ele.skipped = true
-            await this.apiInstance.put('/workout_history/skip_exercise', {
-                historyId : this.work.historyId,
-                exerciseId : data.exerciseId
-            })
+        async sendRep(data : any){
+            let ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
+            if ( ex != undefined) {
+                for (let set of ex.set) {
+                    if ((set.completed == undefined || set.completed == false ) && this.apiInstance != undefined ) {
+                        await this.apiInstance.post('/workout_history/send_rep', {
+                            historyId : this.work.historyId,
+                            exerciseId : data.exerciseId,
+                            repetitions : data.set.repetitions,
+                            weight : data.set.weight
+                        }); 
+                        break;
+                    } 
+                }
+            }
         },
-        changeSet(data) {
-            let ex = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
-            ex.set[data.index] = data.newSet
+        async skippedExercise(data : any ) {
+            let ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
+            if ( ele != undefined && this.apiInstance != undefined ) {
+                ele.skipped = true;
+                await this.apiInstance.put('/workout_history/skip_exercise', {
+                    historyId : this.work.historyId,
+                    exerciseId : data.exerciseId
+                });
+            }
+        },
+        changeSet(data : any) {
+            let ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
+            if ( ex != undefined ) {
+                ex.set[data.index] = data.newSet;
+            }
         },
         async showEndCard() {
-            let res = await this.apiInstance.put('/workout_history/end_exercise', {
-                historyId: this.work.historyId
-            })
-            this.work.timeOfEnd = res.data
-            this.emitter.emit('workout-completed', {
-                timeOfStart : this.work.timeOfStart,
-                timeOfEnd : res.data,
-                workout : this.work
-            })
-
+            if (this.apiInstance != undefined) {
+                let res = await this.apiInstance.put('/workout_history/end_exercise', {
+                    historyId: this.work.historyId
+                });
+                this.work.timeOfEnd = res.data;
+                const emitter : any = inject("emitter"); // Inject `emitter`
+                emitter.emit('workout-completed', {
+                    timeOfStart : this.work.timeOfStart,
+                    timeOfEnd : res.data,
+                    workout : this.work
+                });
+            }
         },
         async endWorkout() {
-            localStorage.removeItem('onGoingWorkout')
-            this.work = {}
-            this.$emit('back')
+            localStorage.removeItem('onGoingWorkout');
+            //this.work = {};
+            this.$emit('back');
         },
         returnToFront() {
-            localStorage.setItem('onGoingWorkout', JSON.stringify(this.work))
-            this.$emit('back')
+            localStorage.setItem('onGoingWorkout', JSON.stringify(this.work));
+            this.$emit('back');
         }
     },
     mounted() {
-        let onGoingWorkout = localStorage.getItem('onGoingWorkout')
+        let onGoingWorkout = localStorage.getItem('onGoingWorkout');
         if (onGoingWorkout != undefined) {
-            this.work = JSON.parse(onGoingWorkout)
+            this.work  = (JSON.parse(onGoingWorkout) as IWorkout);
         } else {
-            let tempWork = this.workout
-            tempWork.timeOfStart = undefined
-            for (let ex of tempWork.exerciseList) {
-                for (let set of ex.set) {
-                    set.completed = undefined
+            if (this.workout != undefined) {
+                let tempWork = this.workout;
+                tempWork.timeOfStart = undefined;
+                for (let ex of tempWork.exerciseList) {
+                    for (let set of ex.set) {
+                        set.completed = undefined;
+                    }
                 }
+                this.work = (tempWork as IWorkout);
             }
-            this.work = tempWork
         }
-        this.calcTime()
-        this.startWorkout()
+        this.calcTime();
+        this.startWorkout();
     },
     updated() {
     }
-}
+});
 </script>
 
 

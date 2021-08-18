@@ -5,8 +5,9 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent ({
     name: "NewExercise",
     components : {
     },
@@ -15,16 +16,16 @@ export default {
     },
     data() {
         return {
-        }
+        };
     },
     methods: {
         addExercise() {
-            this.$emit('add-exercise')
+            this.$emit('add-exercise');
         }
     },
   mounted() {
   }
-}
+});
 </script>
 
 <style lang="scss" scoped>

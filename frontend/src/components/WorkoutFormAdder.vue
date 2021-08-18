@@ -19,12 +19,14 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+
 import ExerciseItem from './ExerciseItem.vue';
 import NewExercise from './NewExercise.vue';
 
 
-export default {
+export default defineComponent ({
     name: "WorkoutFormAdder",
     components : {
         ExerciseItem,
@@ -37,23 +39,24 @@ export default {
     data() {
         return {
             workoutHeader : '',
-            picked : ''        }
+            picked : ''        
+        };
     },
     methods: {
         checkHeader() {
-            this.$emit('workout-header', this.workoutHeader)
+            this.$emit('workout-header', this.workoutHeader);
         },
-        newRepetition(data) {
-            this.$emit('new-repetition', data)
+        newRepetition(data : any) {
+            this.$emit('new-repetition', data);
         },
-        changeExerciseName(data) {
-            this.$emit('exercise-name', data)
+        changeExerciseName(data : any) {
+            this.$emit('exercise-name', data);
         },
         addExercise() {
-            this.$emit('add-exercise')
+            this.$emit('add-exercise');
         }
     }
-}
+});
 
 </script>
 

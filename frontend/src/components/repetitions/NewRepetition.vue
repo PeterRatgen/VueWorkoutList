@@ -5,14 +5,15 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent ({
     name: "NewRepetition",
     emits: ["new-repetition"],
     components : {
     }
-}
+});
 
 </script>
 

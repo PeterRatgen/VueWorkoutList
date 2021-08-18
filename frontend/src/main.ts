@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlus, faEllipsisV, faCheck, faMinus, faPencilAlt, faTrashAlt, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
@@ -12,15 +12,15 @@ const emitter = mitt();
 library.add(faPlus);
 library.add(faEllipsisV);
 library.add(faCheck);
-library.add(faMinus)
-library.add(faPencilAlt)
-library.add(faTrashAlt)
-library.add(faArrowLeft)
+library.add(faMinus);
+library.add(faPencilAlt);
+library.add(faTrashAlt);
+library.add(faArrowLeft);
 
-const app = createApp(App)
+const app = createApp(App);
 
 app.provide('emitter', emitter);
 
 app.use(router)
 .component("fa", FontAwesomeIcon)
-.mount('#app')
+.mount('#app');

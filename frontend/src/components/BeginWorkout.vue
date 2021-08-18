@@ -27,43 +27,44 @@
     <div class="background" v-if="displayPicker"></div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent ({
     name : 'BeginWorkout',
-    emits : {
-       ["select-workout"] : String,
-       ["continue-workout"] : undefined
-    },
     props : {
         ["workouts"] : Object
+    },
+    emits : {
+       ["select-workout"] : Object as any,
+       ["continue-workout"] : Object as any
     },
     data() {
         return {
             displayPicker : false,
             chosenWorkout: ""
-        }
+        };
     },
     methods: {
         startWorkout() {
             this.displayPicker = true;    
         },
-        workoutPicker(workout) {
-            this.$emit("select-workout", workout)
+        workoutPicker(workout : any) {
+            this.$emit("select-workout", workout);
         },
         continueWorkout() {
-            this.$emit("continue-workout")
+            this.$emit("continue-workout");
         }
     },
     computed : {
         onGoingWorkout() {
             if (localStorage.getItem('onGoingWorkout') != undefined){
-                return true
+                return true;
             }
-            return false
+            return false;
         }
     }
-}
+});
 
 </script>
 

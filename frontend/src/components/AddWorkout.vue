@@ -22,89 +22,101 @@
     </div>
 </template>
 
-<script>
-import { inject } from 'vue'
-import WorkoutFormAdder from './WorkoutFormAdder'
+<script lang="ts">
+import { inject, defineComponent } from 'vue';
+import WorkoutFormAdder from './WorkoutFormAdder.vue';
 
-export default {
-  name: "AddTodo",
-  components : {
+
+import { IExercise } from '../types';
+
+export default defineComponent({
+    name: "AddTodo",
+    components : {
     WorkoutFormAdder
-  },
-  emits: ["new-workout"],
-  data() {
-    return {
-      title: '',
-      createButton: true,
-      addCardColor : '#efefef',
-        exerciseList: []
+    },
+    emits: ["new-workout"],
+    data() {
+        return {
+            title: '',
+            createButton: true,
+            addCardColor : '#efefef',
+            exerciseList: [] as IExercise[]
 
-    }
-  },
-  methods: {
-    createCard() {
-      if(this.createButton) {
-        this.createButton = false;
-        this.addCardColor = "#fff"
-      }
+        };
     },
-    collapseCard() {
-      if(!this.createButton) {
-        this.createButton = true;
-        this.addCardColor = "#fff"
-      }
-    },
-    newRepetition(data){
-        console.log("finding id " + data.exerciseId)
-        let exercise = this.exerciseList.find(element => element.id == data.exerciseId)
-        const length = exercise["set"].length
-        if (length > 0) {
-            const weight = exercise["set"][length - 1]["weight"];
-            const reps = exercise["set"][length - 1]["repetitions"];
-            exercise["set"].push({repetitions : reps, weight : weight}) 
-        } else {
-            exercise["set"].push({repetitions : 0, weight : 0}) 
+    methods: {
+        createCard() {
+            if(this.createButton) {
+                this.createButton = false;
+                this.addCardColor = "#fff";
+            }
+        },
+        collapseCard() {
+            if(!this.createButton) {
+                this.createButton = true;
+                this.addCardColor = "#fff";
+            }
+        },
+        newRepetition(data : any ){
+            console.log("finding id " + data.exerciseId);
+            let exercise : IExercise | undefined = this.exerciseList.find(ele => ele.id == data.exerciseId);
+            if ( exercise != undefined ) {
+                const length = exercise["set"].length;
+                if (length > 0) {
+                    const weight = exercise["set"][length - 1]["weight"];
+                    const reps = exercise["set"][length - 1]["repetitions"];
+                    exercise["set"].push({repetitions : reps, weight : weight});
+                } else {
+                    exercise["set"].push({repetitions : 0, weight : 0});
+                }
+            }
+        },
+        addExercise() {
+            let identifier = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+            let newExercise = {
+                id: identifier,  
+                name: "", 
+                set: []
+            };
+            console.log("The new exercise");
+            console.log(newExercise);
+            this.exerciseList.push(newExercise);
+        },
+        addName(data : any) {
+            if(this.createButton == false) {
+                let ele : IExercise | undefined = this.exerciseList.find(element => element.id == data["exerciseId"]);
+                if ( ele != undefined) {
+                    ele.name = data["name"]; 
+                }
+            }
+        },
+        submitWorkout() {
+            if (this.title != '' && this.exerciseList != []) {
+                const emitter : any = inject("emitter"); // Inject `emitter`
+                emitter.emit('submit-new-workout', {title : this.title,
+                exerciseList: this.exerciseList});
+                this.title = '';
+                this.exerciseList = [];
+                this.createButton = true;
+            }
+        },
+        titleEditEnd(id : string) {
+            let ex : IExercise | undefined = this.exerciseList.find(ele => ele.id == id);
+            if (ex != undefined) {
+                let index = this.exerciseList.indexOf(ex);
+                this.exerciseList.splice(index, 1);
+            }
+        },
+        newHeader(data : string ) {
+            this.title = data;
         }
-    },
-    addExercise() {
-        let identifier = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        let newExercise = {
-            id: identifier,  
-            name: "", 
-            set: []
-        }
-        console.log("The new exercise")
-        console.log(newExercise)
-        this.exerciseList.push(newExercise)
-    },
-    addName(data) {
-        if(this.createButton == false) {
-            let ele = this.exerciseList.find(element => element.id == data["exerciseId"])
-            ele.name = data["name"] 
-        }
-    },
-    submitWorkout() {
-        if (this.title != '' && this.exerciseList != []) {
-            this.emitter.emit('submit-new-workout', {title : this.title, exerciseList: this.exerciseList}) 
-            this.title = ''
-            this.exerciseList = []
-            this.createButton = true
-        }
-    },
-    titleEditEnd(id) {
-        let index = this.exerciseList.indexOf(this.exerciseList.find(ele => ele.id == id))
-        this.exerciseList.splice(index, 1) 
-    },
-    newHeader(data) {
-        this.title = data
-    }
   },
   mounted() {
-        const emitter = inject("emitter"); // Inject `emitter`
-        emitter.on('exercise-name', this.addName)
-        emitter.on('title-edit-end', this.titleEditEnd)
+        const emitter : any  = inject("emitter"); // Inject `emitter`
+        emitter.on('exercise-name', this.addName);
+        emitter.on('title-edit-end', this.titleEditEnd);
   }
-}
+});
 </script>
 
 <style lang="scss" scoped>

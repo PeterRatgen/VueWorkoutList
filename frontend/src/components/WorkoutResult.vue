@@ -21,63 +21,71 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import { inject, defineComponent } from 'vue';
 
-export default {
+import { Stat } from '../types';
+
+export default defineComponent({
     name : 'WorkoutResult',
     data() {
         return {
-            statArr : []
-        }
-    },
-    emits : {
-        ["ended"] : undefined
+            statArr : [] as Stat[]
+        };
     },
     mounted() {
-        this.emitter.on('workout-completed', (data) => {
-            this.stats(data)
-        })
+        const emitter : any = inject("emitter"); // Inject `emitter`
+        emitter.on('workout-completed', (data : any) => {
+            this.stats(data);
+        });
     },
     methods : {
         removeEndCard() {
-            this.$emit("ended")
+            this.$emit("ended");
         },
         endWorkout () {
 
         }, 
-        stats(data) {
-            this.$refs.endCard.style.display = "block";
-            console.log(data)
-            let timeVal = data.timeOfEnd - data.timeOfStart
-            let date = new Date(timeVal)
-            let secs = date.getSeconds()
+        stats(data : any) {
+            (this.$refs.endCard as any).style.display = "block";
+            let timeVal = data.timeOfEnd - data.timeOfStart;
+            let date = new Date(timeVal);
+            let secs = date.getSeconds();
+            let secPrint : string;
             if (secs < 10) {
-                secs = "0" + secs
-            } 
-            let hours = date.getHours() - 1
-            let print = ''
+                secPrint = "0" + secs;
+            } else {
+                secPrint = secs.toString();
+            }
+
+            let hours = date.getHours() - 1;
+            let print = '';
             if (hours < 1 ){
-                print =  date.getMinutes() + ':' + secs
+                print =  date.getMinutes() + ':' + secPrint;
             } else {
 
-                print =  hours + ':' + date.getMinutes() + ':' + secs
+                print =  hours + ':' + date.getMinutes() + ':' + secPrint;
             }
-            this.statArr.push({
-                title : "Tid", value : print.toString()
-            })
-            date = new Date(data.timeOfStart)
+
+            this.statArr.push( {
+                title : "Tid", 
+                value : print.toString()
+            } as Stat );
+
+            date = new Date(data.timeOfStart);
             this.statArr.push({
                 title: "Start", value: date.getHours() + ':' + date.getMinutes() +
                 ':' + date.getSeconds()
-            })
-            date = new Date(data.timeOfEnd)
+            } as Stat);
+
+            date = new Date(data.timeOfEnd);
             this.statArr.push({
                 title: "Slut", value: date.getHours() + ':' + date.getMinutes() +
                 ':' + date.getSeconds()
-            })
+            } as Stat);
         }
     }
-}
+});
 
 
 </script>

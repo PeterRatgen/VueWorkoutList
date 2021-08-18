@@ -70,15 +70,17 @@
     </div>
 </template>
 
-<script >
-import { inject } from 'vue'
+<script lang="ts">
+import { inject, defineComponent} from 'vue';
 
-import ExerciseItem from "./ExerciseItem"
-import HoverMenu from "./HoverMenu/HoverMenu.vue"
+import ExerciseItem from "./ExerciseItem.vue";
+import HoverMenu from "./HoverMenu/HoverMenu.vue";
 import InputField from "./input_field/InputField.vue";
-import NewExercise from "./NewExercise.vue"
+import NewExercise from "./NewExercise.vue";
 
-export default {
+import { IWorkout } from '../types';
+
+export default defineComponent ({
     /**
         Display a single workout. Provides functionality for modifying the
         existing workout, though the child components.
@@ -89,14 +91,8 @@ export default {
             The workout to be displayed in this component
         */
         ["workout"] : {
-            type: Object,
-            required: true,
-            validator: function(value) {
-                return ( typeof(value._id) == "string" &&
-                typeof(value.title) == "string" &&
-                typeof(value.exerciseList ) == "object"
-                ) === true
-            }
+            type: Object as () => IWorkout,
+            required: true
         }
     },
     components: {
@@ -117,18 +113,18 @@ export default {
             */
             displayHover: false,
             editingTitle : false
-        }
+        };
     },
     methods : {
         /*
             Split the exercises contained in the workouts, and present them as a
             summary.
         */
-        nameWithComma(index) {
+        nameWithComma(index : number) {
             if (index !== this.workout.exerciseList.slice(0,3).length - 1) {
-                return `${this.workout.exerciseList[index].name}, `
+                return `${this.workout.exerciseList[index].name}, `;
             } else{
-                return this.workout.exerciseList[index].name
+                return this.workout.exerciseList[index].name;
             }
         },
         expand_card() {
@@ -136,9 +132,9 @@ export default {
                 Expand the workout card.
             */
             if (this.contracted) {
-                this.contracted = false
+                this.contracted = false;
             } else {
-                this.contracted = true
+                this.contracted = true;
             }
         },
         renameTitle(){
@@ -146,96 +142,104 @@ export default {
                 Rename the title of the workout.
             */
             if (!this.editingTitle) {
-                let title_element = this.$el.querySelector("#title")
-                title_element.style.display = "none"
-                this.editingTitle = true
-                this.displayHover = false
+                let title_element = this.$el.querySelector("#title");
+                title_element.style.display = "none";
+                this.editingTitle = true;
+                this.displayHover = false;
             }
         },
-        handleOption(item){
+        handleOption(item : string){
             /*
                 Handle the option clicked in the HoverMenu component.
             */
+            const emitter : any = inject("emitter"); // Inject `emitter`
             switch(item) {
                 case "Change title":
-                    this.renameTitle()        
+                    this.renameTitle();
                     break;
                 case "Delete workout":
-                    this.emitter.emit('delete-workout', this.workout._id)
+                    emitter.emit('delete-workout', this.workout._id);
                     break;
             }
         },
-        submitEdit(title) {
+        submitEdit(title : string) {
             /*
                 Submit upon ending the editing of the title of the workout.
             */
-            this.emitter.emit('title-change', { workoutId : this.workout._id, title : title})
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('title-change', { workoutId : this.workout._id, title : title});
             if (this.editingTitle) {
-                let title_element = this.$el.querySelector("#title")
-                title_element.style.display = "block"
-                this.editingTitle = false
+                let title_element = this.$el.querySelector("#title");
+                title_element.style.display = "block";
+                this.editingTitle = false;
             }
         },
         editEnd(){
             /*
                 End of edit
             */
-            let title_element = this.$el.querySelector("#title")
-            title_element.style.display = "block"
+            let title_element = this.$el.querySelector("#title");
+            title_element.style.display = "block";
         },
-        newRepetition(data){
+        newRepetition(data : any ){
             /*
                 @data contains the exerciseId of where to add a repetition
             */
-            data.workoutId = this.workout._id
-            this.emitter.emit('new-repetition', data) 
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            data.workoutId = this.workout._id;
+            emitter.emit('new-repetition', data);
         },
-        changeRep(data) {
-            this.emitter.emit('completed-rep-edit', 
+        changeRep(data : any) {
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('completed-rep-edit', 
                 {
                     repItem : data.repItem, 
                     exerciseId: data.exerciseId,
                     workoutId: this.workout._id
                 }
-            )
+            );
         },
-        changeExerciseName(data) {
+        changeExerciseName(data : any) {
             /*
                 Change the name of an exercise
             */
-            data.workoutId = this.workout._id
-            this.emitter.emit('exercise-name-change', data)
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            data.workoutId = this.workout._id;
+            emitter.emit('exercise-name-change', data);
         },
-        deleteExercise(data) {
+        deleteExercise(data : any) {
             /*
                 Delete and exercise from the workout
             */
-            data.workoutId = this.workout._id
-            this.emitter.emit('delete-exercise', data)
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            data.workoutId = this.workout._id;
+            emitter.emit('delete-exercise', data);
         },
-        deleteRep(data) {
+        deleteRep(data : any) {
             /*
                 Delete a repetition of a an exercise of a workout.
                 @data contains the id of the exercise being deleted.
             */
-            data.workoutId = this.workout._id
-            this.emitter.emit('delete-rep', data)
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            data.workoutId = this.workout._id;
+            emitter.emit('delete-rep', data);
         },
         addExercise() {
             /*
                 @data contains the id of the exercise being added.
             */
-            this.emitter.emit('add-exercise', {workoutId : this.workout._id} )
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('add-exercise', {workoutId : this.workout._id} );
         }
     },
     created() {
         // Contract the workout, then the background has been pressed.
-        const emitter = inject("emitter"); // Inject `emitter`
+        const emitter : any = inject("emitter"); // Inject `emitter`
         emitter.on('pressed-background', () => {
             this.contracted = true;
-        })
+        });
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>

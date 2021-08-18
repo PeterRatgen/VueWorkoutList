@@ -2,12 +2,14 @@ export interface IRepetition {
     id? : string,
     repetitions : number,
     weight : number
+    completed? : boolean
 }
 
 export interface IExercise {
     name : string,
     set : IRepetition[],
-    id : string
+    id : string,
+    skipped? : boolean
 }
 
 export interface IWorkout {
@@ -16,4 +18,12 @@ export interface IWorkout {
     exerciseList : IExercise[],
     dateCreated : number,
     userId : string
+    timeOfStart? : number,
+    timeOfEnd? : number,
+    historyId? : string
+}
+
+export interface Stat {
+    title : string,
+    value : string
 }

@@ -2,6 +2,9 @@
     <div class="hover-menu" v-bind:class="{ hoverVisible : display }" >
         <div class="hover-menu-content" v-for="item in items" :key="item">
             <HoverMenuItem :item="item" @option="emitOption"/> 
+            <div @click.stop="emitOption(item)" class="menu-item">
+                <p>{{ item }}</p>
+            </div>
             <div v-if="item != items[items.length]">
                 <div class="divder"></div>
              </div>
@@ -9,30 +12,27 @@
     </div>
 </template>
 
-<script>
-import HoverMenuItem from "./HoverMenuItem.vue"
+<script lang="ts">
+import { defineComponent} from 'vue';
 
-export default {
+export default defineComponent ({
     name: "HoverMenu",
     props: [ "menuItems", "display" ], 
     emits: [ "option" , "minimize"],
-    components: {
-        HoverMenuItem
-    },
     data () {
         return {
             items: []
-        }
+        };
     },
     created() {
         this.items = this.menuItems;
     }, 
     methods: {
-        emitOption(item) {
-            this.$emit("option", item)
+        emitOption(item : any) {
+            this.$emit("option", item);
         }
     }
-}
+});
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +56,9 @@ $menu-width: 13rem;
     display: block;
 }
 
+.menu-item {
+    padding: 0.5rem 0;
+}
 
 .divder {
   @include divider;

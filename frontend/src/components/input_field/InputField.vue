@@ -7,27 +7,28 @@
 
 
 <script>
-
-export default {
+import { defineComponent } from 'vue';
+ 
+export default defineComponent ({
     name : 'InputField',
     props: ['fontSize', 'fontWeight', 'initialValue', 'visibility'],
     emits: ['result'],
     methods: {
         acceptEdit(){
-            const editValue = this.$refs.titleInput.value
-            this.$emit('result', editValue)
+            const editValue = this.$refs.titleInput.value;
+            this.$emit('result', editValue);
         },
     },
     mounted() {
-        let title_input = this.$refs.titleInput
-        console.log("Setting fontsize " + this.fontSize)
+        let title_input = this.$refs.titleInput;
+        console.log("Setting fontsize " + this.fontSize);
         title_input.style.fontSize = this.fontSize;
-        title_input.style.fontWeight = this.fontWeight
-        title_input.value = this.initialValue
+        title_input.style.fontWeight = this.fontWeight;
+        title_input.value = this.initialValue;
     },
     updated() {
     }
-}
+});
 </script>
 
 
