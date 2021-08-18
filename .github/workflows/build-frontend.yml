@@ -16,5 +16,7 @@ jobs:
         run: git pull
       - name: Pull changes from npm
         run: npm install
+      - name: Run tests
+        run: npm run test
       - name: Build frontend
         run: npm run build
