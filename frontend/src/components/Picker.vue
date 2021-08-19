@@ -15,43 +15,45 @@
 </template>
 
 
-<script charset="utf-8">
+<script lang="ts">
+import { inject, defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name : "Picker",
     data() {
         return { 
             data : 0,
             unit : "",
             steps : 1
-        }
+        };
     },
     methods : {
-        showPicker(data) {
-            console.log(this.$refs)
-            this.$refs.picker.style.display = "block"
-            this.data = data.number
-            this.unit = data.unit
-            this.steps = data.steps
+        showPicker(data : any) {
+            (this.$refs.picker as any).style.display = "block";
+            this.data = data.number;
+            this.unit = data.unit;
+            this.steps = data.steps;
         },
         cancel() {
-            this.$refs.picker.style.display = "none"
+            (this.$refs.picker as any).style.display = "none";
         },
         inc() {
-            this.data = this.data + this.steps
+            this.data = this.data + this.steps;
         },
         dec () {
-            this.data = this.data - this.steps
+            this.data = this.data - this.steps;
         },
         submit() {
-            this.emitter.emit('picker-completed', this.data)
-            this.$refs.picker.style.display = "none"
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('picker-completed', this.data);
+            (this.$refs.picker as any).style.display = "none";
         }
     },
     mounted() {
-        this.emitter.on('picker', this.showPicker)
+        const emitter : any = inject("emitter"); // Inject `emitter`
+        emitter.on('picker', this.showPicker);
     }
-}
+});
     
 </script>
 

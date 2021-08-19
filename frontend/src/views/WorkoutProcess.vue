@@ -48,7 +48,7 @@ export default defineComponent ({
         Picker
     },
     props : {
-        ["workout"] : Object,
+        ["workout"] : Object as () => IWorkout,
         ["apiInstance"] : Object as () => AxiosInstance,
     },
     data() {
@@ -180,14 +180,17 @@ export default defineComponent ({
             this.work  = (JSON.parse(onGoingWorkout) as IWorkout);
         } else {
             if (this.workout != undefined) {
-                let tempWork = this.workout;
-                tempWork.timeOfStart = undefined;
-                for (let ex of tempWork.exerciseList) {
-                    for (let set of ex.set) {
-                        set.completed = undefined;
+                let tempWork : IWorkout | undefined = this.workout;
+                console.log(tempWork);
+                if (tempWork != undefined && tempWork.exerciseList != undefined) {
+                    tempWork.timeOfStart = undefined;
+                    for (let ex of tempWork.exerciseList) {
+                        for (let set of ex.set) {
+                            set.completed = undefined;
+                        }
                     }
+                    this.work = (tempWork as IWorkout);
                 }
-                this.work = (tempWork as IWorkout);
             }
         }
         this.calcTime();
