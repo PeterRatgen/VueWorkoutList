@@ -1,6 +1,7 @@
 import 'jest';
 import { mount } from '@vue/test-utils';
 import WorkoutView from '../../src/views/WorkoutView.vue';
+import Workout from '../../src/components/Workout.vue';
 import { testData} from '../testData';
 
 import mitt from 'mitt';
@@ -28,7 +29,7 @@ describe('Mount the Workout View', () => {
     });
 
     test('Has wokrout', () => {
-        expect(wrapper.getComponent({name : 'addWorkout'})).toBeTruthy();
+        expect(wrapper.getComponent(Workout)).toBeTruthy();
     });
 });
 
