@@ -103,7 +103,6 @@ export default defineComponent({
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            console.log(" api url " + process.env.VUE_APP_API_URL);
             const token = localStorage.getItem("user");
             return axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
@@ -325,8 +324,6 @@ export default defineComponent({
         emitter.on('delete-workout', this.deleteWorkout);
     },
     updated() {
-        console.log("currentWorkout");
-        console.log(this.currentWorkout);
     }
 });
 </script>

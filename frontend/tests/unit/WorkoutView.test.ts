@@ -1,7 +1,6 @@
 import 'jest';
 import { mount } from '@vue/test-utils';
 import { testData, current} from '../testData';
-import expect from 'expect';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 
@@ -54,9 +53,11 @@ describe('Test WorkoutView components', () => {
 });
 
 describe('WorkoutView interactivity', () => {
-    //wrapper.setData({"currentWorkout" : current, workingOut : true});
 
-    test('WorkoutProcess component', () => {
+    test('WorkoutProcess component', async () => {
+
+        await wrapper.setData({currentWorkout : current, workingOut : true});
+
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
     });
 });

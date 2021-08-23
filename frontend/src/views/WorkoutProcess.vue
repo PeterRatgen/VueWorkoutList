@@ -13,14 +13,14 @@
             <h1 class="header">{{ work.title }}</h1>
             <div class="accent-divider"></div>
         </div>
-        <div class="workout-section" v-for="(exercise, index) in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
+        <div class="workout-section" v-for="exercise in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
             <WorkoutDisplay 
                 v-bind:exercise="exercise"
-                v-bind:expand="currentExercise(work.exerciseList) == index"
                 v-on:send-rep="sendRep"
                 v-on:change-set="changeSet"
                 @skipped="skippedExercise"
             />
+                <!---v-bind:expand="currentExercise == index"-->
         </div>
     </div>
     <Picker/>
@@ -49,30 +49,19 @@ export default defineComponent ({
     },
     props : {
         ["workout"] : Object as () => IWorkout,
-        ["apiInstance"] : Object as () => AxiosInstance,
+        ["apiInstance"] : Function,
+    },
+    emits : {
+        ['back'] : null
     },
     data() {
         return {
             timeSinceStart : '',
             work : {} as IWorkout,
+            currentExercise : 0
         };
     },
     computed: {
-        currentExercise(exerciseList : IExercise[]) : number {
-            /*
-                Returns the index of the current exercise
-            */
-            let currentEx = 0;
-            for (let ex of exerciseList) {
-                for (let set of ex.set) {
-                    if (set.completed == undefined || set.completed == false) {
-                        return currentEx;
-                    }
-                }
-                currentEx = currentEx + 1;
-            }
-            return currentEx;
-        }
     },
     methods : {
         calcTime() {
@@ -181,7 +170,6 @@ export default defineComponent ({
         } else {
             if (this.workout != undefined) {
                 let tempWork : IWorkout | undefined = this.workout;
-                console.log(tempWork);
                 if (tempWork != undefined && tempWork.exerciseList != undefined) {
                     tempWork.timeOfStart = undefined;
                     for (let ex of tempWork.exerciseList) {
