@@ -1,6 +1,7 @@
 import 'jest';
 import { mount } from '@vue/test-utils';
 import { testData, current} from '../testData';
+import expect from 'expect';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 
@@ -20,21 +21,21 @@ describe('WorkoutView', () => {
 });
 
 
+const wrapper = mount(WorkoutView, {
+    data () {
+        return {
+            workouts : testData
+        };
+    },
+    global: {
+        provide :  {
+            emitter: mitt()
+        },
+        stubs : ['fa']
+    }
+});
 
 describe('Test WorkoutView components', () => {
-    const wrapper = mount(WorkoutView, {
-        data () {
-            return {
-                workouts : testData
-            };
-        },
-        global: {
-            provide :  {
-                emitter: mitt()
-            },
-            stubs : ['fa']
-        }
-    });
     test('Header component', () => {
         expect(wrapper.getComponent(HelloHeader)).toBeTruthy();
     });
@@ -53,22 +54,7 @@ describe('Test WorkoutView components', () => {
 });
 
 describe('WorkoutView interactivity', () => {
-    const wrapper = mount(WorkoutView, {
-        data () {
-            return {
-                workouts : testData,
-                workingOut : true
-            };
-        },
-        global: {
-            provide :  {
-                emitter: mitt()
-            },
-            stubs : ['fa']
-        }
-    });
-
-    wrapper.setData({"currentWorkout" : current});
+    //wrapper.setData({"currentWorkout" : current, workingOut : true});
 
     test('WorkoutProcess component', () => {
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();

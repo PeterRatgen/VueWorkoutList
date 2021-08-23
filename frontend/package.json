@@ -36,9 +36,11 @@
       "vue"
     ],
     "testMatch": [
-        "**/tests/**/*.test.[jt]s"
+      "**/tests/**/*.test.[jt]s"
     ],
-    "setupFiles" : [ "<rootDir>/tests/setup-tests.ts" ],
+    "setupFiles": [
+      "<rootDir>/tests/setup-tests.ts"
+    ],
     "transform": {
       "^.+\\.js$": "babel-jest",
       "^.+\\.vue$": "vue-jest",
@@ -61,8 +63,8 @@
     "eslint-plugin-vue": "^7.0.0-0",
     "prettier": "^2.3.2",
     "sass-loader": "^10.2.0",
-    "typescript": "~4.1.5",
     "typescript-eslint": "^0.0.1-alpha.0",
+    "typescript": "^4.3.5",
     "vue-jest": "^5.0.0-alpha.10"
   },
   "eslintConfig": {
