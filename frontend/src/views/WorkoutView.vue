@@ -19,7 +19,7 @@
     </div>
     <WorkoutProcess v-else 
         :workout="currentWorkout"  
-        :apiInstance="apiInstance"
+        :jwtData="token"
         v-on:back="workingOut = false"
     />
 </template>
@@ -70,7 +70,8 @@ export default defineComponent({
             workouts : [],
             workingOut : false,
             currentWorkout : {},
-            jwtData : { name : ''}
+            jwtData : { name : ''},
+            token : ''
         };
     },
     methods: {
@@ -93,10 +94,15 @@ export default defineComponent({
                     email : this.email, 
                     password: this.password
                 });
+                console.log("Data response");
+                console.log(response.data);
                 let token = response.data;
                 this.jwtData = JSON.parse(atob(token.split('.')[1]));
+                this.token = token;
                 localStorage.setItem("user", token);
+                console.log(localStorage.getItem("user"));
             } catch (err) {
+                console.trace();
                 console.log(err);
             }
         },
@@ -117,19 +123,32 @@ export default defineComponent({
             /**
                 Retrieve the workouts of the user, and save the response.
             */
-            const response = await this.apiInstance.get('/workout');
-            this.workouts = JSON.parse(response.request.response);
+            try {
+                const response = await this.apiInstance.get('/workout');
+                this.workouts = JSON.parse(response.request.response);
+            } catch (err) {
+                console.trace();
+                console.log(err);
+            }
+
         },
         async titleChange(data : any){
             /**
                 Change the title of a workout.
             */
-            await this.apiInstance.post('/workout/rename',
-                {
-                    id : data.workoutId,
-                    title : data.title
-                }
-            );
+            try {
+                await this.apiInstance.post('/workout/rename',
+                    {
+                        id : data.workoutId,
+                        title : data.title
+                    }
+                );
+
+            } catch (err) {
+                console.trace();
+                console.log(err);
+            }
+
             const ele: any = this.workouts.find((element : any) => element._id == data.workoutId);
             if (ele != undefined) {
                 ele.title = data.title;
@@ -140,13 +159,19 @@ export default defineComponent({
                 Delete one workout. First on the database, and then in the data
                 stores locally.
             */
-            this.apiInstance.delete('/workout/' + workoutId );
-            let ele: IWorkout | undefined = this.workouts.find(element => element["_id"] == workoutId);
-            if (ele != undefined) {
-                let index: number = this.workouts.indexOf(ele);
-                if (index != -1 ) {
-                    this.workouts.splice(index, 1);
+            try {
+                this.apiInstance.delete('/workout/' + workoutId );
+                let ele: IWorkout | undefined = this.workouts.find(element => element["_id"] == workoutId);
+                if (ele != undefined) {
+                    let index: number = this.workouts.indexOf(ele);
+                    if (index != -1 ) {
+                        this.workouts.splice(index, 1);
+                    }
                 }
+            }
+            catch (err) {
+                console.trace();
+                console.log(err);
             }
         },
         async addRepetition(data : any){
@@ -176,9 +201,15 @@ export default defineComponent({
                         repetitions : repetitions
                     };
                     data.repItem = repItem;
-                    let res = await this.apiInstance.put('/workout/add_repetition', data);
-                    repItem.id = res.data;
-                    exercise.set.push(repItem);
+                    try {
+                        let res = await this.apiInstance.put('/workout/add_repetition', data);
+                        repItem.id = res.data;
+                        exercise.set.push(repItem);
+                    }
+                    catch (err) {
+                        console.trace();
+                        console.log(err);
+                    }
                 }
             }
         },
@@ -195,12 +226,18 @@ export default defineComponent({
                     if (rep != undefined) {
                         rep.repetitions = data.repItem.repetitions;
                         rep.weight = data.repItem.weight;
-                        this.apiInstance.put('/workout/rep_change', {
-                            workoutId: data["workoutId"],
-                            exerciseId : data["exerciseId"],
-                            repItem: data["repItem"]
-                        });
-                        console.log("changed rep to " + JSON.stringify(data["repItem"]));
+                        try {
+                            this.apiInstance.put('/workout/rep_change', {
+                                workoutId: data["workoutId"],
+                                exerciseId : data["exerciseId"],
+                                repItem: data["repItem"]
+                            });
+                            console.log("changed rep to " + JSON.stringify(data["repItem"]));
+                        }
+                        catch (err) {
+                            console.trace();
+                            console.log(err);
+                        }
                     }
                 }
             }
@@ -213,9 +250,15 @@ export default defineComponent({
             /**
                 Add a new workout to the user.
             */
-            const res = await this.apiInstance.post('/workout', data);
-            data._id =  res.data;
-            this.workouts.push((data as never));
+            try {
+                const res = await this.apiInstance.post('/workout', data);
+                data._id =  res.data;
+                this.workouts.push((data as never));
+            }
+            catch (err) {
+                console.trace();
+                console.log(err);
+            }
         },
         async changeExerciseName(data : any) {
             /**
@@ -226,11 +269,17 @@ export default defineComponent({
                 let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element["id"] == data["exerciseId"]);
                 if (exercise != undefined) {
                     exercise.name = data["name"];
-                    await this.apiInstance.put('/workout/rename_exercise', {
-                        id: data["workoutId"],
-                        exerciseId : data["exerciseId"],
-                        name : data["name"]
-                    });
+                    try {
+                        await this.apiInstance.put('/workout/rename_exercise', {
+                            id: data["workoutId"],
+                            exerciseId : data["exerciseId"],
+                            name : data["name"]
+                        });
+                    }
+                    catch (err) {
+                        console.trace();
+                        console.log(err);
+                    }
                 }
             }
         },
@@ -244,10 +293,16 @@ export default defineComponent({
                 if (exercise != undefined) {
                     let index : number =  (workout as IWorkout).exerciseList.indexOf(exercise);
                     (workout as IWorkout).exerciseList.splice(index, 1);
-                    this.apiInstance.post('/workout/update_exercise', {
-                        id: data["workoutId"],
-                        exerciseList : workout["exerciseList"]
-                    });
+                    try {
+                        this.apiInstance.post('/workout/update_exercise', {
+                            id: data["workoutId"],
+                            exerciseList : workout["exerciseList"]
+                        });
+                    }
+                    catch (err) {
+                        console.trace();
+                        console.log(err);
+                    }
                 }
             }
         },
@@ -256,13 +311,19 @@ export default defineComponent({
                 @data contains 
                     workoutId - for the workout where the exercise should be
             */
-            let response = await this.apiInstance.put('/workout/add_exercise', {
-                workoutId : data.workoutId
-            });
-            let exerciseId = response.data;
-            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
-            if (workout != undefined) {
-                (workout as IWorkout)["exerciseList"].push({id :  exerciseId, name: "", set: []});
+            try {
+                let response = await this.apiInstance.put('/workout/add_exercise', {
+                    workoutId : data.workoutId
+                });
+                let exerciseId = response.data;
+                let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
+                if (workout != undefined) {
+                    (workout as IWorkout)["exerciseList"].push({id :  exerciseId, name: "", set: []});
+                }
+            }
+            catch (err) {
+                console.trace();
+                console.log(err);
             }
         },
         deleteRep(data : any) {
@@ -274,10 +335,16 @@ export default defineComponent({
                 let exercise = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
                 if (exercise != undefined) {
                     exercise.set.splice(data.repIndex, 1);
-                    this.apiInstance.post('/workout/update_exercise', {
-                        id: data.workoutId,
-                        exerciseList : (workout as IWorkout).exerciseList
-                    });
+                    try {
+                        this.apiInstance.post('/workout/update_exercise', {
+                            id: data.workoutId,
+                            exerciseList : (workout as IWorkout).exerciseList
+                        });
+                    }
+                    catch (err) {
+                        console.trace();
+                        console.log(err);
+                    }
                 }
             }
         },
@@ -316,8 +383,10 @@ export default defineComponent({
             Get the data stored within the jwt token.         
         */
         const token = localStorage.getItem("user");
-        if (token) {
+        if (token != undefined) {
             this.jwtData = JSON.parse(atob(token.split('.')[1]));
+        } else if (this.token) {
+            this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
         }
     },
     updated() {

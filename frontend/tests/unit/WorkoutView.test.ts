@@ -1,7 +1,7 @@
 import 'jest';
 import expect from 'expect';
 import { mount } from '@vue/test-utils';
-import { testData, current} from '../testData';
+import { testData, current, token } from '../testData';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 
@@ -13,7 +13,6 @@ import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
 
-
 describe('WorkoutView', () => {
     it('has-data', () => {
         expect(typeof WorkoutView.data).toBe('function');
@@ -24,7 +23,8 @@ const wrapper = mount(WorkoutView, {
     data () {
         return {
             workouts : testData,
-            currentWorkout : current
+            currentWorkout : current,
+            token : token
         };
     },
     global: {
@@ -56,12 +56,15 @@ describe('Test for existence of components', () => {
 describe("Comptents for the rendered header", () => {
     test('contents of header', () => {
         let domWrapper = wrapper.find('h1');
-        console.log(domWrapper.text());
         expect(domWrapper.text()).toEqual("Hej, Peter");
     });
 });
 
-describe('WorkoutView starting and removing a workout', async () => {
+describe('WorkoutView starting and removing a workout', () => {
+
+    test('user login token exists', async () => {
+        expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
+    });
 
     test('workoutProcess component exists on setting "workingOut"', async () => {
 
