@@ -49,7 +49,7 @@ export default defineComponent ({
     },
     props : {
         ["workout"] : Object as () => IWorkout,
-        ["apiInstance"] : Function,
+        ["apiInstance"] : Object as () => AxiosInstance,
     },
     emits : {
         ['back'] : null

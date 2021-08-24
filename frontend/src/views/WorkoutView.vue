@@ -69,7 +69,8 @@ export default defineComponent({
             */
             workouts : [],
             workingOut : false,
-            currentWorkout : {}
+            currentWorkout : {},
+            jwtData : { name : ''}
         };
     },
     methods: {
@@ -77,8 +78,8 @@ export default defineComponent({
             /*
                 Init script, initializes the website with data, and API instances.
             */
-            this.apiInstance = this.createInstance();  
             await this.login();
+            this.apiInstance = this.createInstance();  
             await this.getWorkout();
         },
         async login() {
@@ -87,12 +88,13 @@ export default defineComponent({
                 Token retured by the endpoint
             */
             try {
-                let response = await this.apiInstance.post('/login',
+                let response = await axios.post(process.env.VUE_APP_API_URL + 'login',
                 {
                     email : this.email, 
                     password: this.password
                 });
                 let token = response.data;
+                this.jwtData = JSON.parse(atob(token.split('.')[1]));
                 localStorage.setItem("user", token);
             } catch (err) {
                 console.log(err);
@@ -289,20 +291,6 @@ export default defineComponent({
         }
     },
     computed : {
-        jwtData() {
-            /**
-                Get the data stored within the jwt token.         
-            */
-            const token = localStorage.getItem("user");
-            if (token) {
-                return JSON.parse(atob(token.split('.')[1]));
-            }
-            else {
-                return {
-                    name : ''
-                };
-            }
-        }
     },
     created() {
         this.init();
@@ -322,6 +310,15 @@ export default defineComponent({
         emitter.on('delete-rep', this.deleteRep);
         emitter.on('title-change', this.titleChange);
         emitter.on('delete-workout', this.deleteWorkout);
+
+
+        /**
+            Get the data stored within the jwt token.         
+        */
+        const token = localStorage.getItem("user");
+        if (token) {
+            this.jwtData = JSON.parse(atob(token.split('.')[1]));
+        }
     },
     updated() {
     }

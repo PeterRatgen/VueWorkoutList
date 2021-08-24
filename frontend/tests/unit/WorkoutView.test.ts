@@ -19,11 +19,11 @@ describe('WorkoutView', () => {
     });
 });
 
-
 const wrapper = mount(WorkoutView, {
     data () {
         return {
-            workouts : testData
+            workouts : testData,
+            currentWorkout : current
         };
     },
     global: {
@@ -34,7 +34,7 @@ const wrapper = mount(WorkoutView, {
     }
 });
 
-describe('Test WorkoutView components', () => {
+describe('Test for existence of components', () => {
     test('Header component', () => {
         expect(wrapper.getComponent(HelloHeader)).toBeTruthy();
     });
@@ -52,13 +52,28 @@ describe('Test WorkoutView components', () => {
     });
 });
 
-describe('WorkoutView interactivity', () => {
+describe("Comptents for the rendered header", () => {
+    test('contents of header', () => {
+        let domWrapper = wrapper.find('h1');
+        console.log(domWrapper.text());
+        expect(domWrapper.text()).toEqual("Hej, Peter");
+    });
+});
 
-    test('WorkoutProcess component', async () => {
 
-        await wrapper.setData({currentWorkout : current, workingOut : true});
+describe('WorkoutView starting and removing a workout', () => {
+
+    test('workoutProcess component exists on setting "workingOut"', async () => {
+        await wrapper.setData({workingOut : true});
 
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
+    });
+
+    test('workoutProcess component removed on setting "workingOut" to false', async () => {
+        await wrapper.setData({workingOut : false});
+
+        let errorWrapper = wrapper.findComponent(WorkoutProcess);
+        expect(errorWrapper.exists()).toBeFalsy();
     });
 });
 

@@ -66,10 +66,13 @@
 </template>
 
 
-<script>
-import HoverMenu from "../components/HoverMenu/HoverMenu.vue"
+<script lang="ts">
+import { defineComponent, inject } from 'vue';
+import {  IRepetition } from '../types';
 
-export default {
+import HoverMenu from "../components/HoverMenu/HoverMenu.vue";
+
+export default defineComponent ({
     /*
         A workout is displayed in the context of an ongoing workout.
     */
@@ -92,106 +95,123 @@ export default {
             hovMen: ["Skip exercise"],
             displayHover: false,
             allApproved : false
-        }
+        };
     },
     computed: {
-        avgWeight() {
-            let amount = 0
-            for (let set of this.exercise.set){
-                amount = amount + set.weight 
+        avgWeight() : number {
+            let amount = 0;
+            if (this.exercise != undefined) {
+                for (let set of this.exercise.set){
+                    amount = amount + set.weight;
+                }
+                return Math.round(amount / this.exercise.set.length);
             }
-            return Math.round(amount / this.exercise.set.length)
+            return 0;
         }
     },
     methods : {
-        approveWorkout(set, index, exerciseId) {
-            let allApproved = true
-            for (let i = 0; i < index; i++) {
-                if (this.exercise.set[i].completed != true) {
-                    allApproved = false 
-                    break;
+        approveWorkout(set : IRepetition, index : number, exerciseId : string) {
+            let allApproved = true;
+            if(this.exercise != undefined) {
+                for (let i = 0; i < index; i++) {
+                    if (this.exercise.set[i].completed != true) {
+                        allApproved = false;
+                        break;
+                    }
                 }
-            }
-            if (allApproved)  {
-                set.completed = true
-                this.$emit('send-rep', { set : set, exerciseId : exerciseId}) 
-                if (index == this.exercise.set.length - 1) {
-                    this.contracted = true
-                    this.allApproved = true
+                if (allApproved )  {
+                    set.completed = true;
+                    this.$emit('send-rep', { set : set, exerciseId : exerciseId});
+                    if (index == this.exercise.set.length - 1) {
+                        this.contracted = true;
+                        this.allApproved = true;
+                    }
                 }
             }
         },
-        repPicker(index, set){
-            this.emitter.emit('picker', {
+        repPicker(index : number, set : IRepetition){
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('picker', {
                 number : set.repetitions, 
                 unit : "reps", 
                 steps : 1
-            } )
-            this.emitter.on('picker-completed', (data) => {
-                this.onCompleteReps(data, index)
-                this.emitter.off('picker-completed')
-            })
+            });
+            emitter.on('picker-completed', (data : any) => {
+                this.onCompleteReps(data, index);
+                emitter.off('picker-completed');
+            });
         },
-        weightPicker(index, set){
-            this.emitter.emit('picker', {
+        weightPicker(index : number, set : IRepetition){
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            emitter.emit('picker', {
                 number : set.weight, 
                 unit : "kg",
                 steps : 2.5
-            }
-            )
-            this.emitter.on('picker-completed', (data) => {
-                this.onCompleteWeight(data, index)
-                this.emitter.off('picker-completed')
-            })
+            });
+            emitter.on('picker-completed', (data : any) => {
+                this.onCompleteWeight(data, index);
+                emitter.off('picker-completed');
+            });
         },
-        handleOption(item){
+        handleOption(item : any){
             /*
                 Handle the option clicked in the HoverMenu component.
             */
-            switch(item) {
-                case this.hovMen[0]:
-                    this.contracted = true;
-                    this.$emit("skipped", {exerciseId : this.exercise.id } )
-                    break;
+            if (this.exercise != undefined) {
+                switch(item) {
+                    case this.hovMen[0]:
+                        this.contracted = true;
+                        this.$emit("skipped", {exerciseId : this.exercise.id });
+                        break;
+                }
             }
         },
         checkAllApproved() {
-            let allApproved = true
-            for (let i = 0; i < this.exercise.set.length - 1; i++) {
-                if (this.exercise.set[i].completed != true) {
-                    allApproved = false 
-                    break;
+            if (this.exercise != undefined) {
+                let allApproved = true;
+                for (let i = 0; i < this.exercise.set.length - 1; i++) {
+                    if (this.exercise.set[i].completed != true) {
+                        allApproved = false ;
+                        break;
+                    }
                 }
+                return allApproved;
             }
-            return allApproved
         },
-        onCompleteWeight(data, index) {
-            let set = this.exercise.set[index]
-            set.weight = data
-            this.$emit('change-set', {
-                newSet : set,
-                index : index,
-                exerciseId : this.exercise.id
-            })
+        onCompleteWeight(data : number, index : number) {
+            if (this.exercise != undefined) {
+                let set = this.exercise.set[index];
+                set.weight = data;
+                this.$emit('change-set', {
+                    newSet : set,
+                    index : index,
+                    exerciseId : this.exercise.id
+                });
+            }
         },
-        onCompleteReps(data, index) {
-            let set = this.exercise.set[index]
-            set.repetitions = data
-            this.$emit('change-set', {
-                newSet : set,
-                index : index,
-                exerciseId : this.exercise.id
-            })
+        onCompleteReps(data : number, index : number) {
+            if (this.exercise != undefined) {
+                let set = this.exercise.set[index];
+                set.repetitions = data;
+                this.$emit('change-set', {
+                    newSet : set,
+                    index : index,
+                    exerciseId : this.exercise.id
+                });
+            }
         }
     },
     updated() {
-        this.contracted = !this.expand
-        this.allApproved = this.checkAllApproved()
+        this.contracted = !this.expand;
+        let allApp : boolean | undefined  = this.checkAllApproved();
+        if ( allApp != undefined) {
+            this.allApproved = allApp;
+        }
     },
     mounted() {
 
     }
-}
+});
 </script>
 
 
