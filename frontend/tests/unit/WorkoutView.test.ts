@@ -1,4 +1,5 @@
 import 'jest';
+import expect from 'expect';
 import { mount } from '@vue/test-utils';
 import { testData, current} from '../testData';
 
@@ -60,12 +61,11 @@ describe("Comptents for the rendered header", () => {
     });
 });
 
-
-describe('WorkoutView starting and removing a workout', () => {
+describe('WorkoutView starting and removing a workout', async () => {
 
     test('workoutProcess component exists on setting "workingOut"', async () => {
-        await wrapper.setData({workingOut : true});
 
+        await wrapper.setData({workingOut : true});
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
     });
 

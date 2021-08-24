@@ -8,7 +8,7 @@
                         edited.
                     -->
                     <div class="flex-container">
-                        <h3 id="title">{{ workout.title }}</h3>
+                        <h2 id="title">{{ workout.title }}</h2>
                         <span class="icon-container" @click.stop="displayHover = true">
                             <fa class="dots" icon="ellipsis-v"></fa>
                         </span>
@@ -259,7 +259,7 @@ export default defineComponent ({
     margin-bottom: 1rem;
     width: 100%;
 
-    h3 {
+    h2 {
       font-weight: 700; 
       text-align: left;
       font-size: 1.3rem;
