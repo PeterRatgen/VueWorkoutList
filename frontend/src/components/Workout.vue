@@ -19,7 +19,7 @@
                             @click.stop
                         />
                     </div>
-                        <p class="description "> 
+                        <p class="description" data-test="description-paragraph"> 
                             <span v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
                                 {{ nameWithComma(index) }}
                             </span>

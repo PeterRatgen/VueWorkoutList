@@ -31,13 +31,17 @@ describe('Test for existence of components', () => {
     });
 
     test('Workout description showing', () => {
-        expect(wrapper.find('p').exists()).toBeTruthy();
+        expect(wrapper.find('[data-test="description-paragraph"]')
+               .exists())
+               .toBeTruthy();
     });
 
     test('Workout description removed', async () => {
         await wrapper.setData({ contracted : false });
 
-        expect(wrapper.find('p').exists()).toBeTruthy();
+        expect(wrapper.find('[data-test="description-paragraph"]')
+               .exists())
+               .toBeFalsy();
     });
 
     test('Exercise component showing', async () => {
