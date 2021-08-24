@@ -5,6 +5,8 @@ import { workout } from '../testData';
 
 import Workout from '../../src/components/Workout.vue';
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
+import InputField from '../../src/components/input_field/InputField.vue';
+import NewExercise from '../../src/components/NewExercise.vue';
 
 import mitt from 'mitt';
 
@@ -25,7 +27,7 @@ const wrapper = mount(Workout, {
     }
 });
 
-describe('Test for existence of components', () => {
+describe('Testing the contracted card', () => {
     test('Exercise component not showing', async () => {
         expect(wrapper.findComponent(ExerciseItem).exists()).toBeFalsy();
     });
@@ -36,6 +38,16 @@ describe('Test for existence of components', () => {
                .toBeTruthy();
     });
 
+
+    test('Contents of description summary', async () => {
+        let desc = wrapper.find('[data-test="description-paragraph"]');
+        let html = "Armstrækkere, Squats, Pull-ups";
+        expect(desc.text()).toBe(html);
+    });
+});
+
+
+describe('Contents of expanding the workout card', () => {
     test('Workout description removed', async () => {
         await wrapper.setData({ contracted : false });
 
@@ -44,7 +56,19 @@ describe('Test for existence of components', () => {
                .toBeFalsy();
     });
 
-    test('Exercise component showing', async () => {
+    test('InputField component showing', () => {
+        expect(wrapper.findComponent(InputField).exists()).toBeTruthy();
+    });
+
+    test('Exercise component showing', () => {
         expect(wrapper.findComponent(ExerciseItem).exists()).toBeTruthy();
+    });
+
+    test('Divider before NewExercise ', () => {
+        expect(wrapper.find('[class="divder"]').exists()).toBeTruthy();
+    });
+
+    test('NewExercise component', () => {
+        expect(wrapper.findComponent(NewExercise).exists()).toBeTruthy();
     });
 });
