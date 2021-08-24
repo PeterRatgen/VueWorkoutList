@@ -21,7 +21,6 @@ export default defineComponent ({
     },
     mounted() {
         let title_input = this.$refs.titleInput;
-        console.log("Setting fontsize " + this.fontSize);
         title_input.style.fontSize = this.fontSize;
         title_input.style.fontWeight = this.fontWeight;
         title_input.value = this.initialValue;

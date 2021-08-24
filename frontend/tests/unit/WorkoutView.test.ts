@@ -1,7 +1,6 @@
 import 'jest';
-import expect from 'expect';
 import { mount } from '@vue/test-utils';
-import { testData, current, token } from '../testData';
+import { testData, workout, token } from '../testData';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 
@@ -23,7 +22,7 @@ const wrapper = mount(WorkoutView, {
     data () {
         return {
             workouts : testData,
-            currentWorkout : current,
+            currentWorkout : workout,
             token : token
         };
     },
@@ -33,6 +32,24 @@ const wrapper = mount(WorkoutView, {
         },
         stubs : ['fa']
     }
+});
+
+describe('For login token', () => {
+    test('User login token exists', async () => {
+        expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
+    });
+
+    test('Workout data exists', () => {
+        expect(typeof wrapper.vm.$data.workouts).toBe("object");
+    });
+
+    test('Workout has correct size', () => {
+        expect(wrapper.vm.$data.workouts.length).toBe(3);
+    });
+
+    test('CurrentWorkout data exists', () => {
+        expect(typeof wrapper.vm.$data.currentWorkout).toBe("object");
+    });
 });
 
 describe('Test for existence of components', () => {
@@ -53,18 +70,8 @@ describe('Test for existence of components', () => {
     });
 });
 
-describe("Comptents for the rendered header", () => {
-    test('contents of header', () => {
-        let domWrapper = wrapper.find('h1');
-        expect(domWrapper.text()).toEqual("Hej, Peter");
-    });
-});
 
 describe('WorkoutView starting and removing a workout', () => {
-
-    test('user login token exists', async () => {
-        expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
-    });
 
     test('workoutProcess component exists on setting "workingOut"', async () => {
 

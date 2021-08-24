@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h1>Hej, {{ header.split(" ")[0] }} </h1>
-    <div class="accent-divider"></div>
-  </div>
+    <div>
+        <h1>Hej, {{ header.split(" ")[0] }} </h1>
+        <div class="accent-divider"></div>
+    </div>
 </template>
 
 
@@ -11,12 +11,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'HelloHeader',
-  props : ["header"],
-  data () {
-    return {
-      headerName: ''
-    };
-  }
+  props : ["header"]
 });
 
 </script>
