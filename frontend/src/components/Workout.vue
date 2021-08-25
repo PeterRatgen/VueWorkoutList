@@ -111,8 +111,7 @@ export default defineComponent ({
             /*
                 Is the dots menu hovering right now?
             */
-            displayHover: false,
-            editingTitle : false
+            displayHover: false
         };
     },
     methods : {
@@ -137,26 +136,12 @@ export default defineComponent ({
                 this.contracted = true;
             }
         },
-        renameTitle(){
-            /*
-                Rename the title of the workout.
-            */
-            if (!this.editingTitle) {
-                let title_element = this.$el.querySelector("#title");
-                title_element.style.display = "none";
-                this.editingTitle = true;
-                this.displayHover = false;
-            }
-        },
         handleOption(item : string){
             /*
                 Handle the option clicked in the HoverMenu component.
             */
             const emitter : any = inject("emitter"); // Inject `emitter`
             switch(item) {
-                case "Change title":
-                    this.renameTitle();
-                    break;
                 case "Delete workout":
                     emitter.emit('delete-workout', this.workout._id);
                     break;
@@ -168,11 +153,6 @@ export default defineComponent ({
             */
             const emitter : any = inject("emitter"); // Inject `emitter`
             emitter.emit('title-change', { workoutId : this.workout._id, title : title});
-            if (this.editingTitle) {
-                let title_element = this.$el.querySelector("#title");
-                title_element.style.display = "block";
-                this.editingTitle = false;
-            }
         },
         editEnd(){
             /*
