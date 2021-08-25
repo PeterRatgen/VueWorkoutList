@@ -153,10 +153,6 @@ export default defineComponent ({
             */
             const emitter : any = inject("emitter"); // Inject `emitter`
             emitter.emit('title-change', { workoutId : this.workout._id, title : title});
-                let title_element = this.$el.querySelector("#title");
-                title_element.style.display = "block";
-                this.editingTitle = false;
-            }
         },
         editEnd(){
             /*
