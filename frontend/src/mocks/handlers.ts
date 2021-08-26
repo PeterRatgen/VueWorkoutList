@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { token, testData } from '../../tests/testData';
 
 export const handlers = [
-    rest.post('http://locahost:3001/login', (req, res, ctx) => {
+    rest.post('/login', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json(
@@ -11,7 +11,7 @@ export const handlers = [
             )
         );
     }),
-    rest.post('http://localhost:3001/workout_history', (req, res, ctx) => {
+    rest.post('/workout_history', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json(
@@ -19,7 +19,7 @@ export const handlers = [
             )
         );
     }),
-    rest.get('http://localhost:3001/workouts', (req, res, ctx) => {
+    rest.get('/workouts', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json(

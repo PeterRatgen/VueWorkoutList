@@ -14,10 +14,12 @@ import mitt from 'mitt';
 import { server } from '../../src/mocks/server';
 
 
+// NEW
 beforeAll(() => {
   server.listen();
 });
 
+// NEW
 afterAll(() => {
   server.close();
 });
