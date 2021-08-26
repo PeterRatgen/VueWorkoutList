@@ -89,17 +89,17 @@ export default defineComponent({
                 Token retured by the endpoint
             */
             try {
-                let response = await axios.post(process.env.VUE_APP_API_URL + 'login',
+                let response = await axios.post(process.env.VUE_APP_API_URL + '/login',
                 {
                     email : this.email, 
                     password: this.password
                 });
+                console.log("response");
                 console.log(response);
                 let token = response.data;
                 this.jwtData = JSON.parse(atob(token.split('.')[1]));
                 this.token = token;
                 localStorage.setItem("user", token);
-                console.log(localStorage.getItem("user"));
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -124,6 +124,7 @@ export default defineComponent({
             */
             try {
                 const response = await this.apiInstance.get('/workout');
+                console.log(response);
                 this.workouts = JSON.parse(response.request.response);
             } catch (err) {
                 console.trace();
@@ -360,6 +361,7 @@ export default defineComponent({
     },
     created() {
         this.init();
+        console.log(this.token);
     },
     mounted() {
         /**

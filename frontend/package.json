@@ -42,6 +42,9 @@
     "setupFiles": [
       "<rootDir>/tests/setup-tests.ts"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup-tests-after-env.ts"
+    ],
     "transform": {
       "^.+\\.js$": "babel-jest",
       "^.+\\.vue$": "vue-jest",
@@ -62,6 +65,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^7.0.0-0",
+    "flush-promises": "^1.0.2",
     "msw": "^0.35.0",
     "prettier": "^2.3.2",
     "sass-loader": "^10.2.0",
