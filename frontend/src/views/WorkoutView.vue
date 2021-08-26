@@ -94,7 +94,6 @@ export default defineComponent({
                     email : this.email, 
                     password: this.password
                 });
-                console.log("Data response");
                 console.log(response.data);
                 let token = response.data;
                 this.jwtData = JSON.parse(atob(token.split('.')[1]));

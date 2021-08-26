@@ -10,6 +10,7 @@ import NewExercise from '../../src/components/NewExercise.vue';
 
 import mitt from 'mitt';
 
+
 const wrapper = mount(Workout, {
     props : {
         workout : workout

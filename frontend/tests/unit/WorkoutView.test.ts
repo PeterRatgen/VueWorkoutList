@@ -1,9 +1,8 @@
 import 'jest';
 import { mount } from '@vue/test-utils';
-import { testData, workout, token } from '../testData';
+import { workout } from '../testData';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
-
 import Workout from '../../src/components/Workout.vue';
 import HelloHeader from '../../src/components/HelloHeader.vue';
 import AddWorkout from '../../src/components/AddWorkout.vue';
@@ -12,18 +11,28 @@ import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
 
+import { server } from '../../src/mocks/server';
+
+
+beforeAll(() => {
+  server.listen();
+});
+
+afterAll(() => {
+  server.close();
+});
+
 describe('WorkoutView', () => {
     it('has-data', () => {
         expect(typeof WorkoutView.data).toBe('function');
     });
 });
 
+
 const wrapper = mount(WorkoutView, {
     data () {
         return {
-            workouts : testData,
-            currentWorkout : workout,
-            token : token
+            currentWorkout : workout
         };
     },
     global: {
@@ -71,9 +80,11 @@ describe('Test for existence of components', () => {
 });
 
 
-describe('WorkoutView starting and removing a workout', () => {
+describe('When starting a workout', () => {
 
-    test('workoutProcess component exists on setting "workingOut"', async () => {
+    it('should display workoutProcess component', async () => {
+
+
 
         await wrapper.setData({workingOut : true});
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
