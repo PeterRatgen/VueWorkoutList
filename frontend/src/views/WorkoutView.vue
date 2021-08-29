@@ -27,6 +27,8 @@
 <script lang="ts">
 import { inject, defineComponent } from 'vue';
 
+import flushPromises from 'flush-promises';
+
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
 import Workout from '../components/Workout.vue';
@@ -79,9 +81,19 @@ export default defineComponent({
             /*
                 Init script, initializes the website with data, and API instances.
             */
-            await this.login();
-            this.apiInstance = this.createInstance();  
-            await this.getWorkout();
+            this.login().then(() => {
+                this.$nextTick(() => {
+                    console.log("token " + this.token);
+                    let instance = this.createInstance();
+                    this.apiInstance = instance;
+                    this.$nextTick(() => {
+                        console.log(this.apiInstance);
+                        this.getWorkout();
+                        console.log(process.env.VUE_APP_API_URL);
+                    });
+                });
+            });
+
         },
         async login() {
             /**
@@ -94,12 +106,9 @@ export default defineComponent({
                     email : this.email, 
                     password: this.password
                 });
-                console.log("response");
-                console.log(response);
-                let token = response.data;
-                this.jwtData = JSON.parse(atob(token.split('.')[1]));
-                this.token = token;
-                localStorage.setItem("user", token);
+                this.token = response.data;
+                this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
+                localStorage.setItem("user", this.token);
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -110,13 +119,13 @@ export default defineComponent({
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            const token = localStorage.getItem("user");
-            return axios.create({
+            let instance : AxiosInstance = axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
                 headers : {
-                    Authorization : `Bearer ${token}`
+                    Authorization : `Bearer ${this.token}`
                 }
             });
+            return instance;
         },
         async getWorkout() {
             /**
@@ -125,7 +134,7 @@ export default defineComponent({
             try {
                 const response = await this.apiInstance.get('/workout');
                 console.log(response);
-                this.workouts = JSON.parse(response.request.response);
+                this.workouts = JSON.parse(response.data);
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -357,13 +366,8 @@ export default defineComponent({
             this.workingOut = true;
         }
     },
-    computed : {
-    },
-    created() {
-        this.init();
-        console.log(this.token);
-    },
     mounted() {
+        this.init();
         /**
             Receiving emitted events
         */

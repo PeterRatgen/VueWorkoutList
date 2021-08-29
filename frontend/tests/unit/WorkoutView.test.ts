@@ -1,7 +1,5 @@
 import 'jest';
-import { mount } from '@vue/test-utils';
-import { workout } from '../testData';
-import flushPromises from 'flush-promises';
+import { mount, flushPromises } from '@vue/test-utils';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 import Workout from '../../src/components/Workout.vue';
@@ -11,6 +9,39 @@ import BeginWorkout from '../../src/components/BeginWorkout.vue';
 import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
+import 'jest';
+import axios from 'axios';
+jest.mock('axios');
+
+
+import { token, testData, workout} from '../../tests/testData';
+
+const baseURL = "http://localhost:3001";
+
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+mockedAxios.get.mockImplementation((url) => {
+    switch (url) {
+        case baseURL + '/workout':
+            return Promise.resolve({ data : testData});
+        default: 
+            return Promise.reject("no url");
+    }
+});
+
+mockedAxios.post.mockImplementation((url) => {
+    switch (url) {
+        case baseURL + '/login':
+            return Promise.resolve({ data : token });
+        case baseURL + '/workout_history':
+            return Promise.resolve({data : "sadkfji23rjl"});
+        default: 
+            return Promise.reject("no url");
+    }
+});
+
+mockedAxios.create = jest.fn();
+mockedAxios.create.mockReturnValue(mockedAxios);
 
 
 describe('WorkoutView', () => {
