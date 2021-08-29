@@ -1,8 +1,8 @@
-import { rest, setupWorker } from 'msw';
+import { rest } from 'msw';
 
 import { token, testData } from '../../tests/testData';
 
-const baseURL = "http://localhost:3001";
+const baseURL = "http://localhost";
 
 export const handlers = [
     rest.post(baseURL + '/login', (req, res, ctx) => {

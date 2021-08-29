@@ -1,7 +1,6 @@
 import 'jest';
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import { workout } from '../testData';
-import flushPromises from 'flush-promises';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
 import Workout from '../../src/components/Workout.vue';
@@ -11,6 +10,7 @@ import BeginWorkout from '../../src/components/BeginWorkout.vue';
 import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
+
 
 
 describe('WorkoutView', () => {
@@ -39,7 +39,10 @@ describe('For login token', () => {
      
     test('User login token exists', async () => {
         await flushPromises();
-        expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
+        wrapper.vm.$nextTick(() => {
+            console.log(wrapper.vm.$data);
+            expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
+        });
     });
 
     test('Workout data exists', async () => {

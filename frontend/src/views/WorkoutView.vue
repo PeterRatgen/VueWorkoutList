@@ -94,8 +94,6 @@ export default defineComponent({
                     email : this.email, 
                     password: this.password
                 });
-                console.log("response");
-                console.log(response);
                 let token = response.data;
                 this.jwtData = JSON.parse(atob(token.split('.')[1]));
                 this.token = token;
@@ -110,7 +108,7 @@ export default defineComponent({
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            const token = localStorage.getItem("user");
+            const token = this.token;
             return axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
                 headers : {
@@ -124,7 +122,6 @@ export default defineComponent({
             */
             try {
                 const response = await this.apiInstance.get('/workout');
-                console.log(response);
                 this.workouts = JSON.parse(response.request.response);
             } catch (err) {
                 console.trace();
