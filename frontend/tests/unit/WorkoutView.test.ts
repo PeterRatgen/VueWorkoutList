@@ -1,5 +1,6 @@
 import 'jest';
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount, flushPromises, VueWrapper } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import { workout } from '../testData';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
@@ -11,16 +12,7 @@ import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
 
-
-
-describe('WorkoutView', () => {
-    it('has-data', () => {
-        expect(typeof WorkoutView.data).toBe('function');
-    });
-});
-
-
-const wrapper = mount(WorkoutView, {
+const wrapper : VueWrapper<any> = mount(WorkoutView, {
     data () {
         return {
             currentWorkout : workout
@@ -34,19 +26,25 @@ const wrapper = mount(WorkoutView, {
     }
 });
 
+describe('WorkoutView', () => {
+    it('has-data', () => {
+        expect(typeof WorkoutView.data).toBe('function');
+    });
+});
+
 
 describe('For login token', () => {
      
     test('User login token exists', async () => {
+        console.log(wrapper.vm.$data);
         await flushPromises();
+        console.log(wrapper.vm.$data);
         wrapper.vm.$nextTick(() => {
-            console.log(wrapper.vm.$data);
             expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
         });
     });
 
     test('Workout data exists', async () => {
-        await flushPromises();
         expect(typeof wrapper.vm.$data.workouts).toBe("object");
     });
 
@@ -56,24 +54,21 @@ describe('For login token', () => {
     });
 
     test('CurrentWorkout data exists', async () => {
-        await flushPromises();
         expect(typeof wrapper.vm.$data.currentWorkout).toBe("object");
     });
 });
 
 describe('Test for existence of components', () => {
     test('Header component', async () => {
-        await flushPromises();
         expect(wrapper.getComponent(HelloHeader)).toBeTruthy();
     });
 
     test('Workout component', async () => {
-    await flushPromises();
+        await nextTick();
         expect(wrapper.getComponent(Workout)).toBeTruthy();
     });
 
     test('AddWorkout component', async () => {
-    await flushPromises();
         expect(wrapper.getComponent(AddWorkout)).toBeTruthy();
     });
 
@@ -86,14 +81,12 @@ describe('Test for existence of components', () => {
 describe('When starting a workout', () => {
 
     it('should display workoutProcess component', async () => {
-        await flushPromises();
 
         await wrapper.setData({workingOut : true});
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
     });
 
     test('workoutProcess component removed on setting "workingOut" to false', async () => {
-        await flushPromises();
 
         await wrapper.setData({workingOut : false});
 

@@ -75,14 +75,6 @@ export default defineComponent({
         };
     },
     methods: {
-        async init() {
-            /*
-                Init script, initializes the website with data, and API instances.
-            */
-            await this.login();
-            this.apiInstance = this.createInstance();  
-            await this.getWorkout();
-        },
         async login() {
             /**
                 Logs in with the stored credentials, and stores the JSON Web
@@ -354,16 +346,13 @@ export default defineComponent({
             this.workingOut = true;
         }
     },
-    computed : {
-    },
-    created() {
-        this.init();
-        console.log(this.token);
-    },
-    mounted() {
+    async mounted() {
         /**
             Receiving emitted events
         */
+        await this.login();
+        this.apiInstance = this.createInstance();  
+        await this.getWorkout();
         const emitter : any = inject("emitter"); // Inject `emitter`
 
         emitter.on('new-repetition', this.addRepetition);
@@ -386,8 +375,7 @@ export default defineComponent({
         } else if (this.token) {
             this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
         }
-    },
-    updated() {
+        return Promise.resolve("mounted complete");
     }
 });
 </script>
