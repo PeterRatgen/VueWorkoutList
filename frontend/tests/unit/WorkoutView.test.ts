@@ -11,9 +11,7 @@ import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
 
-
 import { workout} from '../../tests/testData';
-
 
 const wrapper : VueWrapper<any> = mount(WorkoutView, {
     data () {

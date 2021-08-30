@@ -1,5 +1,5 @@
 <template>
-    <div class="workout-item" @click.stop="expand_card">
+    <div class="workout-item"  @click.stop="expand_card">
         <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
             <transition name="fade" mode="out-in">
                 <div v-if="contracted">

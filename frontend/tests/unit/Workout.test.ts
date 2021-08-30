@@ -49,13 +49,16 @@ describe('Testing the contracted card', () => {
 
 
 describe('Contents of expanding the workout card', () => {
-    test('Workout description removed', async () => {
-        await wrapper.setData({ contracted : false });
+    it('workout description removed on click of card', async () => {
+
+        let workoutItem = wrapper.find('[class="workout-item"]');
+        await workoutItem.trigger('click');
 
         expect(wrapper.find('[data-test="description-paragraph"]')
                .exists())
                .toBeFalsy();
     });
+
 
     test('InputField component showing', () => {
         expect(wrapper.findComponent(InputField).exists()).toBeTruthy();
