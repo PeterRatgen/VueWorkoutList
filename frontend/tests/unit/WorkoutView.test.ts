@@ -26,6 +26,8 @@ const wrapper : VueWrapper<any> = mount(WorkoutView, {
     }
 });
 
+
+
 describe('WorkoutView', () => {
     it('has-data', () => {
         expect(typeof WorkoutView.data).toBe('function');
@@ -36,12 +38,10 @@ describe('WorkoutView', () => {
 describe('For login token', () => {
      
     test('User login token exists', async () => {
-        console.log(wrapper.vm.$data);
+        //We need to await for two promises.
         await flushPromises();
-        console.log(wrapper.vm.$data);
-        wrapper.vm.$nextTick(() => {
-            expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
-        });
+        await flushPromises();
+        expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
     });
 
     test('Workout data exists', async () => {
@@ -49,7 +49,6 @@ describe('For login token', () => {
     });
 
     test('Workout has correct size', async () => {
-        await flushPromises();
         expect(wrapper.vm.$data.workouts.length).toBe(3);
     });
 
@@ -64,6 +63,7 @@ describe('Test for existence of components', () => {
     });
 
     test('Workout component', async () => {
+        //We need to make sure the DOM has updated.
         await nextTick();
         expect(wrapper.getComponent(Workout)).toBeTruthy();
     });

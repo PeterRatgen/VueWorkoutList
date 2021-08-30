@@ -90,6 +90,7 @@ export default defineComponent({
                 this.jwtData = JSON.parse(atob(token.split('.')[1]));
                 this.token = token;
                 localStorage.setItem("user", token);
+                return token;
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -115,6 +116,7 @@ export default defineComponent({
             try {
                 const response = await this.apiInstance.get('/workout');
                 this.workouts = JSON.parse(response.request.response);
+                return 0;
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -350,9 +352,10 @@ export default defineComponent({
         /**
             Receiving emitted events
         */
-        await this.login();
+        this.login();
         this.apiInstance = this.createInstance();  
-        await this.getWorkout();
+        this.getWorkout();
+
         const emitter : any = inject("emitter"); // Inject `emitter`
 
         emitter.on('new-repetition', this.addRepetition);
