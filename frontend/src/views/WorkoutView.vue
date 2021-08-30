@@ -101,13 +101,13 @@ export default defineComponent({
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            const token = this.token;
-            return axios.create({
+            let instance : AxiosInstance = axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
                 headers : {
-                    Authorization : `Bearer ${token}`
+                    Authorization : `Bearer ${this.token}`
                 }
             });
+            return instance;
         },
         async getWorkout() {
             /**
@@ -348,7 +348,7 @@ export default defineComponent({
             this.workingOut = true;
         }
     },
-    async mounted() {
+    mounted() {
         /**
             Receiving emitted events
         */
