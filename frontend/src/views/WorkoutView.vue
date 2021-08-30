@@ -27,8 +27,6 @@
 <script lang="ts">
 import { inject, defineComponent } from 'vue';
 
-import flushPromises from 'flush-promises';
-
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
 import Workout from '../components/Workout.vue';
@@ -77,24 +75,6 @@ export default defineComponent({
         };
     },
     methods: {
-        async init() {
-            /*
-                Init script, initializes the website with data, and API instances.
-            */
-            this.login().then(() => {
-                this.$nextTick(() => {
-                    console.log("token " + this.token);
-                    let instance = this.createInstance();
-                    this.apiInstance = instance;
-                    this.$nextTick(() => {
-                        console.log(this.apiInstance);
-                        this.getWorkout();
-                        console.log(process.env.VUE_APP_API_URL);
-                    });
-                });
-            });
-
-        },
         async login() {
             /**
                 Logs in with the stored credentials, and stores the JSON Web
@@ -106,9 +86,11 @@ export default defineComponent({
                     email : this.email, 
                     password: this.password
                 });
-                this.token = response.data;
-                this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
-                localStorage.setItem("user", this.token);
+                let token = response.data;
+                this.jwtData = JSON.parse(atob(token.split('.')[1]));
+                this.token = token;
+                localStorage.setItem("user", token);
+                return token;
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -133,8 +115,8 @@ export default defineComponent({
             */
             try {
                 const response = await this.apiInstance.get('/workout');
-                console.log(response);
-                this.workouts = JSON.parse(response.data);
+                this.workouts = JSON.parse(response.request.response);
+                return 0;
             } catch (err) {
                 console.trace();
                 console.log(err);
@@ -367,10 +349,13 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.init();
         /**
             Receiving emitted events
         */
+        this.login();
+        this.apiInstance = this.createInstance();  
+        this.getWorkout();
+
         const emitter : any = inject("emitter"); // Inject `emitter`
 
         emitter.on('new-repetition', this.addRepetition);
@@ -393,8 +378,7 @@ export default defineComponent({
         } else if (this.token) {
             this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
         }
-    },
-    updated() {
+        return Promise.resolve("mounted complete");
     }
 });
 </script>
