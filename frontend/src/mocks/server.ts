@@ -1,6 +1,5 @@
-let http = require('http');
+import { setupServer } from 'msw/node'
+import { handlers } from './handlers'
 
-http.createServer(function(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('Hello World!');
-})(8080);
+// Setup requests interception using the given handlers.
+export const server = setupServer(...handlers)
