@@ -100,10 +100,11 @@ export default defineComponent({
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
+            const token = localStorage.getItem("user");
             let instance : AxiosInstance = axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
                 headers : {
-                    Authorization : `Bearer ${this.token}`
+                    Authorization : `Bearer ${token}`
                 }
             });
             return instance;

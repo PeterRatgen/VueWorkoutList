@@ -1,5 +1,5 @@
 <template>
-    <div class="hover-menu" v-bind:class="{ hoverVisible : display }" >
+    <div class="hover-menu"  >
         <div class="hover-menu-content" v-for="item in items" :key="item">
             <div @click.stop="emitOption(item)" class="menu-item">
                 <p>{{ item }}</p>
@@ -16,7 +16,7 @@ import { defineComponent} from 'vue';
 
 export default defineComponent ({
     name: "HoverMenu",
-    props: [ "menuItems", "display" ], 
+    props: [ "menuItems"], 
     emits: [ "option" , "minimize"],
     data () {
         return {

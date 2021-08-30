@@ -29,23 +29,32 @@ const wrapper = mount(Workout, {
 });
 
 describe('Testing the contracted card', () => {
-    test('Exercise component not showing', async () => {
+    it('has not got the exercise component showing', async () => {
         expect(wrapper.findComponent(ExerciseItem).exists()).toBeFalsy();
     });
 
-    test('Workout description showing', () => {
+    it('has header containing the correct title', async () =>{
+        const header = wrapper.find('#title');
+
+        expect(header.exists()).toBeTruthy();
+
+        expect(header.text()).toBe(workout.title);
+    });
+
+    it('has workout description showing', () => {
         expect(wrapper.find('[data-test="description-paragraph"]')
                .exists())
                .toBeTruthy();
     });
 
 
-    test('Contents of description summary', async () => {
+    it('has correct contents of description summary', async () => {
         let desc = wrapper.find('[data-test="description-paragraph"]');
         let html = "Armstrækkere, Squats, Pull-ups";
         expect(desc.text()).toBe(html);
     });
 });
+
 
 
 describe('Contents of expanding the workout card', () => {
@@ -74,5 +83,36 @@ describe('Contents of expanding the workout card', () => {
 
     test('NewExercise component', () => {
         expect(wrapper.findComponent(NewExercise).exists()).toBeTruthy();
+    });
+
+
+});
+
+import HoverMenu from '../../src/components/HoverMenu/HoverMenu.vue';
+
+describe('Dots on workout card', () => {
+    const dotBtn = wrapper.find('[class="icon-container"]');
+    it('can show HoverMenu on click', async () => {
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeFalsy();
+        await dotBtn.trigger('click');
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeTruthy();
+    });
+
+    it('removes HoverMenu on second click on dots', async() => {
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeTruthy();
+    
+        await dotBtn.trigger('click');
+
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeFalsy();
+    });
+
+    it('removes HoverMenu on clicking outside', async() => {
+        await dotBtn.trigger('click');
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeTruthy();
+    
+        const outside = wrapper.find('[class="outside"]');
+        await outside.trigger('click');
+
+        expect(wrapper.findComponent(HoverMenu).exists()).toBeFalsy();
     });
 });

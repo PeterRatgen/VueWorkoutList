@@ -1,5 +1,5 @@
 <template>
-    <div class="workout-item"  @click.stop="expand_card">
+    <div class="workout-item"  @click.stop="contracted = !contracted">
         <div v-bind:class="{ outside : displayHover }"  @click.stop="displayHover = false"></div>
             <transition name="fade" mode="out-in">
                 <div v-if="contracted">
@@ -9,15 +9,16 @@
                     -->
                     <div class="flex-container">
                         <h2 id="title">{{ workout.title }}</h2>
-                        <span class="icon-container" @click.stop="displayHover = true">
+                        <span class="icon-container" @click.stop="displayHover = !displayHover">
                             <fa class="dots" icon="ellipsis-v"></fa>
                         </span>
-                        <HoverMenu 
-                            :menuItems=hovMen 
-                            :display=displayHover  
-                            @option="handleOption"
-                            @click.stop
-                        />
+                        <span v-if="displayHover">
+                            <HoverMenu 
+                                :menuItems=hovMen 
+                                @option="handleOption"
+                                @click.stop
+                            />
+                        </span>
                     </div>
                         <p class="description" data-test="description-paragraph"> 
                             <span v-bind:key="index" v-for="(exercise, index) in workout.exerciseList.slice(0,3)">
@@ -38,15 +39,16 @@
                             v-on:result="submitEdit"
                             @click.stop
                         />
-                    <span class="icon-container" @click.stop="displayHover = true">
+                    <span class="icon-container" @click.stop="displayHover = !displayHover">
                         <fa class="dots" icon="ellipsis-v"></fa>
                     </span>
-                    <HoverMenu 
-                        :menuItems=hovMen 
-                        :display=displayHover  
-                        @option="handleOption"
-                        @click.prevent
-                    />
+                    <span v-if="displayHover">
+                        <HoverMenu 
+                            :menuItems=hovMen 
+                            @option="handleOption"
+                            @click.stop
+                        />
+                    </span>
                 </div>
                 <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
                     <!--
@@ -124,16 +126,6 @@ export default defineComponent ({
                 return `${this.workout.exerciseList[index].name}, `;
             } else {
                 return this.workout.exerciseList[index].name;
-            }
-        },
-        expand_card() {
-            /*
-                Expand the workout card.
-            */
-            if (this.contracted) {
-                this.contracted = false;
-            } else {
-                this.contracted = true;
             }
         },
         handleOption(item : string){
