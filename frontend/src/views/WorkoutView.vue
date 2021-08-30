@@ -36,7 +36,6 @@ import axios, {AxiosInstance} from 'axios';
 
 import { IWorkout, IExercise, IRepetition } from '../types';
 
-
 export default defineComponent({
     /**
         View of the workouts.
