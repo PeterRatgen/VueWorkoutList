@@ -27,11 +27,11 @@
                 
             </div>
             <div v-else>
-                <span v-if="repItem.weight > 0"> 
-                    {{ repItem.weight }} kg x {{ repItem.repetitions }}
+                <span v-if="repItem.weight > 0"  > 
+                    <p data-test="no-edit-weight">{{ repItem.weight }} kg x {{ repItem.repetitions }}</p>
                 </span>
-                <span v-else>
-                    {{ repItem.repetitions }} reps
+                <span v-else  >
+                    <p data-test="no-edit-rep" >{{ repItem.repetitions }} reps</p>
                 </span> 
             </div>
             </transition>
