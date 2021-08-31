@@ -7,4 +7,4 @@ export let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTBlNjQ
 
 export let exercise = JSON.parse('{"name":"Armstrækkere","set":[{"repetitions":12,"weight":0,"id":"610d7f243efd2997fa3b8cb4"},{"repetitions":12,"weight":0,"id":"610d7f243efd2997fa3b8cb5"},{"repetitions":12,"weight":0,"id":"610d7f243efd2997fa3b8cb6"}],"id":"610d7f243efd2997fa3b8cb3"}');
 
-export let repetition = JSON.parse('{"repetitions":12,"weight":0,"id":"610d7f243efd2997fa3b8cb5"}');
+export let repetition = JSON.parse('{"repetitions":12,"weight":10,"id":"610d7f243efd2997fa3b8cb5"}');
