@@ -36,7 +36,6 @@ describe('Testing the contracted card', () => {
         const header = wrapper.find('#title');
 
         expect(header.exists()).toBeTruthy();
-
         expect(header.text()).toBe(workout.title);
     });
 
@@ -83,8 +82,6 @@ describe('Contents of expanding the workout card', () => {
     test('NewExercise component', () => {
         expect(wrapper.findComponent(NewExercise).exists()).toBeTruthy();
     });
-
-
 });
 
 import HoverMenu from '../../src/components/HoverMenu/HoverMenu.vue';
