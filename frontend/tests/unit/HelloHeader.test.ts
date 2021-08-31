@@ -1,9 +1,9 @@
 import 'jest';
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import HelloHeader from '../../src/components/HelloHeader.vue';
 
-const wrapper = mount(HelloHeader, {
+const wrapper = shallowMount(HelloHeader, {
     props : {
         header : "Peter Heilbo Ratgen"
     }

@@ -1,5 +1,5 @@
 import 'jest';
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import { workout } from '../testData';
 
@@ -10,8 +10,7 @@ import NewExercise from '../../src/components/NewExercise.vue';
 
 import mitt from 'mitt';
 
-
-const wrapper = mount(Workout, {
+const wrapper = shallowMount(Workout, {
     props : {
         workout : workout
     },

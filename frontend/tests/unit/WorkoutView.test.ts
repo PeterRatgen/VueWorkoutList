@@ -1,5 +1,5 @@
 import 'jest';
-import { mount, flushPromises, VueWrapper } from '@vue/test-utils';
+import { shallowMount, flushPromises, VueWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
 
 import WorkoutView from '../../src/views/WorkoutView.vue';
@@ -13,7 +13,7 @@ import mitt from 'mitt';
 
 import { workout} from '../../tests/testData';
 
-const wrapper : VueWrapper<any> = mount(WorkoutView, {
+const wrapper : VueWrapper<any> = shallowMount(WorkoutView, {
     data () {
         return {
             currentWorkout : workout
@@ -82,13 +82,11 @@ describe('Test for existence of components', () => {
 describe('When starting a workout', () => {
 
     it('should display workoutProcess component', async () => {
-
         await wrapper.setData({workingOut : true});
         expect(wrapper.getComponent(WorkoutProcess)).toBeTruthy();
     });
 
     test('workoutProcess component removed on setting "workingOut" to false', async () => {
-
         await wrapper.setData({workingOut : false});
 
         let errorWrapper = wrapper.findComponent(WorkoutProcess);
