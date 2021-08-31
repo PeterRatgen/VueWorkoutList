@@ -80,7 +80,7 @@ import HoverMenu from "./HoverMenu/HoverMenu.vue";
 import InputField from "./input_field/InputField.vue";
 import NewExercise from "./NewExercise.vue";
 
-import { IWorkout } from '../types';
+import { IWorkout, IRepetition } from '../types';
 
 export default defineComponent ({
     /**
@@ -88,6 +88,105 @@ export default defineComponent ({
         existing workout, though the child components.
     */
     name: "Workout",
+    emits : {
+        ['delete-workout'] : (data : {
+            workoutId : string  }) => {
+            if (data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length");
+            }
+            return true;
+        },
+        ['title-change'] : ( data : {
+            workoutId : string,
+            title : string
+        }) => {
+            if (data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length");
+            }
+            if (data.title.length < 1) {
+                new Error("Title is not long enough");
+            }
+            return true;
+        },
+        ['new-repetition'] : ( data : {
+            workoutId : string,
+            exerciseId : string,
+        }) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            if(data.exerciseId.length != 24) {
+                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
+            }
+            return true;
+        },
+        ['completed-rep-edit'] : (data : {
+            repItem : IRepetition,
+            exerciseId : string,
+            workoutId : string
+        }) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            if(data.exerciseId.length != 24) {
+                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
+            }
+            return true;
+        },
+        ['exercise-name-change'] :  (data : {
+            workoutId : string,
+            exerciseId : string,
+            name: string
+        }) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            if(data.exerciseId.length != 24) {
+                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
+            }
+            if(data.name.length < 0) {
+                new Error("Name has wrong length, the length was " + data.name.length);
+            }
+            return true;
+        },
+        ['delete-exercise'] : ( data : {
+                workoutId : string,
+                exerciseId : string,
+            }
+        ) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            if(data.exerciseId.length != 24) {
+                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
+            }
+            return true;
+        },
+        ['delete-rep'] : (data : {
+            workoutId : string,
+            exerciseId : string,
+            repId : string
+        }) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            if(data.exerciseId.length != 24) {
+                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
+            }
+            if(data.repId.length != 24) {
+                new Error("RepId has wrong length, the length was " + data.repId.length);
+            }
+            return true;
+        },
+        ['add-exercise'] : ( data : {
+            workoutId : string,
+        }) => {
+            if(data.workoutId.length != 24) {
+                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
+            }
+            return true;
+        }
+    },
     props: {
         /*
             The workout to be displayed in this component
@@ -132,10 +231,9 @@ export default defineComponent ({
             /*
                 Handle the option clicked in the HoverMenu component.
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
             switch(item) {
                 case "Delete workout":
-                    emitter.emit('delete-workout', this.workout._id);
+                    this.$emit('delete-workout', { workoutId : this.workout._id });
                     break;
             }
         },
@@ -143,8 +241,7 @@ export default defineComponent ({
             /*
                 Submit upon ending the editing of the title of the workout.
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('title-change', { workoutId : this.workout._id, title : title});
+            this.$emit('title-change', { workoutId : this.workout._id, title : title});
         },
         editEnd(){
             /*
@@ -157,15 +254,13 @@ export default defineComponent ({
             /*
                 @data contains the exerciseId of where to add a repetition
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
             data.workoutId = this.workout._id;
-            emitter.emit('new-repetition', data);
+            this.$emit('new-repetition', data);
         },
         changeRep(data : any) {
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('completed-rep-edit', 
+            this.$emit('completed-rep-edit', 
                 {
-                    repItem : data.repItem, 
+                    repItem : data.repItem,
                     exerciseId: data.exerciseId,
                     workoutId: this.workout._id
                 }
@@ -175,33 +270,29 @@ export default defineComponent ({
             /*
                 Change the name of an exercise
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
             data.workoutId = this.workout._id;
-            emitter.emit('exercise-name-change', data);
+            this.$emit('exercise-name-change', data);
         },
         deleteExercise(data : any) {
             /*
                 Delete and exercise from the workout
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
             data.workoutId = this.workout._id;
-            emitter.emit('delete-exercise', data);
+            this.$emit('delete-exercise', data);
         },
         deleteRep(data : any) {
             /*
                 Delete a repetition of a an exercise of a workout.
                 @data contains the id of the exercise being deleted.
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
             data.workoutId = this.workout._id;
-            emitter.emit('delete-rep', data);
+            this.$emit('delete-rep', data);
         },
         addExercise() {
             /*
                 @data contains the id of the exercise being added.
             */
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('add-exercise', {workoutId : this.workout._id} );
+            this.$emit('add-exercise', {workoutId : this.workout._id} );
         }
     },
     created() {
