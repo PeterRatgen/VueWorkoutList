@@ -1,6 +1,10 @@
 <template> 
     <div class="divder"></div>
-    <div class="name" @mouseover="displayEdit" @mouseleave="isHover = false" @click.stop="expand_card">
+    <div class="name" 
+        @mouseover="displayEdit" 
+        @mouseleave="isHover = false"
+        @click.stop="contracted = !contracted"
+    >
         <transition name="fade" mode="out-in">
             <div class="description" v-if="contracted">
                 <!--
@@ -9,9 +13,13 @@
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
                     <span >  
-                            <span class="icon-container" @click.stop="deleteExercise" >
+                            <span 
+                                class="icon-container"  
+                                @click.stop="deleteExercise" 
+                                v-if="isHover"
+                            >
                                 <fa 
-                                    class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                    class="edit-icon" 
                                     icon="trash-alt" >
                                 </fa> 
                             </span>
@@ -33,7 +41,11 @@
                         @click.stop
                     />
                     <span >  
-                            <span class="icon-container" @click.stop="deleteExercise" >
+                            <span 
+                                class="icon-container" 
+                                @click.stop="deleteExercise" 
+                                v-if="isHover"
+                            >
                                 <fa 
                                     class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
                                     icon="trash-alt" >
@@ -66,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent } from 'vue';
 
 import Repetition from './Repetition.vue';
 import InputField from "./input_field/InputField.vue";
@@ -136,18 +148,6 @@ export default defineComponent({
         };
     }, 
     methods : {
-        expand_card() {
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            /*
-                Expands the card of the ExerciseItem
-            */
-            if (this.contracted) {
-                this.contracted = false;
-            } else {
-                this.contracted = true;
-            }
-            emitter.emit('pressed-exerciseItem');
-        },
         titleSubmitEdit(result : string) {
             /*
                 Submit the new title of a workout.
