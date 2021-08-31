@@ -12,7 +12,7 @@
                 -->
                 <div class="item-header">
                     <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
-                    <span >  
+                    <span test-data="set-counter" >  
                             <span 
                                 class="icon-container"  
                                 @click.stop="deleteExercise" 
@@ -40,7 +40,7 @@
                         v-on:result="titleSubmitEdit"
                         @click.stop
                     />
-                    <span>  
+                    <span test-data="set-counter" >  
                         <span 
                             class="icon-container" 
                             @click.stop="deleteExercise" 
