@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
 import Repetition from '../../src/components/Repetition.vue';
-import NewRepetition from '../../src/components/NewRepetition.vue';
+import NewRepetition from '../../src/components/repetitions/NewRepetition.vue';
 import InputField from '../../src/components/input_field/InputField.vue';
 
 import { exercise } from '../testData';
@@ -78,7 +78,7 @@ describe('The expanded Exercise component', () => {
         expect(input.exists()).toBeTruthy();
     });
 
-    test('repetition component', async () => {
+    it('has repetition component', async () => {
         expect(wrapper.getComponent(Repetition)).toBeTruthy();
     });
 
