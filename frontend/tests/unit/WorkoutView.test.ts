@@ -36,34 +36,30 @@ describe('WorkoutView', () => {
 });
 
 
-describe('For login token', () => {
+describe('WorkoutView data', () => {
      
-    test('User login token exists', async () => {
+    test('token exists', async () => {
         //We need to await for two promises.
         await flushPromises();
         await flushPromises();
         expect(wrapper.vm.$data.token.length).toBeGreaterThan(0);
     });
 
-    test('Workout data exists', async () => {
+    test('workouts have correct type', async () => {
         expect(typeof wrapper.vm.$data.workouts).toBe("object");
     });
 
-    test('Workout has correct size', async () => {
+    test('has correct number of workouts', async () => {
         expect(wrapper.vm.$data.workouts.length).toBe(3);
-    });
-
-    test('CurrentWorkout data exists', async () => {
-        expect(typeof wrapper.vm.$data.currentWorkout).toBe("object");
     });
 });
 
-describe('Test for existence of components', () => {
-    test('Header component', async () => {
+describe('WorkoutView contains', () => {
+    test('header component', async () => {
         expect(wrapper.getComponent(HelloHeader)).toBeTruthy();
     });
 
-    test('Workout component', async () => {
+    test('workout component', async () => {
         //We need to make sure the DOM has updated.
         await nextTick();
         expect(wrapper.getComponent(Workout)).toBeTruthy();
