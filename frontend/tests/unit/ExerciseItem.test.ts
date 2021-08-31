@@ -3,6 +3,8 @@ import { shallowMount } from '@vue/test-utils';
 
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
 import Repetition from '../../src/components/Repetition.vue';
+import NewRepetition from '../../src/components/NewRepetition.vue';
+import InputField from '../../src/components/input_field/InputField.vue';
 
 import { exercise } from '../testData';
 import mitt from 'mitt';
@@ -36,6 +38,12 @@ describe('The closed exerciseItem', () => {
         expect(iconContainer.exists()).toBeFalsy();
     });
 
+
+    it('does not have an input field', async () => {
+        const input = wrapper.findComponent(InputField);
+        expect(input.exists()).toBeFalsy();
+    });
+
     it('displays trashcan when hovering', async () => {
         const nameHover =  wrapper.find('[class="name"]');
         await nameHover.trigger('mouseover');
@@ -57,12 +65,25 @@ describe('The closed exerciseItem', () => {
     });
 });
 
-describe('Contain components', () => {
-
-    test('repetition component', async () => {
+describe('The expanded Exercise component', () => {
+    it('expands when clicked upon', async () => {
         const nameHover =  wrapper.find('[class="name"]');
         await nameHover.trigger('click');
 
+        expect(wrapper.vm.$data.contracted).toBeFalsy();
+    });
+
+    it('has an input field', async () => {
+        const input = wrapper.findComponent(InputField);
+        expect(input.exists()).toBeTruthy();
+    });
+
+    test('repetition component', async () => {
         expect(wrapper.getComponent(Repetition)).toBeTruthy();
     });
+
+    it('has the NewRepetition', async() => {
+        expect(wrapper.getComponent(NewRepetition)).toBeTruthy();
+    });
 });
+

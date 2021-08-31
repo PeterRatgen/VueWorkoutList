@@ -40,18 +40,18 @@
                         v-on:result="titleSubmitEdit"
                         @click.stop
                     />
-                    <span >  
-                            <span 
-                                class="icon-container" 
-                                @click.stop="deleteExercise" 
-                                v-if="isHover"
-                            >
-                                <fa 
-                                    class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
-                                    icon="trash-alt" >
-                                </fa> 
-                            </span>
-                            {{ exerciseItem.set.length }} sæt 
+                    <span>  
+                        <span 
+                            class="icon-container" 
+                            @click.stop="deleteExercise" 
+                            v-if="isHover"
+                        >
+                            <fa 
+                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                                icon="trash-alt" >
+                            </fa> 
+                        </span>
+                        {{ exerciseItem.set.length }} sæt 
                     </span>
                 </div>
                 <div class="repetition-container">
