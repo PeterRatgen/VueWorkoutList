@@ -8,7 +8,7 @@
                         v-bind:workout="workout" 
                         @delete-workout="deleteWorkout"
                         @title-change="titleChange"
-                        @new-repetition="newRepetition"
+                        @new-repetition="addRepetition"
                         @completed-rep-edit="changeRep" 
                         @exercise-name-change="changeExerciseName"
                         @delete-exercise="deleteExercise"

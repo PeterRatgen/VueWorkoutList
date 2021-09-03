@@ -10,7 +10,7 @@
                     <span class="icon-container" data-test="weight-minus" @click.stop="dec('weight')">
                         <fa class="icon" icon="minus"  ></fa>
                     </span>
-                    <p data-test="weight-count"> {{ repItem.weight }} kg </p>
+                    <p  > <span data-test="weight-count" > {{ repItem.weight }} </span> kg </p>
                     <span class="icon-container" data-test="weight-plus"  @click.stop="inc('weight')">
                         <fa class="icon" icon="plus"  ></fa>
                     </span>
@@ -19,7 +19,10 @@
                     <span class="icon-container" data-test="rep-minus" @click.stop="dec('reps')">
                         <fa class="icon" icon="minus" ></fa>
                     </span>
-                    <p data-test="rep-count"> {{ repItem.repetitions }} reps </p>
+                    <p> 
+                        <span data-test="rep-count"> {{ repItem.repetitions }} </span> 
+                        reps
+                    </p>
                     <span class="icon-container" data-test="rep-plus" @click.stop="inc('reps')">
                         <fa class="icon" icon="plus" ></fa>
                     </span>
@@ -119,6 +122,7 @@ export default defineComponent({
             /**
                 Decremet the weight or rep.
             */
+            console.log(target);
             switch(target){
                 case "weight":
                     if (this.repItem.weight != 0) {
