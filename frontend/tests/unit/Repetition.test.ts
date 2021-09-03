@@ -48,6 +48,19 @@ describe('Repetition editing', () => {
         expect(editWeight.exists()).toBeTruthy();
     });
 
+    it('can increase weight', async() => {
+        let repCount = wrapper.find('[data-test="weight-count"]');
+        let count : number = parseFloat(repCount.text());
+
+        const minusweight = wrapper.find('[data-test="weight-plus"]');
+        await minusweight.trigger('click');
+
+        repCount = wrapper.find('[data-test="weight-count"]');
+        let countPost  : number = parseFloat(repCount.text());
+        
+        expect(count).toBeLessThan(countPost);
+    });
+
     it('can reduce weight', async() => {
         let repCount = wrapper.find('[data-test="weight-count"]');
         let count : number = parseFloat(repCount.text());
@@ -55,22 +68,11 @@ describe('Repetition editing', () => {
         const minusweight = wrapper.find('[data-test="weight-minus"]');
         await minusweight.trigger('click');
 
+        
         let newRepCount = wrapper.find('[data-test="weight-count"]');
-        let countPost  : number = parseFloat(newRepCount.text());
+        let innerText = newRepCount.text();
+        let countPost  : number = parseFloat(innerText);
         
         expect(count).toBeGreaterThan(countPost);
-    });
-
-    it('can increase weight', async() => {
-        let repCount = wrapper.find('[data-test="weight-count"]');
-        let count : number = parseFloat(repCount.text());
-
-        const minusweight = wrapper.find('[data-test="weight-plug"]');
-        await minusweight.trigger('click');
-
-        repCount = wrapper.find('[data-test="weight-count"]');
-        let countPost  : number = parseFloat(repCount.text());
-        
-        expect(count).toBeLessThan(countPost);
     });
 });
