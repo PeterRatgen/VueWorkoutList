@@ -3,25 +3,25 @@
         @mouseover="isHover = true"
         @mouseleave="isHover = false"
     >
-        <div @click.stop="repetition_click()">
+        <div @click.stop="repetition_click()" data-test="repetition-clicker">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
-                <div class="item"  @mousewheel.prevent="scrolledWeight" > 
-                    <span class="icon-container"  @click.stop="dec('weight')">
-                        <fa class="icon" icon=minus  ></fa>
+                <div class="item" data-test="expanded-weight" @mousewheel.prevent="scrolledWeight" > 
+                    <span class="icon-container" data-test="weight-minus" @click.stop="dec('weight')">
+                        <fa class="icon" icon="minus"  ></fa>
                     </span>
-                    {{ repItem.weight }} kg 
-                    <span class="icon-container"  @click.stop="inc('weight')">
-                        <fa class="icon" icon=plus  ></fa>
+                    <p data-test="weight-count"> {{ repItem.weight }} kg </p>
+                    <span class="icon-container" data-test="weight-plus"  @click.stop="inc('weight')">
+                        <fa class="icon" icon="plus"  ></fa>
                     </span>
                 </div>
                 <div class="item" @mousewheel.prevent="scrolledReps">
-                    <span class="icon-container" @click.stop="dec('reps')">
-                        <fa class="icon" icon=minus  ></fa>
+                    <span class="icon-container" data-test="rep-minus" @click.stop="dec('reps')">
+                        <fa class="icon" icon="minus" ></fa>
                     </span>
-                    {{ repItem.repetitions }} reps
-                    <span class="icon-container" @click.stop="inc('reps')">
-                        <fa class="icon" icon=plus  ></fa>
+                    <p data-test="rep-count"> {{ repItem.repetitions }} reps </p>
+                    <span class="icon-container" data-test="rep-plus" @click.stop="inc('reps')">
+                        <fa class="icon" icon="plus" ></fa>
                     </span>
                 </div> 
                 
@@ -77,7 +77,6 @@ export default defineComponent({
         };
     }, 
     created() : void {
-        const emitter : any = inject("emitter"); // Inject `emitter`
         if (this.repetition != undefined) {
             if (this.repetition.weight) {
                 this.showWeight = true;
@@ -86,6 +85,8 @@ export default defineComponent({
                 this.alignment = 'right';
             }
             this.repItem = this.repetition;
+
+            const emitter : any = inject("emitter"); // Inject `emitter`
             emitter.on('pressed-repetition', () => {
                 this.editing = false;
             });
@@ -132,13 +133,15 @@ export default defineComponent({
             }
         },
         repetition_click(){
-            const emitter : any = inject("emitter"); // Inject `emitter`
             /**
                 What happens when a repetition is clicked.
             */
             let oldEdit = this.editing;
             this.editing = !this.editing;
-            emitter.emit('pressed-repetition');
+            const emitter : any = inject("emitter"); // Inject `emitter`
+            if ( emitter != undefined ) {
+                emitter.emit('pressed-repetition');
+            }
             console.log("Pressed the repetition");
             if (oldEdit == false) {
                 this.editing = true;

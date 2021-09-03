@@ -6,6 +6,14 @@
                 <div v-bind:key="workout" v-for="workout in workouts" >
                     <Workout 
                         v-bind:workout="workout" 
+                        @delete-workout="deleteWorkout"
+                        @title-change="titleChange"
+                        @new-repetition="newRepetition"
+                        @completed-rep-edit="changeRep" 
+                        @exercise-name-change="changeExerciseName"
+                        @delete-exercise="deleteExercise"
+                        @delete-rep="deleteRep"
+                        @add-exercise="addExercise"
                     />
                 </div>
                 <AddWorkout/>
@@ -355,19 +363,6 @@ export default defineComponent({
         this.login();
         this.apiInstance = this.createInstance();  
         this.getWorkout();
-
-        const emitter : any = inject("emitter"); // Inject `emitter`
-
-        emitter.on('new-repetition', this.addRepetition);
-        emitter.on('completed-rep-edit', this.changeRep);
-        emitter.on('submit-new-workout', this.submitWorkout);
-        emitter.on('exercise-name-change', this.changeExerciseName);
-        emitter.on('delete-exercise', this.deleteExercise);
-        emitter.on('add-exercise', this.addExercise);
-        emitter.on('delete-rep', this.deleteRep);
-        emitter.on('title-change', this.titleChange);
-        emitter.on('delete-workout', this.deleteWorkout);
-
 
         /**
             Get the data stored within the jwt token.         

@@ -35,3 +35,42 @@ describe('Repetition when not editing', () => {
         expect(text.text()).toBe("12 reps");
     });
 });
+
+describe('Repetition editing', () => {
+    it('can toggle editing mode', async() => {
+        let editWeight = wrapper.find('[data-test="expanded-weight"]');
+        expect(editWeight.exists()).toBeFalsy();
+        const repContainer = wrapper.find('[data-test="repetition-clicker"]');
+        
+        await repContainer.trigger('click');
+
+        editWeight = wrapper.find('[data-test="expanded-weight"]');
+        expect(editWeight.exists()).toBeTruthy();
+    });
+
+    it('can reduce weight', async() => {
+        let repCount = wrapper.find('[data-test="weight-count"]');
+        let count : number = parseFloat(repCount.text());
+
+        const minusweight = wrapper.find('[data-test="weight-minus"]');
+        await minusweight.trigger('click');
+
+        let newRepCount = wrapper.find('[data-test="weight-count"]');
+        let countPost  : number = parseFloat(newRepCount.text());
+        
+        expect(count).toBeGreaterThan(countPost);
+    });
+
+    it('can increase weight', async() => {
+        let repCount = wrapper.find('[data-test="weight-count"]');
+        let count : number = parseFloat(repCount.text());
+
+        const minusweight = wrapper.find('[data-test="weight-plug"]');
+        await minusweight.trigger('click');
+
+        repCount = wrapper.find('[data-test="weight-count"]');
+        let countPost  : number = parseFloat(repCount.text());
+        
+        expect(count).toBeLessThan(countPost);
+    });
+});
