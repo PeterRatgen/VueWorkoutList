@@ -40,7 +40,7 @@
             </transition>
         </div>
         <div class="trash-container"
-                v-bind:class="{ trashrephover : isHover }"
+                v-if="isHover"
                 @click="deleteRep"
             >
             <fa 
@@ -225,7 +225,7 @@ export default defineComponent({
 }
 
 .trash-container {
-    display: none;
+    display: inline;
     position: absolute;
     right: -8px;
     top: -8px;
@@ -239,10 +239,6 @@ export default defineComponent({
 
 .trash-rep {
     font-size: 0.8rem;
-}
-
-.trashrephover {
-    display: inline;
 }
 
 @media only screen and (max-width: 1350px) {

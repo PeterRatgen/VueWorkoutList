@@ -115,4 +115,34 @@ describe('Repetition editing', () => {
         expect(count).toBeGreaterThan(countPost);
 
     });
+
+    it('can display trash on hover', async () => {
+        const wrap = shallowMount(Repetition, {
+            props : {
+                repetition : repetition 
+            },
+            global: {
+                provide :  {
+                    emitter: mitt()
+                },
+                stubs : ['fa']
+            }
+        });
+
+        let trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeFalsy();
+
+        let repCount = wrap.find('[class="rep-container"]');
+        await repCount.trigger('mouseover');
+
+        
+        trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeTruthy();
+
+        await repCount.trigger('mouseleave');
+
+
+        trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeFalsy();
+    });
 });
