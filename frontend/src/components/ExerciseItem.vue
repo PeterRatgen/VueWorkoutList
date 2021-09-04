@@ -81,7 +81,7 @@
 import { defineComponent } from 'vue';
 
 import Repetition from './Repetition.vue';
-import InputField from "./input_field/InputField.vue";
+import InputField from "./InputField.vue";
 import NewRepetition from "./repetitions/NewRepetition.vue";
 
 import { IExercise, IRepetition } from '../types';

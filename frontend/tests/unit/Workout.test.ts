@@ -5,7 +5,7 @@ import { workout } from '../testData';
 
 import Workout from '../../src/components/Workout.vue';
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
-import InputField from '../../src/components/input_field/InputField.vue';
+import InputField from '../../src/components/InputField.vue';
 import NewExercise from '../../src/components/NewExercise.vue';
 
 import mitt from 'mitt';
@@ -84,7 +84,7 @@ describe('Contents of expanding the workout card', () => {
     });
 });
 
-import HoverMenu from '../../src/components/HoverMenu/HoverMenu.vue';
+import HoverMenu from '../../src/components/HoverMenu.vue';
 
 describe('Dots on workout card', () => {
     const dotBtn = wrapper.find('[class="icon-container"]');

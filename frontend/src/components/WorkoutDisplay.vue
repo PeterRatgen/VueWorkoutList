@@ -70,7 +70,7 @@
 import { defineComponent, inject } from 'vue';
 import {  IRepetition } from '../types';
 
-import HoverMenu from "../components/HoverMenu/HoverMenu.vue";
+import HoverMenu from "../components/HoverMenu.vue";
 
 export default defineComponent ({
     /*
