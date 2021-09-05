@@ -6,6 +6,7 @@ import Repetition from '../../src/components/Repetition.vue';
 import { repetition } from '../testData';
 import mitt from 'mitt';
 
+
 const wrapper = shallowMount(Repetition, {
     props : {
         repetition : repetition 

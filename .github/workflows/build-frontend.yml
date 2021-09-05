@@ -1,11 +1,13 @@
 name: Frontend CI Deployment
 on: 
   push:
+  pull-request:
     branches: 
       - main
     paths:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
+
 jobs:
   Build-Fronted:
     runs-on: self-hosted
