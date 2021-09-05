@@ -9,6 +9,7 @@ import InputField from '../../src/components/InputField.vue';
 import { exercise } from '../testData';
 import mitt from 'mitt';
 
+
 const wrapper = shallowMount(ExerciseItem, {
     data() {
         return {
