@@ -14,10 +14,6 @@ export default defineComponent ({
     emits: {
         ['add-exercise'] : null
     },
-    data() {
-        return {
-        };
-    },
     methods: {
         addExercise() {
             this.$emit('add-exercise');

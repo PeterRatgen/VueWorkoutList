@@ -76,8 +76,8 @@
 import { inject, defineComponent} from 'vue';
 
 import ExerciseItem from "./ExerciseItem.vue";
-import HoverMenu from "./HoverMenu/HoverMenu.vue";
-import InputField from "./input_field/InputField.vue";
+import HoverMenu from "./HoverMenu.vue";
+import InputField from "./InputField.vue";
 import NewExercise from "./NewExercise.vue";
 
 import { IWorkout, IRepetition } from '../types';

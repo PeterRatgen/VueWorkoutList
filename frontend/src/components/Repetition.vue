@@ -6,7 +6,7 @@
         <div @click.stop="repetition_click()" data-test="repetition-clicker">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
-                <div class="item" data-test="expanded-weight" @mousewheel.prevent="scrolledWeight" > 
+                <div class="item" data-test="expanded-weight" @wheel.prevent="scrolledWeight" > 
                     <span class="icon-container" data-test="weight-minus" @click.stop="dec('weight')">
                         <fa class="icon" icon="minus"  ></fa>
                     </span>
@@ -15,7 +15,7 @@
                         <fa class="icon" icon="plus"  ></fa>
                     </span>
                 </div>
-                <div class="item" @mousewheel.prevent="scrolledReps">
+                <div class="item" @wheel.prevent="scrolledReps">
                     <span class="icon-container" data-test="rep-minus" @click.stop="dec('reps')">
                         <fa class="icon" icon="minus" ></fa>
                     </span>
@@ -40,7 +40,7 @@
             </transition>
         </div>
         <div class="trash-container"
-                v-bind:class="{ trashrephover : isHover }"
+                v-if="isHover"
                 @click="deleteRep"
             >
             <fa 
@@ -122,7 +122,6 @@ export default defineComponent({
             /**
                 Decremet the weight or rep.
             */
-            console.log(target);
             switch(target){
                 case "weight":
                     if (this.repItem.weight != 0) {
@@ -146,7 +145,6 @@ export default defineComponent({
             if ( emitter != undefined ) {
                 emitter.emit('pressed-repetition');
             }
-            console.log("Pressed the repetition");
             if (oldEdit == false) {
                 this.editing = true;
             } else {
@@ -227,7 +225,7 @@ export default defineComponent({
 }
 
 .trash-container {
-    display: none;
+    display: inline;
     position: absolute;
     right: -8px;
     top: -8px;
@@ -241,10 +239,6 @@ export default defineComponent({
 
 .trash-rep {
     font-size: 0.8rem;
-}
-
-.trashrephover {
-    display: inline;
 }
 
 @media only screen and (max-width: 1350px) {

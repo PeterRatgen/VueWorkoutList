@@ -75,4 +75,74 @@ describe('Repetition editing', () => {
         
         expect(count).toBeGreaterThan(countPost);
     });
+
+    it('emits an event when editing is done', async() => {
+        const minusweight = wrapper.find('[data-test="weight-plus"]');
+
+        await minusweight.trigger('click');
+        await minusweight.trigger('click');
+        await minusweight.trigger('click');
+        
+        let repCount = wrapper.find('[data-test="weight-count"]');
+        let count : number = parseFloat(repCount.text());
+
+        expect(count).toBe(7.5);
+
+        const repContainer = wrapper.find('[data-test="repetition-clicker"]');
+        await repContainer.trigger('click');
+
+        let editWeight = wrapper.find('[data-test="expanded-weight"]');
+        expect(editWeight.exists()).toBeFalsy();
+        
+        expect(wrapper.emitted()).toHaveProperty("completed-rep-edit");
+    });
+
+
+    it('can increase weight on scrolling', async () => {
+        //we make sure that we are editing  
+        await wrapper.setData({ editing : true });
+        
+        let repCount = wrapper.find('[data-test="weight-count"]');
+        let count : number = parseFloat(repCount.text());
+
+        let editWeight = wrapper.find('[data-test="expanded-weight"]');
+        await editWeight.trigger("wheel");
+
+        let newRepCount = wrapper.find('[data-test="weight-count"]');
+        let innerText = newRepCount.text();
+        let countPost  : number = parseFloat(innerText);
+        
+        expect(count).toBeGreaterThan(countPost);
+
+    });
+
+    it('can display trash on hover', async () => {
+        const wrap = shallowMount(Repetition, {
+            props : {
+                repetition : repetition 
+            },
+            global: {
+                provide :  {
+                    emitter: mitt()
+                },
+                stubs : ['fa']
+            }
+        });
+
+        let trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeFalsy();
+
+        let repCount = wrap.find('[class="rep-container"]');
+        await repCount.trigger('mouseover');
+
+        
+        trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeTruthy();
+
+        await repCount.trigger('mouseleave');
+
+
+        trash = wrap.find('[class="trash-container"]');
+        expect(trash.exists()).toBeFalsy();
+    });
 });

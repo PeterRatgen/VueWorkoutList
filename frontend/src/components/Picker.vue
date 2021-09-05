@@ -1,11 +1,11 @@
 <template>
     <div class="picker" ref="picker">
         <div class="picker-container">
-            <span class="icon-container"  @click.stop="dec()">
+            <span class="icon-container" data-test="decrease" @click.stop="dec()">
                 <fa class="icon" icon="minus"  ></fa>
             </span>
-            {{ data }} {{ unit }}
-            <span class="icon-container"  @click.stop="inc()">
+            <span data-test="data">{{ data }}</span> <span data-test="unit">{{ unit }}</span>
+            <span class="icon-container" data-test="increase" @click.stop="inc()">
                 <fa class="icon" icon="plus"  ></fa>
             </span>
         </div>

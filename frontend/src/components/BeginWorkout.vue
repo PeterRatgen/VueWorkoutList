@@ -14,7 +14,12 @@
                 <h3>Vælg en træning</h3>
                 <div class="workout-title" v-bind:key="workout.id" v-for="workout in workouts" >
                     <div class="divder"></div>
-                    <p @click="workoutPicker(workout)">  {{ workout.title }} </p>
+                    <p 
+                        @click="workoutPicker(workout)"
+                        data-test="workoutTitle"
+                    >  
+                        {{ workout.title }} 
+                    </p>
                 </div>
             </div>
         </div>

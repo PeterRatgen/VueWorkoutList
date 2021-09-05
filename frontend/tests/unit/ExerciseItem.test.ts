@@ -4,10 +4,11 @@ import { shallowMount } from '@vue/test-utils';
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
 import Repetition from '../../src/components/Repetition.vue';
 import NewRepetition from '../../src/components/repetitions/NewRepetition.vue';
-import InputField from '../../src/components/input_field/InputField.vue';
+import InputField from '../../src/components/InputField.vue';
 
 import { exercise } from '../testData';
 import mitt from 'mitt';
+
 
 const wrapper = shallowMount(ExerciseItem, {
     data() {

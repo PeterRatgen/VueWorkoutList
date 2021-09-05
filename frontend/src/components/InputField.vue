@@ -24,8 +24,6 @@ export default defineComponent ({
         title_input.style.fontSize = this.fontSize;
         title_input.style.fontWeight = this.fontWeight;
         title_input.value = this.initialValue;
-    },
-    updated() {
     }
 });
 </script>
