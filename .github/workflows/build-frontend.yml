@@ -6,7 +6,7 @@ on:
     paths:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
-  pull-request:
+  pull_request:
     branches: 
       - main
     paths:

@@ -1,5 +1,6 @@
 <template>
     <div @click="backgroundPressed()"  v-if="!workingOut">
+
         <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
         <div class="todo-block">
             <div class="todo">
