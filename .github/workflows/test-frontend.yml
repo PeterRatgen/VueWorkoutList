@@ -1,7 +1,7 @@
-name: Frontend CI Deployment
+name: Frontend CI testing
 on: 
   push:
-    branches: 
+    branches-ignore: 
       - main
     paths:
       - 'frontend/**.vue'
@@ -24,6 +24,3 @@ jobs:
 
       - name: Run tests
         run: npm run test
-
-      - name: Build frontend
-        run: npm run build
