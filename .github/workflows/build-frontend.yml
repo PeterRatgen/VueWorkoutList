@@ -1,6 +1,11 @@
 name: Frontend CI Deployment
 on: 
   push:
+    branches: 
+      - main
+    paths:
+      - 'frontend/**.vue'
+      - 'frontend/**.ts'
   pull-request:
     branches: 
       - main
@@ -16,7 +21,7 @@ jobs:
         working-directory: /var/www/vuetodo/frontend
     steps:
       - name: Checkout 
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Set up node 
         uses: actions/setup-node@v1
