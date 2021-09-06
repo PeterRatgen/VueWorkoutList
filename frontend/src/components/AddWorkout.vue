@@ -32,7 +32,7 @@ import { IExercise } from '../types';
 export default defineComponent({
     name: "AddTodo",
     components : {
-    WorkoutFormAdder
+        WorkoutFormAdder
     },
     emits: ["new-workout"],
     data() {
