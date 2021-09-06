@@ -7,7 +7,7 @@ on:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
 jobs:
-  Build-Fronted:
+  Test-Frontend:
     runs-on: self-hosted
     defaults:
       run:
