@@ -28,6 +28,9 @@ import { Stat } from '../types';
 
 export default defineComponent({
     name : 'WorkoutResult',
+    emits: {
+        ["ended"] : null
+    },
     data() {
         return {
             statArr : [] as Stat[]
@@ -43,9 +46,6 @@ export default defineComponent({
         removeEndCard() {
             this.$emit("ended");
         },
-        endWorkout () {
-
-        }, 
         stats(data : any) {
             (this.$refs.endCard as any).style.display = "block";
             let timeVal = data.timeOfEnd - data.timeOfStart;

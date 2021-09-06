@@ -20,11 +20,14 @@ jobs:
       run:
         working-directory: /var/www/vuetodo/frontend
     steps:
+      - name: Pull changes
+        run: git pull
+        
       - name: Checkout 
         uses: actions/checkout@v2
 
       - name: Set up node 
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
 
       - name: Pull changes from npm
         run: npm install
