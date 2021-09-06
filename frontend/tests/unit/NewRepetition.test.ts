@@ -1,10 +1,13 @@
 import 'jest';
 import { shallowMount } from '@vue/test-utils';
 
-import NewRepetition from '../../src/components/NewRepetition.vue';
+import NewRepetition from '../../src/components/repetitions/NewRepetition.vue';
 
-const items = ["Slet øvelse", "nyt navn"];
-const wrapper = shallowMount(NewRepetition);
+const wrapper = shallowMount(NewRepetition, {
+    global: {
+        stubs : ['fa']
+    }
+});
 
 describe("NewRepetition component", () => {
     it("emits on click", async () => {
