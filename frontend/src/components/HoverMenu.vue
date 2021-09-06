@@ -25,6 +25,7 @@ export default defineComponent ({
     },
     created() {
         this.items = this.menuItems;
+
     }, 
     methods: {
         emitOption(item : any) {

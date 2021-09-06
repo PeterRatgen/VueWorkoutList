@@ -13,6 +13,7 @@
             :edit="true"
             v-on:new-repetition="newRepetition"
             v-on:exercise-name="changeExerciseName"
+            data-test="exercise-item"
         /> 
     </div>
     <NewExercise v-on:add-exercise ="addExercise" />
