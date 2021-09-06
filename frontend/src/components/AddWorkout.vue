@@ -2,23 +2,29 @@
     <div class="add-card" 
         v-bind:style="{backgroundColor: addCardColor}" 
         @click="createCard">  
-    <transition name="cardTransition" mode="out-in">
-        <div v-if="createButton">
-            <fa class="plus-icon" icon="plus"></fa>
-        </div>
-        <div class="add-form" @click.stop v-else>
-            <WorkoutFormAdder
-                :exerciseList="exerciseList"
-                v-on:add-exercise="addExercise"
-                v-on:new-repetition="newRepetition"
-                v-on:exercise-name="addName"
-                v-on:workout-header="newHeader"
-            />
-            <div class="divider"></div>
-            <button class="button" @click="collapseCard">Cancel</button>
-            <button class="button" @click="submitWorkout">Save</button>
-        </div>
-    </transition>
+        <transition name="cardTransition" mode="out-in">
+            <div v-if="createButton">
+                <fa class="plus-icon" icon="plus"></fa>
+            </div>
+            <div class="add-form" @click.stop v-else>
+                <WorkoutFormAdder
+                    :exerciseList="exerciseList"
+                    v-on:add-exercise="addExercise"
+                    v-on:new-repetition="newRepetition"
+                    v-on:exercise-name="addName"
+                    v-on:workout-header="newHeader"
+                />
+                <div class="divider"></div>
+                <button 
+                    class="button" 
+                    data-test="collapseBtn"
+                    @click="collapseCard">Cancel</button>
+                <button 
+                    class="button"
+                    data-test="saveBtn"
+                    @click="submitWorkout">Save</button>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -34,7 +40,9 @@ export default defineComponent({
     components : {
         WorkoutFormAdder
     },
-    emits: ["new-workout"],
+    emits: {
+        ["new-workout"] : Object
+    },
     data() {
         return {
             title: '',
@@ -92,8 +100,7 @@ export default defineComponent({
         },
         submitWorkout() {
             if (this.title != '' && this.exerciseList != []) {
-                const emitter : any = inject("emitter"); // Inject `emitter`
-                emitter.emit('submit-new-workout', {title : this.title,
+                this.$emit('new-workout', {title : this.title,
                 exerciseList: this.exerciseList});
                 this.title = '';
                 this.exerciseList = [];
