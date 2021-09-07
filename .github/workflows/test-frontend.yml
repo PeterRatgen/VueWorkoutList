@@ -14,7 +14,7 @@ jobs:
         working-directory: /var/www/vuetodo/frontend
     steps:
       - name: Pull changes
-        run: git pull
+        run: git fetch
     
       - name: Checkout 
         uses: actions/checkout@v2
