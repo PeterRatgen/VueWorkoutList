@@ -36,7 +36,7 @@ export default defineComponent ({
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/variables.scss';
+@import '../assets/variables.scss';
 $menu-width: 13rem;
 
 .hover-menu{
