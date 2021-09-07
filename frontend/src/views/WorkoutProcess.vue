@@ -62,8 +62,6 @@ export default defineComponent ({
             apiInstance : {} as AxiosInstance,
         };
     },
-    computed: {
-    },
     methods : {
         calcTime() {
             let startTime = 0;
@@ -179,7 +177,7 @@ export default defineComponent ({
                 }
             }
         },
-        async endWorkout() {
+        endWorkout() {
             localStorage.removeItem('onGoingWorkout');
             //this.work = {};
             this.$emit('back');
@@ -201,7 +199,7 @@ export default defineComponent ({
             });
         },
     },
-    async mounted() {
+    mounted() {
         this.apiInstance = this.createInstance();
         let onGoingWorkout = localStorage.getItem('onGoingWorkout');
         if (onGoingWorkout != undefined) {
