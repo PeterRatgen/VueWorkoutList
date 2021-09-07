@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent } from 'vue';
 import { IRepetition } from '../types';
 
 export default defineComponent({
@@ -62,6 +62,7 @@ export default defineComponent({
             type : Object as () => IRepetition
         }
     },
+    inject : ["emitter"],
     emits :  {
         ["completed-rep-edit"] : ( data : {repItem : IRepetition }) => {
             return data.repItem.weight > 0 && data.repItem.repetitions > 0;
@@ -89,8 +90,7 @@ export default defineComponent({
             }
             this.repItem = this.repetition;
 
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.on('pressed-repetition', () => {
+            (this as any).emitter.on('pressed-repetition', () => {
                 this.editing = false;
             });
 
@@ -141,10 +141,7 @@ export default defineComponent({
             */
             let oldEdit = this.editing;
             this.editing = !this.editing;
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            if ( emitter != undefined ) {
-                emitter.emit('pressed-repetition');
-            }
+            (this as any).emitter.emit('pressed-repetition');
             if (oldEdit == false) {
                 this.editing = true;
             } else {
