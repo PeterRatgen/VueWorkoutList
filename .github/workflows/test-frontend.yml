@@ -6,6 +6,10 @@ on:
     paths:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
+  pull_request:
+    paths:
+      - 'frontend/**.vue'
+      - 'frontend/**.ts'
 jobs:
   Test-Frontend:
     runs-on: self-hosted
@@ -24,6 +28,9 @@ jobs:
 
       - name: Pull changes from npm
         run: npm install
+
+      - name: Lint files
+        run: npm run lint
 
       - name: Run tests
         run: npm run test
