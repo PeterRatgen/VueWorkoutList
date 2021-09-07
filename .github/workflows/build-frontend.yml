@@ -1,12 +1,7 @@
-name: Frontend CI Deployment
+name: Frontend Pipeline Check
 on: 
-  push:
-    branches: 
-      - main
-    paths:
-      - 'frontend/**.vue'
-      - 'frontend/**.ts'
   pull_request:
+    types: [closed]
     branches: 
       - main
     paths:
@@ -16,6 +11,7 @@ on:
 jobs:
   Build-Fronted:
     runs-on: self-hosted
+    if: github.event.pull_request.merged == true
     defaults:
       run:
         working-directory: /var/www/vuetodo/frontend
@@ -31,6 +27,9 @@ jobs:
 
       - name: Pull changes from npm
         run: npm install
+
+      - name: Run lint
+        run: npm run lint
 
       - name: Run tests
         run: npm run test

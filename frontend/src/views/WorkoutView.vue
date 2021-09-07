@@ -17,7 +17,9 @@
                         @add-exercise="addExercise"
                     />
                 </div>
-                <AddWorkout/>
+                <AddWorkout
+                    @new-workout="submitWorkout"
+                />
             </div>
         </div>
         <BeginWorkout 
@@ -374,7 +376,6 @@ export default defineComponent({
         } else if (this.token) {
             this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
         }
-        return Promise.resolve("mounted complete");
     }
 });
 </script>

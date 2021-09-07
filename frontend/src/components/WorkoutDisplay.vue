@@ -27,12 +27,14 @@
                         <div 
                             class="table-content set" 
                             v-bind:class="{tableContentCompleted : set.completed}"
+                            data-test="index"
                         >{{ index + 1 }}
                         </div>
                         <div 
                             class="table-content" 
                             v-bind:class="{tableContentCompleted : set.completed}"
                             @click="weightPicker(index, set)"
+                            data-test="weight"
                         >
                             {{ set.weight }}
                         </div>
@@ -40,6 +42,7 @@
                             class="table-content" 
                             v-bind:class="{tableContentCompleted : set.completed}"
                             @click="repPicker(index, set)"
+                            data-test="repetitions"
                         >
                             {{ set.repetitions }}
                         </div>
@@ -47,19 +50,20 @@
                             class="table-content set" 
                             v-bind:class="{tableContentCompleted : set.completed}"
                             @click="approveWorkout(set, index, exercise.id)"
+                            data-test="checkmark"
                         ><fa icon="check"></fa></div>
                     </div>
                     <div class="divder"></div>
                 </div>
             </div>
             <div class="exercise-summary" v-else-if="exercise.skipped">
-                <p >Øvelse sprunget over.</p>
+                <p data-test="skipped-exercise">Øvelse sprunget over.</p>
             </div>
             <div class="exercise-summary" v-else-if="allApproved">
-                <p >Øvelse færdig, {{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
+                <p data-test="done-exercise">Øvelse færdig, {{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
             </div>
             <div class="exercise-summary" v-else>
-                <p>{{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
+                <p data-test="minimize-exercise">{{ avgWeight }} kg x {{ exercise.set.length }} sæt</p>
             </div>
         </transition>
     </div>
