@@ -17,7 +17,9 @@
                         @add-exercise="addExercise"
                     />
                 </div>
-                <AddWorkout/>
+                <AddWorkout
+                    @new-workout="submitWorkout"
+                />
             </div>
         </div>
         <BeginWorkout 
