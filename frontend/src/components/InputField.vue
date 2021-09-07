@@ -30,7 +30,7 @@ export default defineComponent ({
 
 
 <style lang="scss">
-@import '../../assets/variables.scss';
+@import '../assets/variables.scss';
 
 .title-editor {
     display: inline;
