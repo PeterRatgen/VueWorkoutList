@@ -37,6 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
+import mapActions  from 'vuex';
 
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
@@ -61,56 +62,13 @@ export default defineComponent({
         BeginWorkout,
         WorkoutProcess
     },
-    data() {
-        return {
-            /*
-                The user is the JWT Token, which stores the token of the
-                user, which is logged in.
-            */
-            user: {},
-            headerItem : '',
-            email : 'peter@pratgen.dk',
-            password : 'safe',
-            /*
-                Instance of the axios connection, where queries to the API
-                can be performed.
-            */
-            apiInstance : {} as AxiosInstance,
-            /* 
-               Array of the workouts 
-            */
-            workouts : [],
-            workingOut : false,
-            currentWorkout : {},
-            jwtData : { name : ''},
-            token : ''
-        };
-    },
     setup () {
         provide("emitter", mitt());
     },
     methods: {
-        async login() {
-            /**
-                Logs in with the stored credentials, and stores the JSON Web
-                Token retured by the endpoint
-            */
-            try {
-                let response = await axios.post(process.env.VUE_APP_API_URL + '/login',
-                {
-                    email : this.email, 
-                    password: this.password
-                });
-                let token = response.data;
-                this.jwtData = JSON.parse(atob(token.split('.')[1]));
-                this.token = token;
-                localStorage.setItem("user", token);
-                return token;
-            } catch (err) {
-                console.trace();
-                console.log(err);
-            }
-        },
+        ...mapActions([
+            'login'
+        ])
         createInstance() {
             /**
                 Saves an instance of the API connection, as not to repeat the
