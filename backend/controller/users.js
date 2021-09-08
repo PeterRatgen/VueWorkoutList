@@ -96,7 +96,17 @@ exports.login = async function(req, res) {
         let user = await findUserForEmail(email)
         const token = authentication.generate_token({userId: user["_id"], name : user["name"]})
 
-        res.send(token)
+        const secure = {
+            token : token
+        }
+
+        res.cookie("jwt", JSON.stringify(secure), {
+            maxAge: 86_400_000,
+            secure: true,
+            httpOnly: true
+        })
+
+        res.send()
     }
     else {
         // send status 401 Unauthorized
