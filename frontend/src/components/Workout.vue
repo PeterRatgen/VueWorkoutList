@@ -88,6 +88,13 @@ export default defineComponent ({
         existing workout, though the child components.
     */
     name: "Workout",
+    setup () {
+        const emitter = inject('emitter');
+
+        return {
+            emitter
+        };
+    },
     emits : {
         ['delete-workout'] : (data : {
             workoutId : string  }) => {
@@ -297,8 +304,7 @@ export default defineComponent ({
     },
     created() {
         // Contract the workout, then the background has been pressed.
-        const emitter : any = inject("emitter"); // Inject `emitter`
-        emitter.on('pressed-background', () => {
+        (this as any).emitter.on('pressed-background', () => {
             this.contracted = true;
         });
     }

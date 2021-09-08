@@ -27,6 +27,13 @@ export default defineComponent({
             steps : 1
         };
     },
+    setup () {
+        const emitter = inject('emitter');
+
+        return {
+            emitter
+        };
+    },
     methods : {
         showPicker(data : any) {
             (this.$refs.picker as any).style.display = "block";
@@ -44,14 +51,12 @@ export default defineComponent({
             this.data = this.data - this.steps;
         },
         submit() {
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('picker-completed', this.data);
+            (this as any).emitter.emit('picker-completed', this.data);
             (this.$refs.picker as any).style.display = "none";
         }
     },
     mounted() {
-        const emitter : any = inject("emitter"); // Inject `emitter`
-        emitter.on('picker', this.showPicker);
+        (this as any).emitter.on('picker', this.showPicker);
     }
 });
     

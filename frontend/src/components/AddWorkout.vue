@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import WorkoutFormAdder from './WorkoutFormAdder.vue';
 
 
@@ -43,7 +43,12 @@ export default defineComponent({
     emits: {
         ["new-workout"] : Object
     },
-    inject : ["emitter"],
+    setup () {
+        const emitter = inject('emitter');
+        return {
+            emitter
+        };
+    },
     data() {
         return {
             title: '',
@@ -119,10 +124,10 @@ export default defineComponent({
             this.title = data;
         }
   },
-  mounted() {
+    mounted() {
         (this as any).emitter.on('exercise-name', this.addName);
         (this as any).emitter.on('title-edit-end', this.titleEditEnd);
-  }
+    }
 });
 </script>
 

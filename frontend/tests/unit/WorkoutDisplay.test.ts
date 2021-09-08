@@ -6,12 +6,17 @@ import { workout } from '../testData';
 import WorkoutDisplay from '../../src/components/WorkoutDisplay.vue';
 import HoverMenu from '../../src/components/HoverMenu.vue';
 
+import mitt from 'mitt';
+
 const wrapper = shallowMount(WorkoutDisplay, {
     props : {
         exercise : workout.exerciseList[0]
     },
     global: {
-        stubs : ['fa']
+        stubs : ['fa'],
+        provide :  {
+            emitter: mitt()
+        },
     }
 });
 
