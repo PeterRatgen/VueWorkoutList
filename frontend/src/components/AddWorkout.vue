@@ -45,7 +45,6 @@ export default defineComponent({
     },
     setup () {
         const emitter = inject('emitter');
-
         return {
             emitter
         };

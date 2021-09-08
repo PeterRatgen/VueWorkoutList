@@ -93,6 +93,13 @@ export default defineComponent ({
         ["skipped"] : Object,
         ["change-set"] : Object
     },
+    setup() {
+        const emitter = inject('emitter');
+
+        return {
+            emitter
+        };
+    },
     data() {
         return {
             contracted : false,
@@ -134,27 +141,25 @@ export default defineComponent ({
             }
         },
         repPicker(index : number, set : IRepetition){
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('picker', {
+            (this as any).emitter.emit('picker', {
                 number : set.repetitions, 
                 unit : "reps", 
                 steps : 1
             });
-            emitter.on('picker-completed', (data : any) => {
+            (this as any).emitter.on('picker-completed', (data : any) => {
                 this.onCompleteReps(data, index);
-                emitter.off('picker-completed');
+                (this as any).emitter.off('picker-completed');
             });
         },
         weightPicker(index : number, set : IRepetition){
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('picker', {
+            (this as any).emitter.emit('picker', {
                 number : set.weight, 
                 unit : "kg",
                 steps : 2.5
             });
-            emitter.on('picker-completed', (data : any) => {
+            (this as any).emitter.on('picker-completed', (data : any) => {
                 this.onCompleteWeight(data, index);
-                emitter.off('picker-completed');
+                (this as any).emitter.off('picker-completed');
             });
         },
         handleOption(item : any){

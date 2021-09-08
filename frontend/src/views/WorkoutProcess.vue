@@ -62,6 +62,12 @@ export default defineComponent ({
             apiInstance : {} as AxiosInstance,
         };
     },
+    setup () {
+        const emitter = inject('emitter');
+        return {
+            emitter
+        };
+    },
     methods : {
         calcTime() {
             let startTime = 0;
@@ -164,8 +170,7 @@ export default defineComponent ({
                         historyId: this.work.historyId
                     });
                     this.work.timeOfEnd = res.data;
-                    const emitter : any = inject("emitter"); // Inject `emitter`
-                    emitter.emit('workout-completed', {
+                    (this as any).emitter.emit('workout-completed', {
                         timeOfStart : this.work.timeOfStart,
                         timeOfEnd : res.data,
                         workout : this.work

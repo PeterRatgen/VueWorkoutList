@@ -40,7 +40,7 @@ export default defineComponent ({
 $menu-width: 13rem;
 
 .hover-menu{
-    display: none;
+    display: block;
     position: absolute;
     background-color: lighten($background-color, 5%);
     width: $menu-width;
