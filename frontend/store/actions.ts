@@ -6,11 +6,12 @@ import { SET_LOADING} from './mutation_types';
 
 export const actions = {
     async login ({commit , state } : { commit : Commit, state : State}){
-        commit(SET_LOADING, true);
         /**
             Logs in with the stored credentials, and stores the JSON Web
             Token returned by the endpoint
         */
+        let token = localStorage.getItem("token");
+        commit(SET_LOADING, true);
         try {
             let response = await axios.post(process.env.VUE_APP_API_URL + '/login',
             {
@@ -20,6 +21,7 @@ export const actions = {
             let token = response.data;
             state.token = token;
             commit(SET_LOADING, false);
+            this.createInstance({ state });
         } catch (err) {
             console.trace();
             console.log(err);
@@ -30,11 +32,10 @@ export const actions = {
             Saves an instance of the API connection, as not to repeat the
             Bearer Token
         */
-        const token = localStorage.getItem("user");
         let instance : AxiosInstance = axios.create({
             baseURL: process.env.VUE_APP_API_URL,
             headers : {
-                Authorization : `Bearer ${token}`
+                Authorization : `Bearer ${state.token}`
             }
         });
         state.apiInstance = instance;
