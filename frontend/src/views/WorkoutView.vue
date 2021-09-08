@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
 
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
@@ -44,6 +44,8 @@ import Workout from '../components/Workout.vue';
 import BeginWorkout from '../components/BeginWorkout.vue';
 import WorkoutProcess from '../views/WorkoutProcess.vue';
 import axios, {AxiosInstance} from 'axios';
+
+import mitt from 'mitt';
 
 import { IWorkout, IExercise, IRepetition } from '../types';
 
@@ -84,7 +86,9 @@ export default defineComponent({
             token : ''
         };
     },
-    inject : ["emitter"],
+    setup () {
+        provide("emitter", mitt());
+    },
     methods: {
         async login() {
             /**
