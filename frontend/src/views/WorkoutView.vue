@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
@@ -84,6 +84,7 @@ export default defineComponent({
             token : ''
         };
     },
+    inject : ["emitter"],
     methods: {
         async login() {
             /**
@@ -245,8 +246,7 @@ export default defineComponent({
             }
         },
         backgroundPressed() {
-            const emitter : any = inject("emitter"); // Inject `emitter`
-            emitter.emit('pressed-background');
+            (this as any).emitter.emit('pressed-background');
         },
         async submitWorkout(data : any) {
             /**
