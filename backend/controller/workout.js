@@ -247,3 +247,26 @@ exports.workout_add_repetition = function(req, res) {
         );
     });
 }
+
+exports.workout_controller.workout_delete_exercise = function (req, res){
+    mongo.MongoClient.connect( process.env.DB_URL, function(err,db ) {
+        let dbase = db.db("workout_db")
+        
+        let query = {
+            _id : ObjectId(req.body.workoutId), userId : ObjectId(req.user["userId"])
+        }
+        let newValues = {
+            $pull : {
+                exerciseList : {
+                    id : ObjectId(req.body.exerciseId)
+                }
+            }
+        }
+        
+        dbase.collection("workouts").updateOne(
+            query,
+            newValues
+        )
+    })
+}
+

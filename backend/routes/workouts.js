@@ -20,6 +20,8 @@ router.post("/workout/rename", cors.allow_all, authentication.authenticate_token
  */
 router.post("/workout/update_exercise", cors.allow_all, authentication.authenticate_token, workout_controller.workout_post_update_exercise)
 
+router.delete('/workout/exercise', cors.allow_all, authentication.authenticate_token, workout_controller.workout_delete_exercise )
+
 /*
  * Rename an exercise in the workout.
  */
