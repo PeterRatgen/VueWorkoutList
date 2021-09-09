@@ -10,9 +10,9 @@ app.set("trust proxy", 'loopback');
 
 app.use(bodyParser.json());
 
+
 //Support preflight requests
 app.options('*', cors());
-
 
 const PORT = process.env.PORT;
 

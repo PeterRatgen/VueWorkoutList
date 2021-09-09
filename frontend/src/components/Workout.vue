@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent} from 'vue';
+import { inject, defineComponent, mapActions} from 'vue';
 
 import ExerciseItem from "./ExerciseItem.vue";
 import HoverMenu from "./HoverMenu.vue";
@@ -96,13 +96,6 @@ export default defineComponent ({
         };
     },
     emits : {
-        ['delete-workout'] : (data : {
-            workoutId : string  }) => {
-            if (data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length");
-            }
-            return true;
-        },
         ['title-change'] : ( data : {
             workoutId : string,
             title : string
@@ -223,6 +216,10 @@ export default defineComponent ({
         };
     },
     methods : {
+        ...mapActions([
+            'titleChange',
+            'deleteWorkout'
+        ]),
         /*
             Split the exercises contained in the workouts, and present them as a
             summary.
@@ -240,7 +237,7 @@ export default defineComponent ({
             */
             switch(item) {
                 case "Delete workout":
-                    this.$emit('delete-workout', { workoutId : this.workout._id });
+                    this.$store.dispatch('deleteWorkout', { workoutId : this.workout._id });
                     break;
             }
         },
@@ -248,7 +245,7 @@ export default defineComponent ({
             /*
                 Submit upon ending the editing of the title of the workout.
             */
-            this.$emit('title-change', { workoutId : this.workout._id, title : title});
+            this.$store.dispatch('titleChange', { workoutId : this.workout._id, title : title} );
         },
         editEnd(){
             /*

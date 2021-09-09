@@ -4,7 +4,6 @@ require('dotenv').config();
 const authentication = require('../middleware/authentication.js')
 
 
-
 exports.user_post = function(req, res) {
 	if ('name' in req.body === false) {
 		res.send("Include 'name' attribute")
@@ -106,7 +105,7 @@ exports.login = async function(req, res) {
             httpOnly: true
         })
 
-        res.send()
+        res.send({userId: user["_id"], name : user["name"]})
     }
     else {
         // send status 401 Unauthorized
@@ -117,6 +116,5 @@ exports.login = async function(req, res) {
 
 
 exports.validate_token = function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send("authenticated " + JSON.stringify(req.user));
+    res.send(req.user);
 }

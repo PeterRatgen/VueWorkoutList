@@ -7,20 +7,22 @@ import { AxiosInstance} from 'axios';
 //Store related imports
 import mutations from './mutations';
 import actions from './actions';
+import getters from './getters';
 
 //Creation of the store 
 const store = createStore({
     state : {
         workouts : null,
         currentWorkout : {},
-        token : '',
+        userData : {},
         workingOut : false,
         email : 'peter@pratgen.dk',
         password : 'safe',
         loading : false
     },
     mutations,
-    actions
+    actions,
+    getters
 });
 
 export default store;

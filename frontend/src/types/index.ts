@@ -1,3 +1,8 @@
+export interface repData {
+    workoutId :  string,
+    exerciseId : string,
+    repItem : IRepetition
+}
 
 export interface IRepetition {
     id? : string,

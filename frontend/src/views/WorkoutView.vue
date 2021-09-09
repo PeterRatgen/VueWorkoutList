@@ -7,8 +7,6 @@
                 <div v-bind:key="workout" v-for="workout in workouts" >
                     <Workout 
                         v-bind:workout="workout" 
-                        @delete-workout="deleteWorkout"
-                        @title-change="titleChange"
                         @new-repetition="addRepetition"
                         @completed-rep-edit="changeRep" 
                         @exercise-name-change="changeExerciseName"
@@ -37,18 +35,16 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import mapActions  from 'vuex';
+import { mapActions }  from 'vuex';
 
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
 import Workout from '../components/Workout.vue';
 import BeginWorkout from '../components/BeginWorkout.vue';
 import WorkoutProcess from '../views/WorkoutProcess.vue';
-import axios, {AxiosInstance} from 'axios';
 
 import mitt from 'mitt';
 
-import { IWorkout, IExercise, IRepetition } from '../types';
 
 export default defineComponent({
     /**
@@ -67,117 +63,9 @@ export default defineComponent({
     },
     methods: {
         ...mapActions([
-            'login'
-        ])
-        createInstance() {
-            /**
-                Saves an instance of the API connection, as not to repeat the
-                Bearer Token
-            */
-            const token = localStorage.getItem("user");
-            let instance : AxiosInstance = axios.create({
-                baseURL: process.env.VUE_APP_API_URL,
-                headers : {
-                    Authorization : `Bearer ${token}`
-                }
-            });
-            return instance;
-        },
-        async getWorkout() {
-            /**
-                Retrieve the workouts of the user, and save the response.
-            */
-            try {
-                const response = await this.apiInstance.get('/workout');
-                this.workouts = JSON.parse(response.request.response);
-                return 0;
-            } catch (err) {
-                console.trace();
-                console.log(err);
-            }
-
-        },
-        async titleChange(data : any){
-            /**
-                Change the title of a workout.
-            */
-            try {
-                await this.apiInstance.post('/workout/rename',
-                    {
-                        id : data.workoutId,
-                        title : data.title
-                    }
-                );
-
-            } catch (err) {
-                console.trace();
-                console.log(err);
-            }
-
-            const ele: any = this.workouts.find((element : any) => element._id == data.workoutId);
-            if (ele != undefined) {
-                ele.title = data.title;
-            }
-        },
-        deleteWorkout(workoutId : any) {
-            /**
-                Delete one workout. First on the database, and then in the data
-                stores locally.
-            */
-            try {
-                this.apiInstance.delete('/workout/' + workoutId );
-                let ele: IWorkout | undefined = this.workouts.find(element => element["_id"] == workoutId);
-                if (ele != undefined) {
-                    let index: number = this.workouts.indexOf(ele);
-                    if (index != -1 ) {
-                        this.workouts.splice(index, 1);
-                    }
-                }
-            }
-            catch (err) {
-                console.trace();
-                console.log(err);
-            }
-        },
-        async addRepetition(data : any){
-            /**
-                Add a repetition to a workout. If another repetition exists
-                before it, then add the same weight and reps to the new one.
-                
-                @exerciseId - id of the exercise
-                @workoutId - id of the workout
-            */
-            const workout: IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
-            if (workout != undefined) {
-                const exercise: IExercise | undefined = (workout as IWorkout).exerciseList.find((element: any) => element.id == data.exerciseId);
-                if (exercise != undefined ) {
-                    const length = exercise.set.length;
-                    let weight = 0;
-                    let repetitions = 0; 
-                    if (length > 0) {
-                        weight = exercise.set[length - 1].weight;
-                        repetitions = exercise.set[length - 1].repetitions;
-                    } else {
-                        weight = 0;
-                        repetitions = 0;
-                    }
-                    let repItem : IRepetition = {
-                        weight : weight,
-                        repetitions : repetitions
-                    };
-                    data.repItem = repItem;
-                    try {
-                        let res = await this.apiInstance.put('/workout/add_repetition', data);
-                        repItem.id = res.data;
-                        exercise.set.push(repItem);
-                    }
-                    catch (err) {
-                        console.trace();
-                        console.log(err);
-                    }
-                }
-            }
-        },
+            'login',
+            'getWorkout'
+        ]),
         async changeRep(data : any){
             /**
                 Change a rep of the workout. First in the local data, then in
@@ -326,18 +214,6 @@ export default defineComponent({
             Receiving emitted events
         */
         this.login();
-        this.apiInstance = this.createInstance();  
-        this.getWorkout();
-
-        /**
-            Get the data stored within the jwt token.         
-        */
-        const token = localStorage.getItem("user");
-        if (token != undefined) {
-            this.jwtData = JSON.parse(atob(token.split('.')[1]));
-        } else if (this.token) {
-            this.jwtData = JSON.parse(atob(this.token.split('.')[1]));
-        }
     }
 });
 </script>
