@@ -36,6 +36,9 @@ export const getters = {
             return undefined;
         }
         return undefined;
+    },
+    changeExerciseName( state : State, data : any) {
+
     }
 };
 

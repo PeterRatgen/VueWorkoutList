@@ -2,7 +2,7 @@ import { Commit, Getter } from 'vuex';
 import axios, { AxiosInstance } from 'axios';
 import { State } from './state_type';
 
-import { IWorkout, IExercise, IRepetition, repData } from '../types';
+import { IWorkout, IExercise, IRepetition, repData } from '../src/types/index';
 
 import { SET_LOADING, SET_API_INSTANCE, SET_USER_DATA} from './mutation_types';
 
@@ -152,27 +152,28 @@ export const actions = {
             the database.
         */
         let rep : IRepetition | undefined = getters.getRepetition(state, data);
-        if (rep == undefined) {
-            Promise.reject("No such repetition exists");
-        }
-        rep.repetitions = data.repItem.repetitions;
-        rep.weight = data.repItem.weight;
-        try {
-            let res = await state.apiInstance.put('/workout/rep_change', {
-                workoutId: data["workoutId"],
-                exerciseId : data["exerciseId"],
-                repItem: data["repItem"]
-            });
-            if (res.status == 200) {
-                commit('addRepetition', data);
-                console.log("changed rep to " + JSON.stringify(data["repItem"]));
-            } else {
-                Promise.reject("API call to change rep failed");
+        if (rep != undefined) {
+            rep.repetitions = data.repItem.repetitions;
+            rep.weight = data.repItem.weight;
+            try {
+                let res = await state.apiInstance.put('/workout/rep_change', {
+                    workoutId: data["workoutId"],
+                    exerciseId : data["exerciseId"],
+                    repItem: data["repItem"]
+                });
+                if (res.status == 200) {
+                    commit('addRepetition', data);
+                    console.log("changed rep to " + JSON.stringify(data["repItem"]));
+                } else {
+                    Promise.reject("API call to change rep failed");
+                }
             }
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
+            catch (err) {
+                console.trace();
+                console.log(err);
+            }
+        } else {
+            Promise.reject("No such repetition exists");
         }
     },
     async submitWorkout({getters, commit , state } : 
@@ -189,6 +190,59 @@ export const actions = {
             if (res.status == 200) {
                 data._id =  res.data;
                 commit('addWorkout', data);
+            }
+        }
+        catch (err) {
+            console.trace();
+            console.log(err);
+        }
+    },
+    async changeExerciseName({getters, commit , state } : 
+            {
+                getters : Getter, 
+                commit : Commit, 
+                state : State
+            }, data : {
+                workoutId : string,
+                exerciseId : string,
+                name : string
+            }) {
+        /**
+            Change the name of an exercise.
+        */
+        try {
+            let res = await state.apiInstance.put('/workout/rename_exercise', {
+                id: data["workoutId"],
+                exerciseId : data["exerciseId"],
+                name : data["name"]
+            });
+            if (res.status == 200) {
+                commit('changeExerciseName', data);
+            }
+        }
+        catch (err) {
+            console.trace();
+            console.log(err);
+        }
+    },
+    async deleteExercise({getters, commit , state } : 
+            {
+                getters : Getter, 
+                commit : Commit, 
+                state : State
+            }, data : any) {
+        /*
+            Delete an exercise.
+        */
+        let workout : IWorkout = getters.getWorkout(state, data);
+        
+        try {
+            let res = await state.apiInstance.post('/workout/update_exercise', {
+                id: data["workoutId"],
+                exerciseList : workout["exerciseList"]
+            });
+            if( res.status == 200) {
+                commit('deleteExercise', data)
             }
         }
         catch (err) {

@@ -43,6 +43,25 @@ export const mutations = {
     },
     addWorkout (state : State, data : IWorkout) {
         state.workouts.push(data);
+    },
+    changeExerciseName( state : State, data : any) {
+        let workout : IWorkout | undefined = state.workouts.find((element : IWorkout) => element._id == data.workoutId);
+        if (workout != undefined) {
+            let exercise : IExercise | undefined = workout.exerciseList.find((element : IExercise) => element.id == data.exerciseId);
+            if (exercise != undefined) {
+                exercise.name = data["name"];
+            }
+        }
+    },
+    deleteExercise ( state : State, data : any) {
+        let workout : IWorkout | undefined = state.workouts.find(element => element["_id"] == data["workoutId"]);
+        if ( workout != undefined) {
+            let exercise : IExercise | undefined = workout.exerciseList.find((element : IExercise) => element.id == data.exerciseId);
+            if (exercise != undefined) {
+                let index : number =  (workout as IWorkout).exerciseList.indexOf(exercise);
+                workout.exerciseList.splice(index, 1);
+            }
+        }
     }
 };
 
