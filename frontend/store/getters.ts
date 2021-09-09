@@ -1,7 +1,7 @@
 import { State } from './state_type';
-import { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axis';
 
-import { IWorkout, IExercise, IRepetition } from '../types';
+import { IWorkout, IExercise, IRepetition, repData } from '../src/types/index';
 
 export const getters = {
     getWorkout(state : State, data : {
@@ -21,6 +21,21 @@ export const getters = {
                 return exercise;
             }
         }
+    },
+    getRepetition(state : State, data : repData) : IRepetition | undefined {
+        let workout : IWorkout | undefined = state.workouts.find((element : IWorkout) => element._id == data.workoutId);
+        if (workout != undefined) {
+            let exercise : IExercise | undefined = workout.exerciseList.find((element : IExercise) => element.id == data.exerciseId);
+            if (exercise != undefined) {
+                let rep : IRepetition | undefined = exercise.set.find((element : IRepetition) => element.id == data.repItem.id);
+                if (rep != undefined) {
+                    return rep;
+                }
+                return undefined;
+            }
+            return undefined;
+        }
+        return undefined;
     }
 };
 

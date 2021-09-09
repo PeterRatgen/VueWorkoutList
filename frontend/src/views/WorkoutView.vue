@@ -64,53 +64,13 @@ export default defineComponent({
     methods: {
         ...mapActions([
             'login',
-            'getWorkout'
+            'getWorkout',
+            'addRepetition',
+            'changeRep',
+            'submitWorkout'
         ]),
-        async changeRep(data : any){
-            /**
-                Change a rep of the workout. First in the local data, then in
-                the database.
-            */
-            let workout : IWorkout | undefined = this.workouts.find((element : IWorkout) => element._id == data.workoutId);
-            if (workout != undefined) {
-                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
-                if (exercise != undefined) {
-                    let rep : IRepetition | undefined = exercise.set.find(element => element.id == data.repItem.id);
-                    if (rep != undefined) {
-                        rep.repetitions = data.repItem.repetitions;
-                        rep.weight = data.repItem.weight;
-                        try {
-                            this.apiInstance.put('/workout/rep_change', {
-                                workoutId: data["workoutId"],
-                                exerciseId : data["exerciseId"],
-                                repItem: data["repItem"]
-                            });
-                            console.log("changed rep to " + JSON.stringify(data["repItem"]));
-                        }
-                        catch (err) {
-                            console.trace();
-                            console.log(err);
-                        }
-                    }
-                }
-            }
-        },
         backgroundPressed() {
             (this as any).emitter.emit('pressed-background');
-        },
-        async submitWorkout(data : any) {
-            /**
-                Add a new workout to the user.
-            */
-            try {
-                const res = await this.apiInstance.post('/workout', data);
-                data._id =  res.data;
-                this.workouts.push((data as never));
-            }
-            catch (err) {
-                console.trace();
-                console.log(err);
-            }
         },
         async changeExerciseName(data : any) {
             /**

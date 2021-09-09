@@ -25,6 +25,24 @@ export const mutations = {
                 exercise.set.push(data.repItem);
             }
         }
+    },
+    changeRepetition (state : State, data : repData) {
+        let workout : IWorkout | undefined = state.workouts.find((element : IWorkout) => element._id == data.workoutId);
+        if (workout != undefined) {
+            let exercise : IExercise | undefined = workout.exerciseList.find((element : IExercise) => element.id == data.exerciseId);
+            if (exercise != undefined) {
+                let rep : IRepetition | undefined = exercise.set.find((element : IRepetition) => element.id == data.repItem.id);
+                if (rep != undefined) {
+                    rep = repData.repItem;
+                }
+                return undefined;
+            }
+            return undefined;
+        }
+        return undefined;
+    },
+    addWorkout (state : State, data : IWorkout) {
+        state.workouts.push(data);
     }
 };
 

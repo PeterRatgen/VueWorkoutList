@@ -141,6 +141,61 @@ export const actions = {
             console.log(err);
         }
     },
+    async changeRep ({getters, commit , state } : 
+            {
+                getters : Getter, 
+                commit : Commit, 
+                state : State
+            }, data : repData){
+        /**
+            Change a rep of the workout. First in the local data, then in
+            the database.
+        */
+        let rep : IRepetition | undefined = getters.getRepetition(state, data);
+        if (rep == undefined) {
+            Promise.reject("No such repetition exists");
+        }
+        rep.repetitions = data.repItem.repetitions;
+        rep.weight = data.repItem.weight;
+        try {
+            let res = await state.apiInstance.put('/workout/rep_change', {
+                workoutId: data["workoutId"],
+                exerciseId : data["exerciseId"],
+                repItem: data["repItem"]
+            });
+            if (res.status == 200) {
+                commit('addRepetition', data);
+                console.log("changed rep to " + JSON.stringify(data["repItem"]));
+            } else {
+                Promise.reject("API call to change rep failed");
+            }
+        }
+        catch (err) {
+            console.trace();
+            console.log(err);
+        }
+    },
+    async submitWorkout({getters, commit , state } : 
+            {
+                getters : Getter, 
+                commit : Commit, 
+                state : State
+            }, data :  IWorkout) {
+        /**
+            Add a new workout to the user.
+        */
+        try {
+            const res = await state.apiInstance.post('/workout', data);
+            if (res.status == 200) {
+                data._id =  res.data;
+                commit('addWorkout', data);
+            }
+        }
+        catch (err) {
+            console.trace();
+            console.log(err);
+        }
+    },
 };
 
 export default actions;
