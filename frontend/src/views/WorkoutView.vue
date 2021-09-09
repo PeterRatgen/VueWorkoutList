@@ -72,29 +72,6 @@ export default defineComponent({
         backgroundPressed() {
             (this as any).emitter.emit('pressed-background');
         },
-        async changeExerciseName(data : any) {
-            /**
-                Change the name of an exercise.
-            */
-            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data["workoutId"]);
-            if (workout != undefined) {
-                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element["id"] == data["exerciseId"]);
-                if (exercise != undefined) {
-                    exercise.name = data["name"];
-                    try {
-                        await this.apiInstance.put('/workout/rename_exercise', {
-                            id: data["workoutId"],
-                            exerciseId : data["exerciseId"],
-                            name : data["name"]
-                        });
-                    }
-                    catch (err) {
-                        console.trace();
-                        console.log(err);
-                    }
-                }
-            }
-        },
         deleteExercise(data : any) {
             /*
                 Delete an exercise.
