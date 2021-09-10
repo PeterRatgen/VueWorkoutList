@@ -1,7 +1,7 @@
 import { State } from './state_type';
-import { AxiosInstance } from 'axis';
+import { AxiosInstance } from 'axios';
 
-import { IWorkout, IExercise, IRepetition, repData } from '../src/types/index';
+import { IWorkout, IExercise, IRepetition, repData } from '../types/index';
 
 export const getters = {
     getWorkout(state : State, data : {

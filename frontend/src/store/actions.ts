@@ -1,8 +1,9 @@
 import { Commit, Getter } from 'vuex';
-import axios, { AxiosInstance } from 'axios';
 import { State } from './state_type';
+import user from './../api/user'
+import { AxiosInstance } from 'axios';
 
-import { IWorkout, IExercise, IRepetition, repData } from '../src/types/index';
+import { IWorkout, IExercise, IRepetition, repData } from '../types/index';
 
 import { SET_LOADING, SET_API_INSTANCE, SET_USER_DATA} from './mutation_types';
 
@@ -19,31 +20,23 @@ export const actions = {
             withCredentials: true
         });
         commit(SET_API_INSTANCE, instance);
-        commit(SET_LOADING, true);
-        try {
-            let response = await state.apiInstance.get("/user_validateToken");
-            if (response.status == 200) {
-                commit(SET_USER_DATA, response.data);
-                await this.getWorkout({commit , state });
-            } else if (response.status == 401) {
-                try {
-                    let response = await axios.post(process.env.VUE_APP_API_URL + '/login',
-                    {
-                        email : state.email, 
-                        password: state.password
-                    });
-                    commit(SET_USER_DATA, response.data);
-                    await this.getWorkout({commit , state });
-                    commit(SET_LOADING, false);
-                } catch (err) {
-                    console.trace();
-                    console.log(err);
-                }
+
+        user.validateToken(instance).then((status : {
+            validated : boolean
+            payload? : string
+        }) => {
+            if (status.validated) {
+                this.getWorkout({commit , state });
+            } else {
+                user.login(instance, {
+                    email : state.email,
+                    password : state.password
+                }).then(() => {
+                })
             }
-        } catch (err) {
-            console.trace();
-            console.log(err);
-        }
+        })
+
+        commit(SET_LOADING, true);
     },
     async getWorkout({commit , state } : { commit : Commit, state : State}) {
         /**
@@ -242,7 +235,7 @@ export const actions = {
                 exerciseList : workout["exerciseList"]
             });
             if( res.status == 200) {
-                commit('deleteExercise', data)
+                commit('deleteExercise', data);
             }
         }
         catch (err) {
