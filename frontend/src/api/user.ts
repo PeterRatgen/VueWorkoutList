@@ -1,16 +1,21 @@
 import { AxiosInstance } from 'axios';
 
-export async function validateToken(apiInstance : AxiosInstance) {
+interface valiDate {
+    validated : boolean
+}
+
+export async function validateToken(apiInstance : AxiosInstance) : Promise<valiDate | undefined> {
         try {
             let response = await apiInstance.get("/user_validateToken");
             if (response.status == 200) {
-                Promise.resolve({ validated : true});
+                return { validated : true};
             } else if (response.status == 401) {
-                Promise.resolve({ validated : false });
+                return { validated : false };
             }
         } catch (err) {
             console.trace();
             console.log(err);
+            new Error("Something went wrong with the API Call");
         }
 }
 

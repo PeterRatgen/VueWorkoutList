@@ -265,8 +265,89 @@ exports.workout_controller.workout_delete_exercise = function (req, res){
         
         dbase.collection("workouts").updateOne(
             query,
-            newValues
+            newValues,
+            function(err, result){
+                if (err) throw err;
+                db.close();
+                res.send();
+            }
         )
     })
 }
 
+exports.workout_controller_delete_repetition = function(req,res ) {
+    mongo.MongoClient.connect( process.env.DB_URL, function(err,db ) {
+        let dbase = db.db("workout_db")
+        
+        let query = {
+            _id : ObjectId(req.body.workoutId), userId : ObjectId(req.user["userId"])
+        }
+        let newValues = {
+            $pull : {
+                "exerciseList.$[el].set" : { id : ObjectId(req.body.repetitionId) } 
+            }
+        }
+        let options = {
+            arrayFilters : [
+                { 
+                    "el.id" : ObjectId(req.body.exerciseId)
+                }, 
+                {
+                    "rep.id" : ObjectId(req.body.repetitionId)
+                }
+            ]
+        }
+        
+        dbase.collection("workouts").updateOne(
+            query,
+            newValues,
+            options,
+            function(err, result){
+                if (err) throw err;
+                db.close();
+                res.send();
+            }
+        )
+    })
+}
+exports.workout_change_reps = function(req, res) {
+    console.log("Changing repetitions.")
+    let body = req.body
+    mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
+        if (err) throw err;
+        let dbase = db.db("workout_db");
+        let query = { _id: ObjectId(req.body.workoutId), userId: ObjectId(req.user["userId"])}
+        let newValues = {
+            $set : { 
+                "exerciseList.$[el].set.$[rep].weight" : body.repItem.weight,
+                "exerciseList.$[el].set.$[rep].repetitions" : body.repItem.repetitions
+            }
+        }
+        let options = { 
+            arrayFilters : [
+                { 
+                    "el.id" : ObjectId(body.exerciseId)
+                }, 
+                {
+                    "rep.id" : ObjectId(body.repItem.id)
+                }
+            ]
+        }     
+        dbase.collection("workouts").updateOne(
+            query, 
+            newValues, 
+            options,
+            function(err, result) {
+                if (err) throw err;
+                db.close();
+                if (result.modifiedCount == 0) {
+                    res.send("Completed successfully, none modified. Found " + result.matchedCount + " documents.")
+                    console.log("none modified")
+                } else {
+                    res.send("Result modified")
+                    console.log("modified")
+                }
+            }
+        );
+    });
+}

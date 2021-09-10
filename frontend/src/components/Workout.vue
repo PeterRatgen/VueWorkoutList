@@ -50,17 +50,13 @@
                         />
                     </span>
                 </div>
-                <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
+                <div v-bind:key="exercise" v-for="(index, exercise) in workout.exerciseList">
                     <!--
                         List all the exercises contained in the workout.
                     -->
                     <ExerciseItem 
+                        :workoutId="workout._id"
                         :exerciseItem="exercise"
-                        v-on:new-repetition="newRepetition"
-                        v-on:completed-rep-edit="changeRep"
-                        v-on:exercise-name="changeExerciseName"
-                        v-on:delete-exercise="deleteExercise"
-                        v-on:delete-rep="deleteRep"
                     /> 
                 </div>
                 <div class="divder"></div>
@@ -74,13 +70,14 @@
 
 <script lang="ts">
 import { inject, defineComponent, mapActions} from 'vue';
+import { mapActions }  from 'vuex';
 
 import ExerciseItem from "./ExerciseItem.vue";
 import HoverMenu from "./HoverMenu.vue";
 import InputField from "./InputField.vue";
 import NewExercise from "./NewExercise.vue";
 
-import { IWorkout, IRepetition } from '../types';
+import { IWorkout } from '../types';
 
 export default defineComponent ({
     /**
@@ -94,98 +91,6 @@ export default defineComponent ({
         return {
             emitter
         };
-    },
-    emits : {
-        ['title-change'] : ( data : {
-            workoutId : string,
-            title : string
-        }) => {
-            if (data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length");
-            }
-            if (data.title.length < 1) {
-                new Error("Title is not long enough");
-            }
-            return true;
-        },
-        ['new-repetition'] : ( data : {
-            workoutId : string,
-            exerciseId : string,
-        }) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            if(data.exerciseId.length != 24) {
-                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
-            }
-            return true;
-        },
-        ['completed-rep-edit'] : (data : {
-            repItem : IRepetition,
-            exerciseId : string,
-            workoutId : string
-        }) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            if(data.exerciseId.length != 24) {
-                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
-            }
-            return true;
-        },
-        ['exercise-name-change'] :  (data : {
-            workoutId : string,
-            exerciseId : string,
-            name: string
-        }) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            if(data.exerciseId.length != 24) {
-                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
-            }
-            if(data.name.length < 0) {
-                new Error("Name has wrong length, the length was " + data.name.length);
-            }
-            return true;
-        },
-        ['delete-exercise'] : ( data : {
-                workoutId : string,
-                exerciseId : string,
-            }
-        ) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            if(data.exerciseId.length != 24) {
-                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
-            }
-            return true;
-        },
-        ['delete-rep'] : (data : {
-            workoutId : string,
-            exerciseId : string,
-            repId : string
-        }) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            if(data.exerciseId.length != 24) {
-                new Error("ExerciseId has wrong length, the length was " + data.exerciseId.length);
-            }
-            if(data.repId.length != 24) {
-                new Error("RepId has wrong length, the length was " + data.repId.length);
-            }
-            return true;
-        },
-        ['add-exercise'] : ( data : {
-            workoutId : string,
-        }) => {
-            if(data.workoutId.length != 24) {
-                new Error("WorkoutId has wrong length, the length was " + data.workoutId.length);
-            }
-            return true;
-        }
     },
     props: {
         /*
@@ -218,7 +123,8 @@ export default defineComponent ({
     methods : {
         ...mapActions([
             'titleChange',
-            'deleteWorkout'
+            'deleteWorkout',
+            'addRepetition'
         ]),
         /*
             Split the exercises contained in the workouts, and present them as a
@@ -237,7 +143,7 @@ export default defineComponent ({
             */
             switch(item) {
                 case "Delete workout":
-                    this.$store.dispatch('deleteWorkout', { workoutId : this.workout._id });
+                    this.deleteWorkout({ workoutId : this.workout._id });
                     break;
             }
         },
@@ -245,7 +151,7 @@ export default defineComponent ({
             /*
                 Submit upon ending the editing of the title of the workout.
             */
-            this.$store.dispatch('titleChange', { workoutId : this.workout._id, title : title} );
+            this.titleChange({ workoutId : this.workout._id, title : title});
         },
         editEnd(){
             /*
@@ -254,49 +160,11 @@ export default defineComponent ({
             let title_element = this.$el.querySelector("#title");
             title_element.style.display = "block";
         },
-        newRepetition(data : any ){
-            /*
-                @data contains the exerciseId of where to add a repetition
-            */
-            data.workoutId = this.workout._id;
-            this.$emit('new-repetition', data);
-        },
-        changeRep(data : any) {
-            this.$emit('completed-rep-edit', 
-                {
-                    repItem : data.repItem,
-                    exerciseId: data.exerciseId,
-                    workoutId: this.workout._id
-                }
-            );
-        },
-        changeExerciseName(data : any) {
-            /*
-                Change the name of an exercise
-            */
-            data.workoutId = this.workout._id;
-            this.$emit('exercise-name-change', data);
-        },
-        deleteExercise(data : any) {
-            /*
-                Delete and exercise from the workout
-            */
-            data.workoutId = this.workout._id;
-            this.$emit('delete-exercise', data);
-        },
-        deleteRep(data : any) {
-            /*
-                Delete a repetition of a an exercise of a workout.
-                @data contains the id of the exercise being deleted.
-            */
-            data.workoutId = this.workout._id;
-            this.$emit('delete-rep', data);
-        },
         addExercise() {
             /*
                 @data contains the id of the exercise being added.
             */
-            this.$emit('add-exercise', {workoutId : this.workout._id} );
+            this.addExercise( {workoutId : this.workout._id} );
         }
     },
     created() {

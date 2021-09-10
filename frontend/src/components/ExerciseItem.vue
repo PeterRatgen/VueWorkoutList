@@ -60,6 +60,8 @@
                     -->
                     <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
+                            :workoutId="workoutId"
+                            :exerciseId="exercise.id"
                             v-bind:repetition="rep"
                             v-bind:index="index"
                             v-on:delete-rep="deleteRep"
@@ -85,6 +87,7 @@ import InputField from "./InputField.vue";
 import NewRepetition from "./repetitions/NewRepetition.vue";
 
 import { IExercise, IRepetition } from '../types';
+import { mapActions }  from 'vuex';
 
 export default defineComponent({
     /*
@@ -92,48 +95,9 @@ export default defineComponent({
     */
     name: "ExerciseItem",
     props: {
+        ["workoutId"] : String,
         ["exerciseItem"] : Object as () => IExercise, 
         ["edit"] : Boolean,
-    },
-    emits: {
-        ['new-repetition'] : (data : { exerciseId : string }) => {
-            if (data.exerciseId.length > 0 ) {
-                return true;
-            } else {
-                console.error("The exerciseId was not of correct length.");
-                return false;
-            }
-        },
-        //On completion of the edting of a repetion
-        ['completed-rep-edit'] : (data : {
-            exerciseId : string,
-            repItem : IRepetition}) => { 
-            if(data.exerciseId != ''){
-                return true;
-            }
-        },
-        //On completion on the editing of an exercise name
-        ['exercise-name'] : (data : {
-            exerciseId : string,
-            name : string}) => {
-            if (data.name != '' && data.exerciseId != ''){
-                return true;
-            }
-        },
-        ['delete-exercise'] : (data : {
-            exerciseId : string}) => {
-            if(data.exerciseId != ''){
-                return true;
-            }
-        }
-        ,
-        ['delete-rep'] : (data: {
-            exerciseId : string,
-            repId: string}) => {
-            if(data.exerciseId != '' && data.repId != ''){
-                return true;
-            }
-        }
     },
     components: {
         Repetition,
@@ -148,40 +112,28 @@ export default defineComponent({
         };
     }, 
     methods : {
+        ...mapActions([
+            'changeExerciseName',
+            'deleteExercise'
+        ]),
         titleSubmitEdit(result : string) {
             /*
                 Submit the new title of a workout.
             */
             if (this.exerciseItem != undefined) {
-                this.$emit('exercise-name', { 
+                this.changeExerciseName({
                     exerciseId : this.exerciseItem.id, 
                     name : result 
                     }
                 );
             }
         },
-        repChange(data : any ) {
-            if (this.exerciseItem != undefined) {
-                data.exerciseId = this.exerciseItem.id;
-                this.$emit('completed-rep-edit', data);
-            }
-        },
-        newRepetition() {
-            if (this.exerciseItem != undefined) {
-                this.$emit('new-repetition', {exerciseId : this.exerciseItem.id});
-            }
-        }, 
         displayEdit() {
             this.isHover = true;        
         },
         deleteExercise() {
             if (this.exerciseItem != undefined) {
-                this.$emit('delete-exercise', {exerciseId : this.exerciseItem.id});
-            }
-        },
-        deleteRep(data : any) {
-            if (this.exerciseItem != undefined) {
-                this.$emit('delete-rep', { repId: data.repId , exerciseId: this.exerciseItem.id });
+                this.deleteExercise({exerciseId : this.exerciseItem.id});
             }
         },
     },

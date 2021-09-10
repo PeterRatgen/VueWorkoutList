@@ -55,11 +55,19 @@
 import { defineComponent } from 'vue';
 import { IRepetition } from '../types';
 
+import { mapActions }  from 'vuex';
+
 export default defineComponent({
     name: "Repetition",
     props: {
         repetition : {
             type : Object as () => IRepetition
+        },
+        workoutId : {
+            type : String
+        },
+        exerciseId : {
+            type : String
         }
     },
     inject : ["emitter"],
@@ -97,6 +105,9 @@ export default defineComponent({
         }
     },
     methods: {
+        ...mapActions([
+            'changeRep'
+        ]),
         deleteRep() {
             /**
                 Deleting a rep.

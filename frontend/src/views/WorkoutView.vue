@@ -4,7 +4,7 @@
         <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
         <div class="todo-block">
             <div class="todo">
-                <div v-bind:key="workout" v-for="workout in workouts" >
+                <div v-bind:key="workout" v-for="(workout) in workouts" >
                     <Workout 
                         v-bind:workout="workout" 
                         @new-repetition="addRepetition"
@@ -63,11 +63,7 @@ export default defineComponent({
     },
     methods: {
         ...mapActions([
-            'login',
-            'getWorkout',
-            'addRepetition',
-            'changeRep',
-            'submitWorkout'
+            'login'
         ]),
         backgroundPressed() {
             (this as any).emitter.emit('pressed-background');

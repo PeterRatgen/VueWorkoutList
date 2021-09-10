@@ -1,11 +1,15 @@
 import { Commit, Getter } from 'vuex';
 import { State } from './state_type';
-import user from './../api/user'
-import { AxiosInstance } from 'axios';
+import * as user from './../api/user';
+import * as workout from '../api/workout';
+import * as repetition from '../api/repetition';
+import * as exercise from '../api/exercise';
+
+import axios, { AxiosInstance } from 'axios';
 
 import { IWorkout, IExercise, IRepetition, repData } from '../types/index';
 
-import { SET_LOADING, SET_API_INSTANCE, SET_USER_DATA} from './mutation_types';
+import * as types from './mutation_types';
 
 export const actions = {
     async login ({commit , state } : { commit : Commit, state : State}){
@@ -19,82 +23,71 @@ export const actions = {
             },
             withCredentials: true
         });
-        commit(SET_API_INSTANCE, instance);
+        commit(types.SET_API_INSTANCE, instance);
 
         user.validateToken(instance).then((status : {
             validated : boolean
             payload? : string
-        }) => {
-            if (status.validated) {
-                this.getWorkout({commit , state });
-            } else {
-                user.login(instance, {
-                    email : state.email,
-                    password : state.password
-                }).then(() => {
-                })
+        } | undefined) => {
+            if ( status != undefined ) {
+                if (status.validated) {
+                    this.getWorkout({commit , state });
+                } else {
+                    user.login(instance, {
+                        email : state.email,
+                        password : state.password
+                    }).then(() => {
+                        user.validateToken(instance).then((status) =>{ 
+                            if (status != undefined ) {
+                                if (status.validated) {
+                                    this.getWorkout({commit , state});
+                                }
+                            }
+                        });
+                    });
+                }
             }
-        })
+        });
 
-        commit(SET_LOADING, true);
+        commit(types.SET_LOADING, true);
     },
     async getWorkout({commit , state } : { commit : Commit, state : State}) {
         /**
             Retrieve the workouts of the user, and save the response.
         */
-        try {
-            commit(SET_LOADING, true);
-            const response = await state.apiInstance.get('/workout');
-            state.workouts = JSON.parse(response.request.response);
-            commit(SET_LOADING, false);
-        } catch (err) {
+        commit(types.SET_LOADING, true);
+        workout.getWorkout(state.apiInstance).then((workouts : IWorkout[] | undefined) => {
+            if (workouts != undefined) {
+                commit(types.SET_WORKOUTS, workouts);
+                commit(types.SET_LOADING, false);
+            }
+        }).catch((err) => {
             console.trace();
             console.log(err);
-            commit(SET_LOADING, false);
-        }
-
+            commit(types.SET_LOADING, false);
+        });  
+        
     },
     async titleChange({commit , state } : { commit : Commit, state : State}, data : any){
         /**
             Change the title of a workout.
         */
-        try {
-            await state.apiInstance.post('/workout/rename',
-                {
-                    id : data.workoutId,
-                    title : data.title
-                }
-            );
-        } catch (err) {
-            console.trace();
-            console.log(err);
-        }
-        if (state.workouts != null) {
-            const ele: any = state.workouts.find((element : any) => element._id == data.workoutId);
-            if (ele != undefined) {
-                ele.title = data.title;
-            }
-        }
+        commit(types.SET_LOADING, true);
+        workout.renameWorkout(state.apiInstance, data).then(() => {
+            commit(types.CHANGE_EXERCISE_NAME, data);
+            commit(types.SET_LOADING, false);
+        });
     },
-    deleteWorkout({commit , state } : { commit : Commit, state : State}, data : any) {
+    deleteWorkout({commit , state } : { commit : Commit, state : State}, data : {
+        workoutId : string
+    }) {
         /**
             Delete one workout. First on the database, and then in the data
             stores locally.
         */
-        try {
-            state.apiInstance.delete('/workout/' + data.workoutId );
-            let ele: IWorkout | undefined = state.workouts.find(element => element["_id"] == data.workoutId);
-            if (ele != undefined) {
-                let index: number = state.workouts.indexOf(ele);
-                if (index != -1 ) {
-                    state.workouts.splice(index, 1);
-                }
-            }
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
-        }
+        workout.deleteWorkout(state.apiInstance, data).then(() => {
+            commit(types.DELETE_WORKOUT, data);
+        });
     },
     async addRepetition({getters, commit , state } : 
             {
@@ -107,7 +100,7 @@ export const actions = {
             before it, then add the same weight and reps to the new one.
             
             @exerciseId - id of the exercise
-            @workoutId - id of the workout
+            @workout Id - id of the workout
         */
         let exercise = getters.getExercise(data);
         const length = exercise.set.length;
@@ -122,19 +115,18 @@ export const actions = {
             repetitions : repetitions
         };
         data.repItem = repItem;
-        try {
-            let res = await state.apiInstance.put('/workout/add_repetition', data);
-            if(res.status == 200) {
-                data.repItem.id = res.data;
-                commit('addRepetition', data);
-            } 
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
-        }
+        repetition.addRepetition(state.apiInstance, data)
+            .then((data : {repetitionId : string} | undefined) => {
+                if (data != undefined) {
+                    commit(types.ADD_REPETITION, data);
+                }
+            })
+            .catch( (err) => {
+                console.trace();
+                console.log(err);
+            });
     },
-    async changeRep ({getters, commit , state } : 
+    async changeRep ({commit , state } : 
             {
                 getters : Getter, 
                 commit : Commit, 
@@ -144,32 +136,11 @@ export const actions = {
             Change a rep of the workout. First in the local data, then in
             the database.
         */
-        let rep : IRepetition | undefined = getters.getRepetition(state, data);
-        if (rep != undefined) {
-            rep.repetitions = data.repItem.repetitions;
-            rep.weight = data.repItem.weight;
-            try {
-                let res = await state.apiInstance.put('/workout/rep_change', {
-                    workoutId: data["workoutId"],
-                    exerciseId : data["exerciseId"],
-                    repItem: data["repItem"]
-                });
-                if (res.status == 200) {
-                    commit('addRepetition', data);
-                    console.log("changed rep to " + JSON.stringify(data["repItem"]));
-                } else {
-                    Promise.reject("API call to change rep failed");
-                }
-            }
-            catch (err) {
-                console.trace();
-                console.log(err);
-            }
-        } else {
-            Promise.reject("No such repetition exists");
-        }
+       repetition.changeRepetition(state.apiInstance, data).then(() => {
+            commit(types.CHANGE_REPETITION, data);
+       });
     },
-    async submitWorkout({getters, commit , state } : 
+    async submitWorkout({commit , state } : 
             {
                 getters : Getter, 
                 commit : Commit, 
@@ -178,19 +149,19 @@ export const actions = {
         /**
             Add a new workout to the user.
         */
-        try {
-            const res = await state.apiInstance.post('/workout', data);
-            if (res.status == 200) {
-                data._id =  res.data;
-                commit('addWorkout', data);
-            }
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
-        }
+        workout.addWorkout(state.apiInstance, data)
+            .then((da : {id : string} | undefined) => {
+                if(da != undefined){
+                    data._id = da.id;
+                    commit(types.ADD_WORKOUT, data);
+                }
+            })
+            .catch((err) => {
+                console.trace();
+                console.log(err);
+            });
     },
-    async changeExerciseName({getters, commit , state } : 
+    async changeExerciseName({ commit , state } : 
             {
                 getters : Getter, 
                 commit : Commit, 
@@ -203,46 +174,40 @@ export const actions = {
         /**
             Change the name of an exercise.
         */
-        try {
-            let res = await state.apiInstance.put('/workout/rename_exercise', {
-                id: data["workoutId"],
-                exerciseId : data["exerciseId"],
-                name : data["name"]
-            });
-            if (res.status == 200) {
-                commit('changeExerciseName', data);
-            }
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
-        }
+       exercise.renameExercise(state.apiInstance, data).then(() => {
+            commit(types.RENAME_EXERCISE, data);
+       });
+        
     },
-    async deleteExercise({getters, commit , state } : 
+    async deleteExercise({commit , state } : 
             {
                 getters : Getter, 
                 commit : Commit, 
                 state : State
-            }, data : any) {
+            }, data : {
+                workoutId : string,
+                exerciseId : string
+            }) {
         /*
             Delete an exercise.
         */
-        let workout : IWorkout = getters.getWorkout(state, data);
-        
-        try {
-            let res = await state.apiInstance.post('/workout/update_exercise', {
-                id: data["workoutId"],
-                exerciseList : workout["exerciseList"]
-            });
-            if( res.status == 200) {
-                commit('deleteExercise', data);
-            }
-        }
-        catch (err) {
-            console.trace();
-            console.log(err);
-        }
+        exercise.deleteExercise(state.apiInstance, data).then(() => {
+            commit(types.CHANGE_REPETITION, data);
+        });
     },
+    async deleteRep({commit, state} : {
+                getters : Getter, 
+                commit : Commit, 
+                state : State
+            }, data : {
+                workoutId : string,
+                exerciseId : string,
+                repetitionId : string
+    }) {
+        repetition.deleteRepetition(state.apiInstance, data).then(() => {
+            commit(types.DELETE_REPETITION, data);
+        });
+    }
 };
 
 export default actions;

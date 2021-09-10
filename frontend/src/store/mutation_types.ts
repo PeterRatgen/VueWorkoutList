@@ -1,3 +1,11 @@
 export const SET_LOADING = 'setLoading';
 export const SET_API_INSTANCE = 'setApiInstance';
 export const SET_USER_DATA = 'setUserData';
+export const SET_WORKOUTS = 'setWorkouts';
+export const DELETE_WORKOUT = 'deleteWorkout';
+export const CHANGE_EXERCISE_NAME = 'changeExerciseName';
+export const ADD_REPETITION = 'addRepetition';
+export const CHANGE_REPETITION = 'changeRepetition';
+export const ADD_WORKOUT = 'addWorkout';
+export const RENAME_EXERCISE = 'changeExerciseName';
+export const DELETE_EXERCISE = 'deleteExercise';
