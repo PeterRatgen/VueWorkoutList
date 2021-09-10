@@ -15,7 +15,7 @@
                     <span test-data="set-counter" >  
                             <span 
                                 class="icon-container"  
-                                @click.stop="deleteExercise" 
+                                @click.stop="delExercise" 
                                 v-if="isHover"
                             >
                                 <fa 
@@ -43,7 +43,7 @@
                     <span test-data="set-counter" >  
                         <span 
                             class="icon-container" 
-                            @click.stop="deleteExercise" 
+                            @click.stop="delExercise" 
                             v-if="isHover"
                         >
                             <fa 
@@ -86,8 +86,8 @@ import Repetition from './Repetition.vue';
 import InputField from "./InputField.vue";
 import NewRepetition from "./repetitions/NewRepetition.vue";
 
-import { IExercise, IRepetition } from '../types';
-import { mapActions }  from 'vuex';
+import { IExercise } from '../types';
+import { mapActions }  from '../../node_modules/vuex';
 
 export default defineComponent({
     /*
@@ -131,7 +131,7 @@ export default defineComponent({
         displayEdit() {
             this.isHover = true;        
         },
-        deleteExercise() {
+        delExercise() {
             if (this.exerciseItem != undefined) {
                 this.deleteExercise({exerciseId : this.exerciseItem.id});
             }

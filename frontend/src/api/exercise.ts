@@ -24,7 +24,7 @@ export async function deleteExercise(apiInstance : AxiosInstance, data : {
     workoutId : string,
     exerciseId : string
 }) {
-    apiInstance.put('/workout/exercise', data).then((res) => {
+    apiInstance.put('/workout/delete_exercise', data).then((res) => {
             if( res.status == 200) {
                 return;
             }

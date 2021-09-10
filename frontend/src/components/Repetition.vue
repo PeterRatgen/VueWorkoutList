@@ -55,7 +55,7 @@
 import { defineComponent } from 'vue';
 import { IRepetition } from '../types';
 
-import { mapActions }  from 'vuex';
+import { mapActions }  from '../../node_modules/vuex';
 
 export default defineComponent({
     name: "Repetition",

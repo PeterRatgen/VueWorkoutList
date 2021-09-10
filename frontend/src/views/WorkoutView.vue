@@ -6,13 +6,7 @@
             <div class="todo">
                 <div v-bind:key="workout" v-for="(workout) in workouts" >
                     <Workout 
-                        v-bind:workout="workout" 
-                        @new-repetition="addRepetition"
-                        @completed-rep-edit="changeRep" 
-                        @exercise-name-change="changeExerciseName"
-                        @delete-exercise="deleteExercise"
-                        @delete-rep="deleteRep"
-                        @add-exercise="addExercise"
+                        :workout="workout" 
                     />
                 </div>
                 <AddWorkout
@@ -21,9 +15,9 @@
             </div>
         </div>
         <BeginWorkout 
-            v-bind:workouts="workouts"
-            v-on:select-workout="selectedWorkout"
-            v-on:continue-workout="continueWorkout"
+            :workouts="workouts"
+            @select-workout="selectedWorkout"
+            @continue-workout="continueWorkout"
         />
     </div>
     <WorkoutProcess v-else 
@@ -35,7 +29,9 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import { mapActions }  from 'vuex';
+import { mapActions }  from '../../node_modules/vuex';
+
+import { IWorkout } from '../types/index';
 
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
@@ -63,83 +59,20 @@ export default defineComponent({
     },
     methods: {
         ...mapActions([
-            'login'
+            'login',
+            'workingOut',
+            'currentWorkout'
         ]),
         backgroundPressed() {
             (this as any).emitter.emit('pressed-background');
         },
-        deleteExercise(data : any) {
-            /*
-                Delete an exercise.
-            */
-            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data["workoutId"]);
-            if ( workout != undefined) {
-                let exercise : IExercise | undefined = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
-                if (exercise != undefined) {
-                    let index : number =  (workout as IWorkout).exerciseList.indexOf(exercise);
-                    (workout as IWorkout).exerciseList.splice(index, 1);
-                    try {
-                        this.apiInstance.post('/workout/update_exercise', {
-                            id: data["workoutId"],
-                            exerciseList : workout["exerciseList"]
-                        });
-                    }
-                    catch (err) {
-                        console.trace();
-                        console.log(err);
-                    }
-                }
-            }
-        },
-        async addExercise(data : any) {
-            /*
-                @data contains 
-                    workoutId - for the workout where the exercise should be
-            */
-            try {
-                let response = await this.apiInstance.put('/workout/add_exercise', {
-                    workoutId : data.workoutId
-                });
-                let exerciseId = response.data;
-                let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
-                if (workout != undefined) {
-                    (workout as IWorkout)["exerciseList"].push({id :  exerciseId, name: "", set: []});
-                }
-            }
-            catch (err) {
-                console.trace();
-                console.log(err);
-            }
-        },
-        deleteRep(data : any) {
-            /*
-                Delete a repetition of an exercise in a workout.
-            */
-            let workout : IWorkout | undefined = this.workouts.find(element => element["_id"] == data.workoutId);
-            if (workout != undefined) {
-                let exercise = (workout as IWorkout).exerciseList.find(element => element.id == data.exerciseId);
-                if (exercise != undefined) {
-                    exercise.set.splice(data.repIndex, 1);
-                    try {
-                        this.apiInstance.post('/workout/update_exercise', {
-                            id: data.workoutId,
-                            exerciseList : (workout as IWorkout).exerciseList
-                        });
-                    }
-                    catch (err) {
-                        console.trace();
-                        console.log(err);
-                    }
-                }
-            }
-        },
         selectedWorkout(workout : IWorkout) {
-            this.workingOut = true;
-            this.currentWorkout = workout;
+            this.workingOut(true);
+            this.currentWorkout(workout);
         },
         continueWorkout() {
-            this.currentWorkout = {};
-            this.workingOut = true;
+            this.currentWorkout({});
+            this.workingOut(true);
         }
     },
     mounted() {

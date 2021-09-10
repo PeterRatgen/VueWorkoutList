@@ -1,13 +1,11 @@
-import { Commit, Getter } from 'vuex';
+import { Commit } from '../../node_modules/vuex';
 import { State } from './state_type';
 import * as user from './../api/user';
 import * as workout from '../api/workout';
 import * as repetition from '../api/repetition';
 import * as exercise from '../api/exercise';
 
-import axios, { AxiosInstance } from 'axios';
-
-import { IWorkout, IExercise, IRepetition, repData } from '../types/index';
+import { IWorkout, IRepetition, repData } from '../types/index';
 
 import * as types from './mutation_types';
 
@@ -17,15 +15,8 @@ export const actions = {
             Logs in with the stored credentials, and stores the JSON Web
             Token returned by the endpoint
         */
-        let instance : AxiosInstance = axios.create({
-            baseURL: process.env.VUE_APP_API_URL,
-            headers : {
-            },
-            withCredentials: true
-        });
-        commit(types.SET_API_INSTANCE, instance);
 
-        user.validateToken(instance).then((status : {
+        user.validateToken(state.apiInstance).then((status : {
             validated : boolean
             payload? : string
         } | undefined) => {
@@ -33,20 +24,26 @@ export const actions = {
                 if (status.validated) {
                     this.getWorkout({commit , state });
                 } else {
-                    user.login(instance, {
+                    user.login(state.apiInstance, {
                         email : state.email,
                         password : state.password
                     }).then(() => {
-                        user.validateToken(instance).then((status) =>{ 
+                        user.validateToken(state.apiInstance).then((status) =>{ 
                             if (status != undefined ) {
                                 if (status.validated) {
                                     this.getWorkout({commit , state});
                                 }
                             }
                         });
+                    }).catch((err) => {
+                        console.trace();
+                        console.log(err);
                     });
                 }
             }
+        }).catch((err) => {
+            console.trace();
+            console.log(err);
         });
 
         commit(types.SET_LOADING, true);
@@ -91,7 +88,7 @@ export const actions = {
     },
     async addRepetition({getters, commit , state } : 
             {
-                getters : Getter, 
+                getters : any, 
                 commit : Commit, 
                 state : State
             }, data : repData){
@@ -128,7 +125,6 @@ export const actions = {
     },
     async changeRep ({commit , state } : 
             {
-                getters : Getter, 
                 commit : Commit, 
                 state : State
             }, data : repData){
@@ -142,7 +138,6 @@ export const actions = {
     },
     async submitWorkout({commit , state } : 
             {
-                getters : Getter, 
                 commit : Commit, 
                 state : State
             }, data :  IWorkout) {
@@ -163,7 +158,6 @@ export const actions = {
     },
     async changeExerciseName({ commit , state } : 
             {
-                getters : Getter, 
                 commit : Commit, 
                 state : State
             }, data : {
@@ -181,7 +175,6 @@ export const actions = {
     },
     async deleteExercise({commit , state } : 
             {
-                getters : Getter, 
                 commit : Commit, 
                 state : State
             }, data : {
@@ -196,7 +189,6 @@ export const actions = {
         });
     },
     async deleteRep({commit, state} : {
-                getters : Getter, 
                 commit : Commit, 
                 state : State
             }, data : {
@@ -207,7 +199,18 @@ export const actions = {
         repetition.deleteRepetition(state.apiInstance, data).then(() => {
             commit(types.DELETE_REPETITION, data);
         });
-    }
+    },
+    workingOut({commit } : {
+        commit : Commit
+    }, bool : boolean){
+        commit(types.SET_WORKINGOUT, bool) ;
+    },
+    currentWorkout({commit } : {
+        commit : Commit
+    }, workout : IWorkout){
+        commit(types.SET_CURRENTWORKOUT, workout) ;
+    },
+
 };
 
 export default actions;

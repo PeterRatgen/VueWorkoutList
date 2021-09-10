@@ -42,4 +42,6 @@ router.put("/workout/add_exercise", cors.allow_all, authentication.authenticate_
  */
 router.put("/workout/add_repetition", cors.allow_all, authentication.authenticate_token, workout_controller.workout_add_repetition)
 
+router.put("/workout/delete_exercise", cors.allow_all, authentication.authenticate_token, workout_controller.workout_delete_exercise)
+
 module.exports = router

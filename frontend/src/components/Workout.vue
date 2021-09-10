@@ -69,8 +69,8 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent, mapActions} from 'vue';
-import { mapActions }  from 'vuex';
+import { inject, defineComponent } from 'vue';
+import { mapActions }  from '../../node_modules/vuex';
 
 import ExerciseItem from "./ExerciseItem.vue";
 import HoverMenu from "./HoverMenu.vue";
@@ -124,8 +124,10 @@ export default defineComponent ({
         ...mapActions([
             'titleChange',
             'deleteWorkout',
-            'addRepetition'
         ]),
+        ...mapActions({
+            addEx : 'addExercise'
+        }),
         /*
             Split the exercises contained in the workouts, and present them as a
             summary.
@@ -164,7 +166,7 @@ export default defineComponent ({
             /*
                 @data contains the id of the exercise being added.
             */
-            this.addExercise( {workoutId : this.workout._id} );
+            this.addEx( {workoutId : this.workout._id} );
         }
     },
     created() {

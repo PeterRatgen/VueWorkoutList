@@ -9,3 +9,6 @@ export const CHANGE_REPETITION = 'changeRepetition';
 export const ADD_WORKOUT = 'addWorkout';
 export const RENAME_EXERCISE = 'changeExerciseName';
 export const DELETE_EXERCISE = 'deleteExercise';
+export const DELETE_REPETITION = 'deleteRepetition';
+export const SET_WORKINGOUT = "setWorkingOut";
+export const SET_CURRENTWORKOUT = "setCurrentWorkout";

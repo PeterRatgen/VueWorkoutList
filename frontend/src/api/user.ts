@@ -13,9 +13,7 @@ export async function validateToken(apiInstance : AxiosInstance) : Promise<valiD
                 return { validated : false };
             }
         } catch (err) {
-            console.trace();
-            console.log(err);
-            new Error("Something went wrong with the API Call");
+            return { validated : false };
         }
 }
 
@@ -28,9 +26,9 @@ export async function login(apiInstance : AxiosInstance, data : { email : string
         });
 
         if (response.status == 200) {
-            Promise.resolve();
+            return;
         } else {
-            Promise.reject("API error occured");
+            new Error("eeorr");
         }
     } catch (err) {
         console.trace();
