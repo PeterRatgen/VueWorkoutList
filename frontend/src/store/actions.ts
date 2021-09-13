@@ -16,13 +16,14 @@ export const actions = {
             Token returned by the endpoint
         */
 
+
         user.validateToken(state.apiInstance).then((status : {
             validated : boolean
             payload? : string
         } | undefined) => {
             if ( status != undefined ) {
                 if (status.validated) {
-                    this.getWorkout({commit , state });
+                    return;
                 } else {
                     user.login(state.apiInstance, {
                         email : state.email,
@@ -31,7 +32,7 @@ export const actions = {
                         user.validateToken(state.apiInstance).then((status) =>{ 
                             if (status != undefined ) {
                                 if (status.validated) {
-                                    this.getWorkout({commit , state});
+                                    return;
                                 }
                             }
                         });
@@ -45,7 +46,6 @@ export const actions = {
             console.trace();
             console.log(err);
         });
-
         commit(types.SET_LOADING, true);
     },
     async getWorkout({commit , state } : { commit : Commit, state : State}) {
@@ -71,7 +71,7 @@ export const actions = {
         */
         commit(types.SET_LOADING, true);
         workout.renameWorkout(state.apiInstance, data).then(() => {
-            commit(types.CHANGE_EXERCISE_NAME, data);
+            commit(types.CHANGE_WORKOUT_TITLE, data);
             commit(types.SET_LOADING, false);
         });
     },
@@ -200,7 +200,7 @@ export const actions = {
             commit(types.DELETE_REPETITION, data);
         });
     },
-    workingOut({commit } : {
+    setWorkingOut({commit } : {
         commit : Commit
     }, bool : boolean){
         commit(types.SET_WORKINGOUT, bool) ;

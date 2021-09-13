@@ -30,7 +30,6 @@ exports.start_workout = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
 exports.send_rep = function(req, res) {
@@ -70,7 +69,6 @@ exports.send_rep = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
 exports.skip_exercise = function(req, res) {
@@ -107,7 +105,6 @@ exports.skip_exercise = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
 
@@ -137,6 +134,5 @@ exports.end_exercise = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 

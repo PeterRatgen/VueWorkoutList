@@ -50,7 +50,7 @@
                         />
                     </span>
                 </div>
-                <div v-bind:key="exercise" v-for="(index, exercise) in workout.exerciseList">
+                <div v-bind:key="exercise" v-for="exercise in workout.exerciseList">
                     <!--
                         List all the exercises contained in the workout.
                     -->

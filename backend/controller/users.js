@@ -34,7 +34,6 @@ exports.user_post = function(req, res) {
 			db.close();
 		});
 	});
-	res.setHeader('Access-Control-Allow-Origin', '*')
 }
 
 exports.user_get = function(req, res) {
@@ -45,7 +44,6 @@ exports.user_get = function(req, res) {
 			if (err) throw err;
 			console.log("1 document found");
 			console.log(result);
-            res.setHeader('Access-Control-Allow-Origin', '*')
 			res.send(result);
 			db.close();
 		});
@@ -53,7 +51,6 @@ exports.user_get = function(req, res) {
 }
 
 exports.user_delete = function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
 	mongo.MongoClient.connect (process.env.DB_URL, function(err, db) {
 		if (err) throw err;
 		let dbase = db.db("workout_db");
@@ -87,7 +84,6 @@ async function findUserForEmail(email) {
 }
 
 exports.login = async function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
     const email = req.body.email,
         password = req.body.password;
     let result = await validateEmailAndPassword(email, password)

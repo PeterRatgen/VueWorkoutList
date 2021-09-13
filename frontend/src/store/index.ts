@@ -25,7 +25,8 @@ const store = createStore({
         userData : {},
         email : 'peter@pratgen.dk',
         password : 'safe',
-        loading : false
+        loading : false,
+        name : "Peter Ratgen"
     },
     mutations,
     actions,

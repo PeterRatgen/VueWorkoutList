@@ -76,7 +76,11 @@ export const mutations = {
             state.workouts.push(data);
         }
     },
-    changeExerciseName( state : State, data : any) {
+    changeExerciseName( state : State, data : {
+        workoutId : string,
+        exerciseId : string,
+        name : string
+    }) {
         if ( state.workouts != undefined) {
             let workout : IWorkout | undefined = 
                 state.workouts.find(
@@ -88,11 +92,37 @@ export const mutations = {
                         (element : IExercise) => element.id == data.exerciseId
                 );
                 if (exercise != undefined) {
-                    exercise.name = data["name"];
+                    exercise.name = data.name;
+                } else {
+                    console.warn("exercise not found");
                 }
+            } else {
+                console.warn("workout not found");
             }
+        } else {
+            console.warn("state.workouts undefined");
         }
     },
+    changeWorkoutTitle (state : State, data : {
+        workoutId : string,
+        title : string
+    }) {
+        console.log(state);
+        if ( state.workouts != undefined) {
+            let workout : IWorkout | undefined = 
+                state.workouts.find(
+                    (element : IWorkout) => element._id == data.workoutId
+            );
+            if (workout != undefined) {
+                workout.title = data.title;
+                console.log(state);
+            } else {
+                console.warn("workout not found");
+            }
+        } else {
+            console.warn("state.workouts undefined");
+        }
+     },
     deleteExercise ( state : State, data : any) {
         if( state.workouts != undefined) {
             let workout : IWorkout | undefined = 

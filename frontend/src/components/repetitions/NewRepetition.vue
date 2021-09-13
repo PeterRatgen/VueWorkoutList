@@ -10,8 +10,18 @@ import { defineComponent } from 'vue';
 
 export default defineComponent ({
     name: "NewRepetition",
-    emits: ["new-repetition"],
-    components : {
+    props : {
+        workoutId : {
+            required : true,
+            type : String
+        },
+        exerciseId : {
+            required : true,
+            type : String,
+        }
+    }, 
+    methodss : {
+
     }
 });
 

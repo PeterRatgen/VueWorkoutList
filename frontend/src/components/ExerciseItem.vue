@@ -58,19 +58,17 @@
                     <!--
                         In here all the repetitions are displayed
                     -->
-                    <div class="repetition" @click.stop v-for="(rep, index) in exerciseItem.set" v-bind:key="rep">
+                    <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
                         <Repetition  
                             :workoutId="workoutId"
-                            :exerciseId="exercise.id"
+                            :exerciseId="exerciseItem.id"
                             v-bind:repetition="rep"
-                            v-bind:index="index"
-                            v-on:delete-rep="deleteRep"
-                            v-on:completed-rep-edit="repChange"
                         />
                     </div>
                     <div class="repetition add-repetition"> 
                         <NewRepetition
-                            v-on:new-repetition="newRepetition"
+                            :workoutId="workoutId"
+                            :exerciseId="exerciseItem.id"
                         />
                     </div>
                 </div>
@@ -122,6 +120,7 @@ export default defineComponent({
             */
             if (this.exerciseItem != undefined) {
                 this.changeExerciseName({
+                    workoutId : this.workoutId,
                     exerciseId : this.exerciseItem.id, 
                     name : result 
                     }

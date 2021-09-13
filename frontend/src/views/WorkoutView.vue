@@ -1,7 +1,7 @@
 <template>
     <div @click="backgroundPressed()"  v-if="!workingOut">
 
-        <HelloHeader class="hello-header" v-bind:header="jwtData.name" v-on:click="getWorkout"/>
+        <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
         <div class="todo-block">
             <div class="todo">
                 <div v-bind:key="workout" v-for="(workout) in workouts" >
@@ -9,9 +9,7 @@
                         :workout="workout" 
                     />
                 </div>
-                <AddWorkout
-                    @new-workout="submitWorkout"
-                />
+                <AddWorkout/>
             </div>
         </div>
         <BeginWorkout 
@@ -29,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import { mapActions }  from '../../node_modules/vuex';
+import { mapActions, mapState }  from '../../node_modules/vuex';
 
 import { IWorkout } from '../types/index';
 
@@ -57,29 +55,37 @@ export default defineComponent({
     setup () {
         provide("emitter", mitt());
     },
+    computed : mapState([
+        'workouts',
+        'workingOut',
+        'name'
+    ]),
     methods: {
         ...mapActions([
             'login',
-            'workingOut',
+            'getWorkout',
+            'setWorkingOut',
             'currentWorkout'
         ]),
         backgroundPressed() {
             (this as any).emitter.emit('pressed-background');
         },
         selectedWorkout(workout : IWorkout) {
-            this.workingOut(true);
+            this.setWorkingOut(true);
             this.currentWorkout(workout);
         },
         continueWorkout() {
             this.currentWorkout({});
-            this.workingOut(true);
+            this.setWorkingOut(true);
         }
     },
     mounted() {
         /**
             Receiving emitted events
         */
-        this.login();
+        this.login().then(() => {
+            this.getWorkout();
+        });
     }
 });
 </script>

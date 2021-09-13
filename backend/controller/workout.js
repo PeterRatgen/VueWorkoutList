@@ -101,7 +101,6 @@ exports.workout_post_update_exercise = function(req, res) {
             }
         );
     });
-    res.setHeader('Access-Control-Allow-Origin', '*')
     res.send("document modified: " + req.body);
 }
 
@@ -277,6 +276,7 @@ exports.workout_delete_exercise = function (req, res){
 
 exports.workout_controller_delete_repetition = function(req,res ) {
     mongo.MongoClient.connect( process.env.DB_URL, function(err,db ) {
+        console.log(req.body)
         let dbase = db.db("workout_db")
         
         let query = {
@@ -284,16 +284,13 @@ exports.workout_controller_delete_repetition = function(req,res ) {
         }
         let newValues = {
             $pull : {
-                "exerciseList.$[el].set" : { id : ObjectId(req.body.repetitionId) } 
+                "exerciseList.$[el].set" : { "id" : ObjectId(req.body.repId) } 
             }
         }
         let options = {
             arrayFilters : [
                 { 
                     "el.id" : ObjectId(req.body.exerciseId)
-                }, 
-                {
-                    "rep.id" : ObjectId(req.body.repetitionId)
                 }
             ]
         }
@@ -303,9 +300,10 @@ exports.workout_controller_delete_repetition = function(req,res ) {
             newValues,
             options,
             function(err, result){
+                console.log(result)
                 if (err) throw err;
                 db.close();
-                res.send();
+                res.send("Completed");
             }
         )
     })

@@ -10,9 +10,15 @@ app.set("trust proxy", 'loopback');
 
 app.use(bodyParser.json());
 
+let corsOptions = {
+    "origin": "http://localhost:8080",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "credentials" : true
+}
 
 //Support preflight requests
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 const PORT = process.env.PORT;
 

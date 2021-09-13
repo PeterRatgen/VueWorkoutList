@@ -4,6 +4,7 @@ export const SET_USER_DATA = 'setUserData';
 export const SET_WORKOUTS = 'setWorkouts';
 export const DELETE_WORKOUT = 'deleteWorkout';
 export const CHANGE_EXERCISE_NAME = 'changeExerciseName';
+export const CHANGE_WORKOUT_TITLE = "changeWorkoutTitle";
 export const ADD_REPETITION = 'addRepetition';
 export const CHANGE_REPETITION = 'changeRepetition';
 export const ADD_WORKOUT = 'addWorkout';

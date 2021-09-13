@@ -41,7 +41,7 @@
         </div>
         <div class="trash-container"
                 v-if="isHover"
-                @click="deleteRep"
+                @click="delRep"
             >
             <fa 
                 class="trash-rep" 
@@ -106,14 +106,20 @@ export default defineComponent({
     },
     methods: {
         ...mapActions([
-            'changeRep'
+            'changeRep',
+            'deleteRep'
         ]),
-        deleteRep() {
+        delRep() {
             /**
                 Deleting a rep.
             */
             if(this.repItem.id != undefined) {
-                this.$emit('delete-rep', { repId  : this.repItem.id });
+                this.deleteRep (
+                    { 
+                        workoutId : this.workoutId,
+                        exerciseId : this.exerciseId,
+                        repId  : this.repItem.id 
+                    });
             }
         },
         inc(target : string) {
@@ -157,7 +163,10 @@ export default defineComponent({
                 this.editing = true;
             } else {
                 this.editing = false;
-                this.$emit("completed-rep-edit", { repItem : this.repItem });
+                this.changeRep({ 
+                    workoutId : this.workoutId, 
+                    exerciseId : this.exerciseId, 
+                    repItem : this.repItem });
             }
         },
         scrolledReps(event : any) {
