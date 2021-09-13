@@ -10,7 +10,7 @@ import actions from './actions';
 import getters from './getters';
 
 let instance : AxiosInstance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: import.meta.env.VITE_URL,
     headers : {
     },
     withCredentials: true
