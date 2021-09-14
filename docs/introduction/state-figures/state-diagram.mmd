@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> loggedIn
+    loggedIn --> editing
+    editing --> workingOut : workout start/resume
+    workingOut --> workoutEnded : workout end
+    workingOut --> editing : workout pause
+    workoutEnded --> editing
+
+

@@ -1,82 +1,87 @@
 {
-  "name": "todo",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vite",
-    "preview": "vite preview",
-    "build": "vite build",
-    "lint": "vue-cli-service lint",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/vue-fontawesome": "^3.0.0-3",
-    "@vue/test-utils": "^2.0.0-rc.12",
-    "axios": "^0.21.0",
-    "dotenv": "^8.2.0",
-    "mitt": "^3.0.0",
-    "sass": "^1.39.2",
-    "vue": "^3.2.11",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.2"
-  },
-  "jest": {
-    "preset": "@vue/cli-plugin-unit-jest",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "vue"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.[jt]s"
-    ],
-    "setupFiles": [
-      "<rootDir>/tests/setup-tests.ts"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setupScript.ts"
-    ],
-    "transform": {
-      "^.+\\.js$": "babel-jest",
-      "^.+\\.vue$": "vue-jest",
-      "^.+\\.ts$": "ts-jest"
+    "name": "todo",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vite",
+        "preview": "vite preview",
+        "build": "vite build",
+        "lint": "vue-cli-service lint",
+        "test": "jest",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:serve": "vitepress serve docs"
     },
-    "testURL": "http://localhost"
-  },
-  "devDependencies": {
-    "@typescript-eslint/parser": "^2.34.0",
-    "@vitejs/plugin-vue": "^1.6.2",
-    "@vue/compiler-sfc": "^3.2.11",
-    "@vue/eslint-config-typescript": "^5.1.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^7.0.0-0",
-    "jest": "^27.2.0",
-    "msw": "^0.35.0",
-    "prettier": "^2.3.2",
-    "typescript": "4.4.2",
-    "vite": "^2.5.7"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.34",
+        "@fortawesome/free-solid-svg-icons": "^5.15.2",
+        "@fortawesome/vue-fontawesome": "^3.0.0-3",
+        "@mermaid-js/mermaid-cli": "^8.12.1",
+        "@vue/test-utils": "^2.0.0-rc.12",
+        "axios": "^0.21.0",
+        "dotenv": "^8.2.0",
+        "mitt": "^3.0.0",
+        "sass": "^1.39.2",
+        "vue": "^3.2.11",
+        "vue-router": "^4.0.0-0",
+        "vuex": "^4.0.2"
     },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended",
-      "@vue/typescript"
-    ],
-    "parserOptions": {
-      "parser": "@typescript-eslint/parser"
+    "jest": {
+        "preset": "@vue/cli-plugin-unit-jest",
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts",
+            "vue"
+        ],
+        "testMatch": [
+            "**/tests/**/*.test.[jt]s"
+        ],
+        "setupFiles": [
+            "<rootDir>/tests/setup-tests.ts"
+        ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/tests/setupScript.ts"
+        ],
+        "transform": {
+            "^.+\\.js$": "babel-jest",
+            "^.+\\.vue$": "vue-jest",
+            "^.+\\.ts$": "ts-jest"
+        },
+        "testURL": "http://localhost"
     },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "devDependencies": {
+        "@typescript-eslint/parser": "^2.34.0",
+        "@vitejs/plugin-vue": "^1.6.2",
+        "@vue/compiler-sfc": "^3.2.11",
+        "@vue/eslint-config-typescript": "^5.1.0",
+        "eslint": "^6.8.0",
+        "eslint-plugin-vue": "^7.0.0-0",
+        "jest": "^27.2.0",
+        "msw": "^0.35.0",
+        "prettier": "^2.3.2",
+        "typescript": "4.4.2",
+        "vite": "^2.5.7",
+        "vitepress": "^0.18.0"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/vue3-essential",
+            "eslint:recommended",
+            "@vue/typescript"
+        ],
+        "parserOptions": {
+            "parser": "@typescript-eslint/parser"
+        },
+        "rules": {}
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
 }
