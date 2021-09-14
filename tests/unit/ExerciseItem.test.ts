@@ -7,6 +7,8 @@ import NewRepetition from '../../src/components/repetitions/NewRepetition.vue';
 import InputField from '../../src/components/InputField.vue';
 
 import { exercise } from '../testData';
+import store from '../../src/store/index';
+
 import mitt from 'mitt';
 
 
@@ -23,7 +25,8 @@ const wrapper = shallowMount(ExerciseItem, {
         provide :  {
             emitter: mitt()
         },
-        stubs : ['fa']
+        stubs : ['fa'],
+        plugins : [store]
     }
 });
 
@@ -81,7 +84,7 @@ describe('The expanded Exercise component', () => {
         const nameHover =  wrapper.find('[class="name"]');
         await nameHover.trigger('click');
 
-        expect(wrapper.vm.$data.contracted).toBeFalsy();
+        expect((wrapper.vm.$data as any).contracted).toBeFalsy();
     });
     
     delEx(2);

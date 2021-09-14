@@ -71,14 +71,6 @@ export default defineComponent({
         }
     },
     inject : ["emitter"],
-    emits :  {
-        ["completed-rep-edit"] : ( data : {repItem : IRepetition }) => {
-            return data.repItem.weight > 0 && data.repItem.repetitions > 0;
-        },
-        ["delete-rep"] : ( payload : { repId : string  }) => {
-                return payload.repId != '';
-        }
-    },
     data () {
         return {
             showWeight: false,
@@ -137,7 +129,7 @@ export default defineComponent({
         },
         dec(target : string){
             /**
-                Decremet the weight or rep.
+                Decrement the weight or rep.
             */
             switch(target){
                 case "weight":

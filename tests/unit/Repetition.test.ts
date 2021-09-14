@@ -5,6 +5,7 @@ import Repetition from '../../src/components/Repetition.vue';
 
 import { repetition } from '../testData';
 import mitt from 'mitt';
+import store from '../../src/store/index'
 
 
 const wrapper = shallowMount(Repetition, {
@@ -15,9 +16,9 @@ const wrapper = shallowMount(Repetition, {
         provide :  {
             emitter: mitt()
         },
-        stubs : ['fa']
-    }
-});
+        stubs : ['fa'],
+        plugins : [store]
+    }});
 
 describe('Repetition when not editing', () => {
     it('has weight and reps', () => {
@@ -94,8 +95,6 @@ describe('Repetition editing', () => {
 
         let editWeight = wrapper.find('[data-test="expanded-weight"]');
         expect(editWeight.exists()).toBeFalsy();
-        
-        expect(wrapper.emitted()).toHaveProperty("completed-rep-edit");
     });
 
 
