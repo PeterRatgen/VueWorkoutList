@@ -39,6 +39,7 @@ import WorkoutProcess from '../views/WorkoutProcess.vue';
 
 import mitt from 'mitt';
 
+let mittInstance = mitt();
 
 export default defineComponent({
     /**
@@ -52,8 +53,8 @@ export default defineComponent({
         BeginWorkout,
         WorkoutProcess
     },
-    setup () {
-        provide("emitter", mitt());
+    provide : {
+        emitter : mittInstance
     },
     computed : mapState([
         'workouts',
@@ -68,7 +69,7 @@ export default defineComponent({
             'currentWorkout'
         ]),
         backgroundPressed() {
-            (this as any).emitter.emit('pressed-background');
+            mittInstance.emitter.emit('pressed-background');
         },
         selectedWorkout(workout : IWorkout) {
             this.setWorkingOut(true);
