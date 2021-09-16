@@ -1,5 +1,25 @@
-# LiftLog
+# vuetodo
 
-An application for tracking  your workouts in the gym.
+## Project setup
+```
+npm install
+```
 
-The instance of this application is running at [liftlog.app](https://liftlog.app)
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+=======

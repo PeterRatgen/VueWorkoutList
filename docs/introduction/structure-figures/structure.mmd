@@ -1,0 +1,25 @@
+graph TD
+    classDef exerciseItem fill:#aaf;
+
+    A[WorkoutView] 
+
+    A --> B[Workout]
+    A --> F[AddWorkout]
+    A --> G[BeginWorkout]
+    A --> H[WorkoutProcess]
+
+    B --> C[ExerciseItem] 
+    B --> N[NewExercise]
+
+    F --> I[WorkoutFormAdder]
+    I --> J[ExerciseItem]
+    J --> K[Repetition]
+    J --> L[NewRepetition]
+
+    C --> D[Repetition]
+    C --> E[NewRepetition]
+
+    H --> M[WorkoutDisplay]
+
+    class C exerciseItem;
+    class J exerciseItem;
