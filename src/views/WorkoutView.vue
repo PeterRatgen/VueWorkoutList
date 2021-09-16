@@ -74,7 +74,7 @@ export default defineComponent({
             'currentWorkout'
         ]),
         backgroundPressed() {
-            mittInstance.emit('pressed-background');
+            (mittInstance as any).emit('pressed-background');
         },
         selectedWorkout(workout : IWorkout) {
             this.setWorkingOut(true);
