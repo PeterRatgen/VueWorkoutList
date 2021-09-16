@@ -3,9 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "serve": "vite",
-        "preview": "vite preview",
-        "build": "vite build",
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
         "test": "jest",
         "docs:dev": "vitepress dev docs",
@@ -17,19 +16,18 @@
         "@fortawesome/free-solid-svg-icons": "^5.15.2",
         "@fortawesome/vue-fontawesome": "^3.0.0-3",
         "@mermaid-js/mermaid-cli": "^8.12.1",
-        "@vue/test-utils": "^2.0.0-rc.12",
+        "@vue/cli-plugin-typescript": "^4.5.13",
+        "@vue/cli-service": "^4.5.13",
         "axios": "^0.21.0",
         "dotenv": "^8.2.0",
         "mitt": "^3.0.0",
         "sass": "^1.39.2",
-        "ts-jest": "^27.0.0",
-        "vite-jest": "^0.0.3",
         "vue": "^3.2.11",
         "vue-router": "^4.0.0-0",
         "vuex": "^4.0.2"
     },
     "jest": {
-        "preset": "vite-jest",
+        "preset": "@vue/cli-plugin-unit-jest",
         "moduleFileExtensions": [
             "js",
             "json",
@@ -46,8 +44,7 @@
             "<rootDir>/tests/setupScript.ts"
         ],
         "transform": {
-            "^.+\\.js$": "babel-jest",
-            "^.+\\.vue$": "vue3-jest",
+            "^.+\\.vue$": "vue-jest",
             "^.+\\.ts$": "ts-jest"
         },
         "testURL": "http://localhost"
@@ -58,18 +55,22 @@
         "@typescript-eslint/parser": "^2.34.0",
         "@vitejs/plugin-vue": "^1.6.2",
         "@vue/cli-plugin-babel": "^4.5.13",
+        "@vue/cli-plugin-unit-jest": "^4.5.13",
         "@vue/compiler-sfc": "^3.2.11",
         "@vue/eslint-config-typescript": "^5.1.0",
-        "@vue/vue3-jest": "^27.0.0-alpha.1",
+        "@vue/test-utils": "^2.0.0-rc.14",
         "eslint": "^6.8.0",
         "eslint-plugin-vue": "^7.0.0-0",
-        "jest": "^27.0.0",
+        "jest": "^26.6.3",
         "msw": "^0.35.0",
         "prettier": "^2.3.2",
+        "sass-loader": "^10.2.0",
+        "ts-jest": "^26.5.6",
         "ts-node": "^10.2.1",
         "typescript": "4.4.2",
-        "vite": "^2.5.7",
-        "vitepress": "^0.18.0"
+        "vitepress": "^0.18.0",
+        "vue-jest": "^5.0.0-alpha.10",
+        "webpack": "^4.46.0"
     },
     "eslintConfig": {
         "root": true,
