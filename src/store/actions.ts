@@ -200,8 +200,9 @@ export const actions = {
             commit(types.DELETE_REPETITION, data);
         });
     },
-    setWorkingOut({commit } : {
-        commit : Commit
+    setWorkingOut({commit, state } : {
+        commit : Commit,
+        state : State
     }, bool : boolean){
         commit(types.SET_WORKINGOUT, bool) ;
     },

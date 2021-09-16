@@ -7,6 +7,7 @@ import Workout from '../../src/components/Workout.vue';
 import ExerciseItem from '../../src/components/ExerciseItem.vue';
 import InputField from '../../src/components/InputField.vue';
 import NewExercise from '../../src/components/NewExercise.vue';
+import store from '../../src/store/index';
 
 import mitt from 'mitt';
 
@@ -23,7 +24,8 @@ const wrapper = shallowMount(Workout, {
         provide :  {
             emitter: mitt()
         },
-        stubs : ['fa']
+        stubs : ['fa'],
+        plugins : [store]
     }
 });
 

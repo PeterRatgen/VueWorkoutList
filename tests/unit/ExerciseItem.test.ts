@@ -42,8 +42,6 @@ function delEx(length : number) {
         const iconContainer =  wrapper.find('[class="icon-container"]');
         await iconContainer.trigger('click');
 
-        const deleteEvent = wrapper.emitted('delete-exercise');
-        expect(deleteEvent).toHaveLength(length);
     });
 
     it('has a set counter', async() => {
