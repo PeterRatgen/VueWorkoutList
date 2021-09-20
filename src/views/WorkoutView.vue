@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide } from 'vue';
+import { defineComponent } from 'vue';
 import { mapActions, mapState }  from '../../node_modules/vuex';
 
 import { IWorkout } from '../types/index';
@@ -34,8 +34,9 @@ import { IWorkout } from '../types/index';
 import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
 import Workout from '../components/Workout.vue';
-import BeginWorkout from '../components/BeginWorkout.vue';
-import WorkoutProcess from '../views/WorkoutProcess.vue';
+
+const BeginWorkout = () => import('../components/BeginWorkout.vue');
+const WorkoutProcess = () => import('../views/WorkoutProcess.vue');
 
 import mitt, { Emitter } from 'mitt';
 

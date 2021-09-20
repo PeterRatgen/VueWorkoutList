@@ -80,9 +80,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import Repetition from './Repetition.vue';
-import InputField from "./InputField.vue";
-import NewRepetition from "./repetitions/NewRepetition.vue";
+const Repetition = () => import('./Repetition.vue');
+const InputField = () => import("./InputField.vue");
+const NewRepetition =  () => import("./repetitions/NewRepetition.vue");
 
 import { IExercise } from '../types';
 import { mapActions }  from '../../node_modules/vuex';
