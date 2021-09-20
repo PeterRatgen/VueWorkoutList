@@ -15,39 +15,26 @@ let instance : AxiosInstance = axios.create({
 });
 
 let state = {
-        workouts : undefined,
-        workingOut : false,
-        currentWorkout : undefined,
-        apiInstance : instance,
-        userData : {},
-        email : 'peter@pratgen.dk',
-        password : 'safe',
-        loading : false,
-        name : "Peter Ratgen"
-    };
+    workouts : undefined,
+    workingOut : false,
+    currentWorkout : undefined,
+    apiInstance : instance,
+    userData : {},
+    email : 'peter@pratgen.dk',
+    password : 'safe',
+    loading : false,
+    name : "Peter Ratgen"
+};
+
+import mutations from './mutations';
+import actions from './actions';
+import getters from './getters';
 
 //Store related imports
-let mutations : any; 
-let actions : any;
-let getters : any;
-export let store : Store<State>;
-
-import('./mutations').then((mutationsImport) => {
-        mutations = mutationsImport;
-        import('./actions').then((actionsImport) => {
-            actions = actionsImport;
-            import('./getters').then((getterImport) => {
-                getters = getterImport
-                //Creation of the store 
-                store = createStore({
-                    state,
-                    mutations,
-                    actions,
-                    getters
-                });
-            });
-        });
+export let store : Store<State> = createStore({
+    state,
+    mutations,
+    actions,
+    getters
 });
-
-
 
