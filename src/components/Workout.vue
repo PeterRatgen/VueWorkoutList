@@ -72,10 +72,10 @@
 import { inject, defineComponent } from 'vue';
 import { mapActions }  from '../../node_modules/vuex';
 
-const ExerciseItem = () => import("./ExerciseItem.vue");
+import ExerciseItem from "./ExerciseItem.vue";
 import HoverMenu from "./HoverMenu.vue";
-const InputField = () => import("./InputField.vue");
-const NewExercise = () => import("./NewExercise.vue");
+import InputField from "./InputField.vue";
+import NewExercise from "./NewExercise.vue";
 
 import { IWorkout } from '../types';
 
