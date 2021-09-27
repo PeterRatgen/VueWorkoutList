@@ -14,6 +14,8 @@ let instance : AxiosInstance = axios.create({
     withCredentials: true
 });
 
+console.log(process.env);
+
 let state = {
     workouts : undefined,
     workingOut : false,
