@@ -1,8 +1,4 @@
-FROM node:16
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
+FROM node:16 as build-stage
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -15,8 +11,29 @@ RUN npm install --production
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
+# Copy entrypoint script as /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
+
 # build app for production with minification
 RUN npm run build
 
+
+
+RUN ["/bin/gzip", "-r", "dist/"]
+
+FROM node:16-slim
+
+WORKDIR /app
+
+COPY --from=build-stage /app/dist dist
+COPY --from=build-stage /entrypoint.sh /entrypoint.sh
+
+# Grant Linux permissions and run entrypoint script
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# install simple http server for serving static content
+RUN npm install -g http-server
+
 EXPOSE 8080
-CMD [ "http-server", "dist", "--cors" ]
+CMD [ "http-server", "dist", "--cors" , "--gzip"]

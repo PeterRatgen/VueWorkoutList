@@ -136,7 +136,7 @@ export default defineComponent ({
     bottom: 2rem;
     height: 3rem;
     width: 30%;
-    background-color: darken($go-color, 3%);
+    background-color: $go-color;
     border-radius: 10px;
     padding: 12px;
     left: calc((100% - 30%) / 2);
@@ -147,7 +147,7 @@ export default defineComponent ({
     }
 
     &:hover {
-        background-color: darken($go-color, 6%);
+        background-color: darken($go-color, 3%);
     }
 }
 

@@ -19,7 +19,7 @@
         "@vue/cli-plugin-unit-jest": "^4.5.13",
         "@vue/cli-service": "^4.5.13",
         "axios": "^0.21.0",
-        "dotenv": "^8.2.0",
+        "dotenv": "^8.6.0",
         "mitt": "^3.0.0",
         "sass-loader": "^10.2.0",
         "vue": "^3.2.11",
