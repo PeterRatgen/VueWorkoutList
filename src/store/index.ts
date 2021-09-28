@@ -1,5 +1,6 @@
 //Imports from modules
 import { createStore, Store } from '../../node_modules/vuex';
+import serverUrl from '../configuration';
 
 //Type imports
 import axios, { AxiosInstance } from 'axios';
@@ -8,7 +9,7 @@ import { State } from './state_type';
 console.log(process.env.VUE_APP_API_URL);
 
 let instance : AxiosInstance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: serverUrl,
     headers : {
     },
     withCredentials: true

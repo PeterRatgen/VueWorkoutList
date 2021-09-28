@@ -2,8 +2,6 @@ FROM node:16 as build-stage
 # make the 'app' folder the current working directory
 WORKDIR /app
 
-ARG VUE_APP_API_URL
-
 # copy both 'package.json' and 'package-lock.json' (if available)
 COPY package*.json ./
 
@@ -21,13 +19,13 @@ FROM node:16-slim
 
 WORKDIR /app
 
+# install simple http server for serving static content
+RUN npm install -g http-server
 COPY --from=build-stage /app/dist dist
 
 # copy entrypoint script as /entrypoint.sh
 COPY ./entrypoint.sh /entrypoint.sh
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
 EXPOSE 8080
-CMD [ "http-server", "dist", "--cors" , "--gzip"]
+
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
