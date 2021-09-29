@@ -6,8 +6,8 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "test:unit":  "vue-cli-service test:unit",
-        "test:e2e" : "vue-cli-service test:e2e",
+        "test:unit": "vue-cli-service test:unit",
+        "test:e2e": "vue-cli-service test:e2e",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
         "docs:serve": "vitepress serve docs"
@@ -17,11 +17,10 @@
         "@fortawesome/free-solid-svg-icons": "^5.15.2",
         "@fortawesome/vue-fontawesome": "^3.0.0-3",
         "axios": "^0.21.0",
+        "core-js": "^3.17.3",
         "dotenv": "^8.6.0",
-        "mitt": "^3.0.0",
         "vue": "^3.2.11",
         "vue-router": "^4.0.0-0",
-        "core-js": "^3.17.3",
         "vuex": "^4.0.2"
     },
     "jest": {
@@ -49,7 +48,6 @@
     },
     "devDependencies": {
         "@mermaid-js/mermaid-cli": "^8.12.1",
-        "msw": "^0.35.0",
         "@types/jest": "^24.0.19",
         "@typescript-eslint/eslint-plugin": "^4.18.0",
         "@typescript-eslint/parser": "^4.18.0",
@@ -71,6 +69,7 @@
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.0",
         "eslint-plugin-vue": "^7.0.0",
+        "msw": "^0.35.0",
         "sass": "^1.26.5",
         "sass-loader": "^8.0.2",
         "typescript": "4.4.2",
@@ -87,7 +86,7 @@
             "@vue/typescript/recommended"
         ],
         "parserOptions": {
-            "ecmaVersion" : 2020
+            "ecmaVersion": 2020
         },
         "rules": {}
     },
