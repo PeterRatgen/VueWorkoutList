@@ -1,38 +1,47 @@
 name: Build Frontend Pipeline
 on: 
-  pull_request:
-    types: [closed]
+  push:
     branches: 
       - main
     paths:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
-  Build-Fronted:
+  Build-Frontend:
     runs-on: self-hosted
-    if: github.event.pull_request.merged == true
-    defaults:
-      run:
-        working-directory: /var/www/liftlog-frontend
-    steps:
-      - name: Pull changes
-        run: git pull
-        
+    permissions:
+      contents: read
+      packages: write
+
+    steps:    
       - name: Checkout 
         uses: actions/checkout@v2
 
-      - name: Set up node 
-        uses: actions/setup-node@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-      - name: Pull changes from npm
-        run: npm install
+      - name: Login to Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: env.REGISTRY
+          username: ${{ github.actor }}
+          password: ${{ secrets.IMAGE_TOKEN }}
 
-      - name: Run lint
-        run: npm run lint
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}/frontend:latest
+          labels: 
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.ref.name=${{ steps.vars.outputs.short_ref }}
 
-      - name: Run tests
-        run: npm run test
 
-      - name: Build frontend
-        run: npm run build
+  
