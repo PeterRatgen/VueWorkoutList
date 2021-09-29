@@ -2,12 +2,12 @@ name: Frontend CI testing
 on: 
   push:
     paths:
-      - 'frontend/**.vue'
-      - 'frontend/**.ts'
+      - '**/**.vue'
+      - '**/**.ts'
   pull_request:
     paths:
-      - 'frontend/**.vue'
-      - 'frontend/**.ts'
+      - '**/**.vue'
+      - '**/**.ts'
 jobs:
   Test-Frontend:
     runs-on: self-hosted
