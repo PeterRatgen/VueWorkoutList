@@ -7,10 +7,6 @@ on:
       - 'src/**.vue'
       - '/**.ts'
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   Build-Frontend:
     runs-on: self-hosted
@@ -28,7 +24,7 @@ jobs:
       - name: Login to Container Registry
         uses: docker/login-action@v1
         with:
-          registry: env.REGISTRY
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.IMAGE_TOKEN }}
 
@@ -38,7 +34,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}/frontend:latest
+          tags: ${{ github.repository }}/frontend:latest
           labels: 
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.ref.name=${{ steps.vars.outputs.short_ref }}
