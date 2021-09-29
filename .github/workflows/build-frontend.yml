@@ -4,8 +4,8 @@ on:
     branches: 
       - main
     paths:
-      - 'frontend/**.vue'
-      - 'frontend/**.ts'
+      - 'src/**.vue'
+      - '/**.ts'
 
 env:
   REGISTRY: ghcr.io

@@ -40,7 +40,6 @@ import WorkoutProcess from '../views/WorkoutProcess.vue';
 
 import mitt, { Emitter } from 'mitt';
 
-
 type Events = {
   foo: string;
   bar?: number;
