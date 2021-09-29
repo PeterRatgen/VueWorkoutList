@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent } from 'vue'
 
 import WorkoutDisplay from '../components/WorkoutDisplay.vue'
 import WorkoutResult from '../components/WorkoutResult.vue'
@@ -38,6 +38,12 @@ import Picker from '../components/Picker.vue'
 
 import { IWorkout, IExercise } from '../types'
 import axios, { AxiosInstance } from 'axios'
+
+export interface workoutDone {
+    timeOfEnd : number,
+    timeOfStart: number
+    workout: IWorkout
+}
 
 export default defineComponent({
   name: 'WorkoutProcess',
@@ -51,7 +57,12 @@ export default defineComponent({
     jwtData: String
   },
   emits: {
-    back: null
+    back: null,
+    'workout-completed': (
+      payload: workoutDone
+    ) => {
+      console.log(payload)
+    }
   },
   data () {
     return {
@@ -59,12 +70,6 @@ export default defineComponent({
       work: {} as IWorkout,
       currentExercise: 0,
       apiInstance: {} as AxiosInstance
-    }
-  },
-  setup () {
-    const emitter = inject('emitter')
-    return {
-      emitter
     }
   },
   methods: {
@@ -165,12 +170,12 @@ export default defineComponent({
           const res = await this.apiInstance.put('/workout_history/end_exercise', {
             historyId: this.work.historyId
           })
-          this.work.timeOfEnd = res.data;
-          (this as any).emitter.emit('workout-completed', {
+          this.work.timeOfEnd = res.data
+          this.$emit('workout-completed', {
             timeOfStart: this.work.timeOfStart,
             timeOfEnd: res.data,
             workout: this.work
-          })
+          } as workoutDone)
         } catch (err) {
           console.trace()
           console.log(err)
