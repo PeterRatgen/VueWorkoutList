@@ -1,8 +1,6 @@
 name: Frontend CI testing
 on: 
   push:
-    branches-ignore: 
-      - main
     paths:
       - 'frontend/**.vue'
       - 'frontend/**.ts'
