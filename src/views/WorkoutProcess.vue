@@ -40,6 +40,7 @@ import Picker from '../components/Picker.vue';
 import { IWorkout, IExercise} from '../types';
 import axios, {AxiosInstance} from 'axios';
 
+
 export default defineComponent ({
     name : 'WorkoutProcess',
     components : {
