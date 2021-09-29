@@ -35,11 +35,11 @@ import AddWorkout from '../components/AddWorkout.vue';
 import HelloHeader from '../components/HelloHeader.vue';
 import Workout from '../components/Workout.vue';
 
+
 import BeginWorkout from '../components/BeginWorkout.vue';
 import WorkoutProcess from '../views/WorkoutProcess.vue';
 
 import mitt, { Emitter } from 'mitt';
-
 
 type Events = {
   foo: string;
