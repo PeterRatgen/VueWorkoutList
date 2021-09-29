@@ -1,43 +1,42 @@
-//Imports from modules
-import { createStore, Store } from '../../node_modules/vuex';
-import serverUrl from '../configuration';
+// Imports from modules
+import { createStore, Store } from '../../node_modules/vuex'
+import serverUrl from '../configuration'
 
-//Type imports
-import axios, { AxiosInstance } from 'axios';
+// Type imports
+import axios, { AxiosInstance } from 'axios'
 
-import { State } from './state_type';
-console.log(process.env.VUE_APP_API_URL);
+import { State } from './state_type'
 
-let instance : AxiosInstance = axios.create({
-    baseURL: serverUrl,
-    headers : {
-    },
-    withCredentials: true
-});
+import mutations from './mutations'
+import actions from './actions'
+import getters from './getters'
+console.log(process.env.VUE_APP_API_URL)
 
-console.log(process.env);
+const instance : AxiosInstance = axios.create({
+  baseURL: serverUrl,
+  headers: {
+  },
+  withCredentials: true
+})
 
-let state = {
-    workouts : undefined,
-    workingOut : false,
-    currentWorkout : undefined,
-    apiInstance : instance,
-    userData : {},
-    email : 'peter@pratgen.dk',
-    password : 'safe',
-    loading : false,
-    name : "Peter Ratgen"
-};
+console.log(process.env)
 
-import mutations from './mutations';
-import actions from './actions';
-import getters from './getters';
+const state = {
+  workouts: undefined,
+  workingOut: false,
+  currentWorkout: undefined,
+  apiInstance: instance,
+  userData: {},
+  email: 'peter@pratgen.dk',
+  password: 'safe',
+  loading: false,
+  name: 'Peter Ratgen'
+}
 
-//Store related imports
-export let store : Store<State> = createStore({
-    state,
-    mutations,
-    actions,
-    getters
-});
-
+// Store related imports
+export const store : Store<State> = createStore({
+  state,
+  mutations,
+  actions,
+  getters
+})

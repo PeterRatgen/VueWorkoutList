@@ -1,5 +1,5 @@
-import { IWorkout } from '../types/index';
-import { AxiosInstance } from 'axios';
+import { IWorkout } from '../types/index'
+import { AxiosInstance } from 'axios'
 
 export interface State {
     workouts : IWorkout[] | undefined,
@@ -11,4 +11,3 @@ export interface State {
     email : string,
     password : string
 }
-

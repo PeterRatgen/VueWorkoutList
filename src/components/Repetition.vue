@@ -1,12 +1,12 @@
-<template> 
-    <div class="rep-container" 
+<template>
+    <div class="rep-container"
         @mouseover="isHover = true"
         @mouseleave="isHover = false"
     >
         <div @click.stop="repetition_click()" data-test="repetition-clicker">
             <transition name="fade" mode="out-in">
             <div v-if="editing">
-                <div class="item" data-test="expanded-weight" @wheel.prevent="scrolledWeight" > 
+                <div class="item" data-test="expanded-weight" @wheel.prevent="scrolledWeight" >
                     <span class="icon-container" data-test="weight-minus" @click.stop="dec('weight')">
                         <fa class="icon" icon="minus"  ></fa>
                     </span>
@@ -19,23 +19,23 @@
                     <span class="icon-container" data-test="rep-minus" @click.stop="dec('reps')">
                         <fa class="icon" icon="minus" ></fa>
                     </span>
-                    <p> 
-                        <span data-test="rep-count"> {{ repItem.repetitions }} </span> 
+                    <p>
+                        <span data-test="rep-count"> {{ repItem.repetitions }} </span>
                         reps
                     </p>
                     <span class="icon-container" data-test="rep-plus" @click.stop="inc('reps')">
                         <fa class="icon" icon="plus" ></fa>
                     </span>
-                </div> 
-                
+                </div>
+
             </div>
             <div v-else>
-                <span v-if="repItem.weight > 0"  > 
+                <span v-if="repItem.weight > 0"  >
                     <p data-test="no-edit-weight">{{ repItem.weight }} kg x {{ repItem.repetitions }}</p>
                 </span>
                 <span v-else  >
                     <p data-test="no-edit-rep" >{{ repItem.repetitions }} reps</p>
-                </span> 
+                </span>
             </div>
             </transition>
         </div>
@@ -43,149 +43,148 @@
                 v-if="isHover"
                 @click="delRep"
             >
-            <fa 
-                class="trash-rep" 
+            <fa
+                class="trash-rep"
                 icon="trash-alt" >
-            </fa> 
+            </fa>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IRepetition } from '../types';
+import { defineComponent } from 'vue'
+import { IRepetition } from '../types'
 
-import { mapActions }  from '../../node_modules/vuex';
+import { mapActions } from '../../node_modules/vuex'
 
 export default defineComponent({
-    name: "Repetition",
-    props: {
-        repetition : {
-            type : Object as () => IRepetition
-        },
-        workoutId : {
-            type : String
-        },
-        exerciseId : {
-            type : String
-        }
+  name: 'Repetition',
+  props: {
+    repetition: {
+      type: Object as () => IRepetition
     },
-    inject : ["emitter"],
-    data () {
-        return {
-            showWeight: false,
-            alignment: 'left',
-            repItem: {} as IRepetition,
-            editing: false,
-            isHover: false
-        };
-    }, 
-    created() : void {
-        if (this.repetition != undefined) {
-            if (this.repetition.weight) {
-                this.showWeight = true;
-            }
-            if (!this.showWeight) {
-                this.alignment = 'right';
-            }
-            this.repItem = this.repetition;
-
-            (this as any).emitter.on('pressed-repetition', () => {
-                this.editing = false;
-            });
-
-        }
+    workoutId: {
+      type: String
     },
-    methods: {
-        ...mapActions([
-            'changeRep',
-            'deleteRep'
-        ]),
-        delRep() {
-            /**
+    exerciseId: {
+      type: String
+    }
+  },
+  inject: ['emitter'],
+  data () {
+    return {
+      showWeight: false,
+      alignment: 'left',
+      repItem: {} as IRepetition,
+      editing: false,
+      isHover: false
+    }
+  },
+  created () : void {
+    if (this.repetition != undefined) {
+      if (this.repetition.weight) {
+        this.showWeight = true
+      }
+      if (!this.showWeight) {
+        this.alignment = 'right'
+      }
+      this.repItem = this.repetition;
+
+      (this as any).emitter.on('pressed-repetition', () => {
+        this.editing = false
+      })
+    }
+  },
+  methods: {
+    ...mapActions([
+      'changeRep',
+      'deleteRep'
+    ]),
+    delRep () {
+      /**
                 Deleting a rep.
             */
-            if(this.repItem.id != undefined) {
-                this.deleteRep (
-                    { 
-                        workoutId : this.workoutId,
-                        exerciseId : this.exerciseId,
-                        repId  : this.repItem.id 
-                    });
-            }
-        },
-        inc(target : string) {
-            /**
+      if (this.repItem.id != undefined) {
+        this.deleteRep(
+          {
+            workoutId: this.workoutId,
+            exerciseId: this.exerciseId,
+            repId: this.repItem.id
+          })
+      }
+    },
+    inc (target : string) {
+      /**
                 Increment the weight or reps.
             */
-            switch(target){
-                case "weight":
-                    this.repItem.weight = this.repItem.weight + 2.5;
-                    break;
-                case "reps":
-                    this.repItem.repetitions = this.repItem.repetitions  + 1;
-                    break;
-            }
-        },
-        dec(target : string){
-            /**
+      switch (target) {
+        case 'weight':
+          this.repItem.weight = this.repItem.weight + 2.5
+          break
+        case 'reps':
+          this.repItem.repetitions = this.repItem.repetitions + 1
+          break
+      }
+    },
+    dec (target : string) {
+      /**
                 Decrement the weight or rep.
             */
-            switch(target){
-                case "weight":
-                    if (this.repItem.weight != 0) {
-                        this.repItem.weight = this.repItem.weight - 2.5;
-                    }
-                    break;
-                case "reps":
-                    if (this.repItem.repetitions != 0) {
-                        this.repItem.repetitions = this.repItem.repetitions  - 1;
-                    }
-                    break;
-            }
-        },
-        repetition_click(){
-            /**
+      switch (target) {
+        case 'weight':
+          if (this.repItem.weight != 0) {
+            this.repItem.weight = this.repItem.weight - 2.5
+          }
+          break
+        case 'reps':
+          if (this.repItem.repetitions != 0) {
+            this.repItem.repetitions = this.repItem.repetitions - 1
+          }
+          break
+      }
+    },
+    repetition_click () {
+      /**
                 What happens when a repetition is clicked.
             */
-            let oldEdit = this.editing;
-            this.editing = !this.editing;
-            (this as any).emitter.emit('pressed-repetition');
-            if (oldEdit == false) {
-                this.editing = true;
-            } else {
-                this.editing = false;
-                this.changeRep({ 
-                    workoutId : this.workoutId, 
-                    exerciseId : this.exerciseId, 
-                    repItem : this.repItem });
-            }
-        },
-        scrolledReps(event : any) {
-            /**
+      const oldEdit = this.editing
+      this.editing = !this.editing;
+      (this as any).emitter.emit('pressed-repetition')
+      if (oldEdit == false) {
+        this.editing = true
+      } else {
+        this.editing = false
+        this.changeRep({
+          workoutId: this.workoutId,
+          exerciseId: this.exerciseId,
+          repItem: this.repItem
+        })
+      }
+    },
+    scrolledReps (event : any) {
+      /**
                 Scroll on reps.
             */
-            if (event.deltaY < 0){
-                this.inc("reps");
-            } else {
-                this.dec("reps");
-            }
-        },
-        scrolledWeight(event : any) {
-            /** 
+      if (event.deltaY < 0) {
+        this.inc('reps')
+      } else {
+        this.dec('reps')
+      }
+    },
+    scrolledWeight (event : any) {
+      /**
                 Scroll on weight.
             */
-            if (event.deltaY < 0){
-                this.inc("weight");
-            } else {
-                this.dec("weight");
-            }
-        },
+      if (event.deltaY < 0) {
+        this.inc('weight')
+      } else {
+        this.dec('weight')
+      }
     }
-});
-  
-</script>
+  }
+})
 
+</script>
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
@@ -259,7 +258,5 @@ export default defineComponent({
    width: 95%;
   }
 }
-  
+
 </style>
-
-

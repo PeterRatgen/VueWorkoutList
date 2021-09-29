@@ -5,97 +5,96 @@
         <div class="todo-block">
             <div class="todo">
                 <div v-bind:key="workout" v-for="(workout) in workouts" >
-                    <Workout 
-                        :workout="workout" 
+                    <Workout
+                        :workout="workout"
                     />
                 </div>
                 <AddWorkout/>
             </div>
         </div>
-        <BeginWorkout 
+        <BeginWorkout
             :workouts="workouts"
             @select-workout="selectedWorkout"
             @continue-workout="continueWorkout"
         />
     </div>
-    <WorkoutProcess v-else 
-        :workout="currentWorkout"  
+    <WorkoutProcess v-else
+        :workout="currentWorkout"
         :jwtData="token"
         v-on:back="workingOut = false"
     />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapActions, mapState }  from '../../node_modules/vuex';
+import { defineComponent } from 'vue'
+import { mapActions, mapState } from '../../node_modules/vuex'
 
-import { IWorkout } from '../types/index';
+import { IWorkout } from '../types/index'
 
-import AddWorkout from '../components/AddWorkout.vue';
-import HelloHeader from '../components/HelloHeader.vue';
-import Workout from '../components/Workout.vue';
-import BeginWorkout from '../components/BeginWorkout.vue';
-import WorkoutProcess from '../views/WorkoutProcess.vue';
+import AddWorkout from '../components/AddWorkout.vue'
+import HelloHeader from '../components/HelloHeader.vue'
+import Workout from '../components/Workout.vue'
+import BeginWorkout from '../components/BeginWorkout.vue'
+import WorkoutProcess from '../views/WorkoutProcess.vue'
 
-import mitt, { Emitter } from 'mitt';
+import mitt, { Emitter } from 'mitt'
 
 type Events = {
   foo: string;
   bar?: number;
 };
 
-let mittInstance  : Emitter<Events>= mitt<Events>();
+const mittInstance : Emitter<Events> = mitt<Events>()
 
 export default defineComponent({
-    /**
+  /**
         View of the workouts.
     */
-    name: 'WorkoutView',
-    components: {
-        Workout,
-        HelloHeader,
-        AddWorkout,
-        BeginWorkout,
-        WorkoutProcess
-    },
-    provide : {
-        emitter : mittInstance
-    },
-    computed : mapState([
-        'workouts',
-        'workingOut',
-        'name'
+  name: 'WorkoutView',
+  components: {
+    Workout,
+    HelloHeader,
+    AddWorkout,
+    BeginWorkout,
+    WorkoutProcess
+  },
+  provide: {
+    emitter: mittInstance
+  },
+  computed: mapState([
+    'workouts',
+    'workingOut',
+    'name'
+  ]),
+  methods: {
+    ...mapActions([
+      'login',
+      'getWorkout',
+      'setWorkingOut',
+      'currentWorkout'
     ]),
-    methods: {
-        ...mapActions([
-            'login',
-            'getWorkout',
-            'setWorkingOut',
-            'currentWorkout'
-        ]),
-        backgroundPressed() {
-            (mittInstance as any).emit('pressed-background');
-        },
-        selectedWorkout(workout : IWorkout) {
-            this.setWorkingOut(true);
-            this.currentWorkout(workout);
-        },
-        continueWorkout() {
-            this.currentWorkout({});
-            this.setWorkingOut(true);
-        }
+    backgroundPressed () {
+      (mittInstance as any).emit('pressed-background')
     },
-    mounted() {
-        /**
+    selectedWorkout (workout : IWorkout) {
+      this.setWorkingOut(true)
+      this.currentWorkout(workout)
+    },
+    continueWorkout () {
+      this.currentWorkout({})
+      this.setWorkingOut(true)
+    }
+  },
+  mounted () {
+    /**
             Receiving emitted events
         */
-        this.login().then(() => {
-            this.getWorkout();
-        });
-    }
-});
+    this.login().then(() => {
+      this.getWorkout()
+    })
+  }
+})
 </script>
-
 
 <style lang="scss" >
 @import "../assets/variables.scss";
@@ -105,7 +104,6 @@ export default defineComponent({
   margin: 0;
   padding: 0;
 }
-
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -140,7 +138,6 @@ body {
     margin: 0 auto;
 }
 
-
 @media only screen and (max-width: 1400px) {
   .todo-block {
     width: 60%;
@@ -149,7 +146,6 @@ body {
     width: 60%;
   }
 }
-
 
 @media only screen and (max-width: 1000px) {
     .todo-block {
@@ -178,4 +174,3 @@ body {
 }
 
 </style>
-

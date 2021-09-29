@@ -1,148 +1,143 @@
-import 'jest';
-import { shallowMount } from '@vue/test-utils';
+import 'jest'
+import { shallowMount } from '@vue/test-utils'
 
-import Repetition from '../../src/components/Repetition.vue';
+import Repetition from '../../src/components/Repetition.vue'
 
-import { repetition } from '../testData';
-import mitt from 'mitt';
+import { repetition } from '../testData'
+import mitt from 'mitt'
 import store from '../../src/store/index'
 
-
 const wrapper = shallowMount(Repetition, {
-    props : {
-        repetition : repetition 
+  props: {
+    repetition: repetition
+  },
+  global: {
+    provide: {
+      emitter: mitt()
     },
-    global: {
-        provide :  {
-            emitter: mitt()
-        },
-        stubs : ['fa'],
-        plugins : [store]
-    }});
+    stubs: ['fa'],
+    plugins: [store]
+  }
+})
 
 describe('Repetition when not editing', () => {
-    it('has weight and reps', () => {
-        const text = wrapper.find('[data-test="no-edit-weight"]');
-        expect(text.text()).toBe("10 kg x 12");
-    });
+  it('has weight and reps', () => {
+    const text = wrapper.find('[data-test="no-edit-weight"]')
+    expect(text.text()).toBe('10 kg x 12')
+  })
 
-    it('has reps only, when weight is 0', async() => {
-        const newRep = repetition;
-        newRep.weight = 0;
+  it('has reps only, when weight is 0', async () => {
+    const newRep = repetition
+    newRep.weight = 0
 
-        await wrapper.setData({repItem : newRep});
+    await wrapper.setData({ repItem: newRep })
 
-        const text = wrapper.find('[data-test="no-edit-rep"]');
+    const text = wrapper.find('[data-test="no-edit-rep"]')
 
-        expect(text.text()).toBe("12 reps");
-    });
-});
+    expect(text.text()).toBe('12 reps')
+  })
+})
 
 describe('Repetition editing', () => {
-    it('can toggle editing mode', async() => {
-        let editWeight = wrapper.find('[data-test="expanded-weight"]');
-        expect(editWeight.exists()).toBeFalsy();
-        const repContainer = wrapper.find('[data-test="repetition-clicker"]');
-        
-        await repContainer.trigger('click');
+  it('can toggle editing mode', async () => {
+    let editWeight = wrapper.find('[data-test="expanded-weight"]')
+    expect(editWeight.exists()).toBeFalsy()
+    const repContainer = wrapper.find('[data-test="repetition-clicker"]')
 
-        editWeight = wrapper.find('[data-test="expanded-weight"]');
-        expect(editWeight.exists()).toBeTruthy();
-    });
+    await repContainer.trigger('click')
 
-    it('can increase weight', async() => {
-        let repCount = wrapper.find('[data-test="weight-count"]');
-        let count : number = parseFloat(repCount.text());
+    editWeight = wrapper.find('[data-test="expanded-weight"]')
+    expect(editWeight.exists()).toBeTruthy()
+  })
 
-        const minusweight = wrapper.find('[data-test="weight-plus"]');
-        await minusweight.trigger('click');
+  it('can increase weight', async () => {
+    let repCount = wrapper.find('[data-test="weight-count"]')
+    const count : number = parseFloat(repCount.text())
 
-        repCount = wrapper.find('[data-test="weight-count"]');
-        let countPost  : number = parseFloat(repCount.text());
-        
-        expect(count).toBeLessThan(countPost);
-    });
+    const minusweight = wrapper.find('[data-test="weight-plus"]')
+    await minusweight.trigger('click')
 
-    it('can reduce weight', async() => {
-        let repCount = wrapper.find('[data-test="weight-count"]');
-        let count : number = parseFloat(repCount.text());
+    repCount = wrapper.find('[data-test="weight-count"]')
+    const countPost : number = parseFloat(repCount.text())
 
-        const minusweight = wrapper.find('[data-test="weight-minus"]');
-        await minusweight.trigger('click');
+    expect(count).toBeLessThan(countPost)
+  })
 
-        
-        let newRepCount = wrapper.find('[data-test="weight-count"]');
-        let innerText = newRepCount.text();
-        let countPost  : number = parseFloat(innerText);
-        
-        expect(count).toBeGreaterThan(countPost);
-    });
+  it('can reduce weight', async () => {
+    const repCount = wrapper.find('[data-test="weight-count"]')
+    const count : number = parseFloat(repCount.text())
 
-    it('emits an event when editing is done', async() => {
-        const minusweight = wrapper.find('[data-test="weight-plus"]');
+    const minusweight = wrapper.find('[data-test="weight-minus"]')
+    await minusweight.trigger('click')
 
-        await minusweight.trigger('click');
-        await minusweight.trigger('click');
-        await minusweight.trigger('click');
-        
-        let repCount = wrapper.find('[data-test="weight-count"]');
-        let count : number = parseFloat(repCount.text());
+    const newRepCount = wrapper.find('[data-test="weight-count"]')
+    const innerText = newRepCount.text()
+    const countPost : number = parseFloat(innerText)
 
-        expect(count).toBe(7.5);
+    expect(count).toBeGreaterThan(countPost)
+  })
 
-        const repContainer = wrapper.find('[data-test="repetition-clicker"]');
-        await repContainer.trigger('click');
+  it('emits an event when editing is done', async () => {
+    const minusweight = wrapper.find('[data-test="weight-plus"]')
 
-        let editWeight = wrapper.find('[data-test="expanded-weight"]');
-        expect(editWeight.exists()).toBeFalsy();
-    });
+    await minusweight.trigger('click')
+    await minusweight.trigger('click')
+    await minusweight.trigger('click')
 
+    const repCount = wrapper.find('[data-test="weight-count"]')
+    const count : number = parseFloat(repCount.text())
 
-    it('can increase weight on scrolling', async () => {
-        //we make sure that we are editing  
-        await wrapper.setData({ editing : true });
-        
-        let repCount = wrapper.find('[data-test="weight-count"]');
-        let count : number = parseFloat(repCount.text());
+    expect(count).toBe(7.5)
 
-        let editWeight = wrapper.find('[data-test="expanded-weight"]');
-        await editWeight.trigger("wheel");
+    const repContainer = wrapper.find('[data-test="repetition-clicker"]')
+    await repContainer.trigger('click')
 
-        let newRepCount = wrapper.find('[data-test="weight-count"]');
-        let innerText = newRepCount.text();
-        let countPost  : number = parseFloat(innerText);
-        
-        expect(count).toBeGreaterThan(countPost);
+    const editWeight = wrapper.find('[data-test="expanded-weight"]')
+    expect(editWeight.exists()).toBeFalsy()
+  })
 
-    });
+  it('can increase weight on scrolling', async () => {
+    // we make sure that we are editing
+    await wrapper.setData({ editing: true })
 
-    it('can display trash on hover', async () => {
-        const wrap = shallowMount(Repetition, {
-            props : {
-                repetition : repetition 
-            },
-            global: {
-                provide :  {
-                    emitter: mitt()
-                },
-                stubs : ['fa']
-            }
-        });
+    const repCount = wrapper.find('[data-test="weight-count"]')
+    const count : number = parseFloat(repCount.text())
 
-        let trash = wrap.find('[class="trash-container"]');
-        expect(trash.exists()).toBeFalsy();
+    const editWeight = wrapper.find('[data-test="expanded-weight"]')
+    await editWeight.trigger('wheel')
 
-        let repCount = wrap.find('[class="rep-container"]');
-        await repCount.trigger('mouseover');
+    const newRepCount = wrapper.find('[data-test="weight-count"]')
+    const innerText = newRepCount.text()
+    const countPost : number = parseFloat(innerText)
 
-        
-        trash = wrap.find('[class="trash-container"]');
-        expect(trash.exists()).toBeTruthy();
+    expect(count).toBeGreaterThan(countPost)
+  })
 
-        await repCount.trigger('mouseleave');
+  it('can display trash on hover', async () => {
+    const wrap = shallowMount(Repetition, {
+      props: {
+        repetition: repetition
+      },
+      global: {
+        provide: {
+          emitter: mitt()
+        },
+        stubs: ['fa']
+      }
+    })
 
+    let trash = wrap.find('[class="trash-container"]')
+    expect(trash.exists()).toBeFalsy()
 
-        trash = wrap.find('[class="trash-container"]');
-        expect(trash.exists()).toBeFalsy();
-    });
-});
+    const repCount = wrap.find('[class="rep-container"]')
+    await repCount.trigger('mouseover')
+
+    trash = wrap.find('[class="trash-container"]')
+    expect(trash.exists()).toBeTruthy()
+
+    await repCount.trigger('mouseleave')
+
+    trash = wrap.find('[class="trash-container"]')
+    expect(trash.exists()).toBeFalsy()
+  })
+})

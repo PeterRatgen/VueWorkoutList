@@ -6,14 +6,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-//import Header from './components/layout/Header.vue';
-export default defineComponent ({
-  name: "App",
+import { defineComponent } from 'vue'
+// import Header from './components/layout/Header.vue';
+export default defineComponent({
+  name: 'App',
   components: {
-    //Header 
-  },
-});
+    // Header
+  }
+})
 </script>
 
 <style>
@@ -26,7 +26,6 @@ export default defineComponent ({
   color: #2c3e50;
   padding: 2.5vh 2.5vw;
 }
-
 
 #nav a {
   font-weight: bold;

@@ -1,6 +1,6 @@
 <template>
     <div class="top-bar"> <!-- Top bar -->
-        <div class="back-button" @click="returnToFront"> 
+        <div class="back-button" @click="returnToFront">
             <fa class="arrow" icon="arrow-left"  ></fa>
         </div>
         <div class="right-flex">
@@ -8,13 +8,13 @@
             <button class="stop-button" @click="showEndCard">Afslut</button>
         </div>
     </div>
-    <div class="workout-block"> 
+    <div class="workout-block">
         <div class="header-container"> <!-- Header -->
             <h1 class="header">{{ work.title }}</h1>
             <div class="accent-divider"></div>
         </div>
         <div class="workout-section" v-for="exercise in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
-            <WorkoutDisplay 
+            <WorkoutDisplay
                 v-bind:exercise="exercise"
                 v-on:send-rep="sendRep"
                 v-on:change-set="changeSet"
@@ -29,210 +29,202 @@
     />
 </template>
 
-
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, inject } from 'vue'
 
-import WorkoutDisplay from '../components/WorkoutDisplay.vue';
-import WorkoutResult from '../components/WorkoutResult.vue';
-import Picker from '../components/Picker.vue';
+import WorkoutDisplay from '../components/WorkoutDisplay.vue'
+import WorkoutResult from '../components/WorkoutResult.vue'
+import Picker from '../components/Picker.vue'
 
-import { IWorkout, IExercise} from '../types';
-import axios, {AxiosInstance} from 'axios';
+import { IWorkout, IExercise } from '../types'
+import axios, { AxiosInstance } from 'axios'
 
-
-export default defineComponent ({
-    name : 'WorkoutProcess',
-    components : {
-        WorkoutDisplay,
-        WorkoutResult,
-        Picker
+export default defineComponent({
+  name: 'WorkoutProcess',
+  components: {
+    WorkoutDisplay,
+    WorkoutResult,
+    Picker
+  },
+  props: {
+    workout: Object as () => IWorkout,
+    jwtData: String
+  },
+  emits: {
+    back: null
+  },
+  data () {
+    return {
+      timeSinceStart: '',
+      work: {} as IWorkout,
+      currentExercise: 0,
+      apiInstance: {} as AxiosInstance
+    }
+  },
+  setup () {
+    const emitter = inject('emitter')
+    return {
+      emitter
+    }
+  },
+  methods: {
+    calcTime () {
+      let startTime = 0
+      if (this.work.timeOfStart == undefined) {
+        const time = new Date()
+        this.work.timeOfStart = time.getTime()
+        startTime = time.getTime()
+      } else {
+        startTime = this.work.timeOfStart
+      }
+      setInterval(() => {
+        let date : Date
+        let secs : number
+        if (this.work.timeOfEnd == undefined) {
+          const now = new Date().getTime()
+          date = new Date(now - startTime)
+          secs = date.getSeconds()
+        } else {
+          date = new Date(this.work.timeOfEnd - startTime)
+          secs = date.getSeconds()
+        }
+        let secPrint : string
+        if (secs < 10) {
+          secPrint = '0' + secs.toString()
+        } else {
+          secPrint = secs.toString()
+        }
+        const print = date.getMinutes().toString() + ':' + secPrint
+        this.timeSinceStart = print
+      }, 1000)
     },
-    props : {
-        ["workout"] : Object as () => IWorkout,
-        ["jwtData"] : String
+    async startWorkout () {
+      const a = []
+      for (const i of this.work.exerciseList) {
+        a.push(i.id)
+      }
+      if (this.apiInstance != undefined || this.jwtData != '') {
+        try {
+          const res = await this.apiInstance.post('/workout_history', {
+            workoutId: this.work._id,
+            exerciseList: a
+          })
+          this.work.historyId = res.data
+        } catch (err) {
+          console.trace()
+          console.log(err)
+        }
+      }
     },
-    emits : {
-        ['back'] : null
+    async sendRep (data : any) {
+      const ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+      if (ex != undefined) {
+        for (const set of ex.set) {
+          if ((set.completed == undefined || set.completed == false) &&
+                        (this.apiInstance != undefined || this.jwtData)) {
+            try {
+              await this.apiInstance.post('/workout_history/send_rep', {
+                historyId: this.work.historyId,
+                exerciseId: data.exerciseId,
+                repetitions: data.set.repetitions,
+                weight: data.set.weight
+              })
+            } catch (err) {
+              console.trace()
+              console.log(err)
+            }
+            break
+          }
+        }
+      }
     },
-    data() {
-        return {
-            timeSinceStart : '',
-            work : {} as IWorkout,
-            currentExercise : 0,
-            apiInstance : {} as AxiosInstance,
-        };
+    async skippedExercise (data : any) {
+      const ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+      if (ele != undefined && this.apiInstance != undefined && this.jwtData) {
+        ele.skipped = true
+        try {
+          await this.apiInstance.put('/workout_history/skip_exercise', {
+            historyId: this.work.historyId,
+            exerciseId: data.exerciseId
+          })
+        } catch (err) {
+          console.trace()
+          console.log(err)
+        }
+      }
     },
-    setup () {
-        const emitter = inject('emitter');
-        return {
-            emitter
-        };
+    changeSet (data : any) {
+      const ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+      if (ex != undefined) {
+        ex.set[data.index] = data.newSet
+      }
     },
-    methods : {
-        calcTime() {
-            let startTime = 0;
-            if(this.work.timeOfStart == undefined)  {
-                let time = new Date();
-                this.work.timeOfStart = time.getTime();
-                startTime = time.getTime();
-            } else {
-                startTime = this.work.timeOfStart;
-            }
-            setInterval(() => {
-                let date : Date;
-                let secs : number;
-                if (this.work.timeOfEnd == undefined) {
-                    let now = new Date().getTime();
-                    date = new Date(now - startTime);
-                    secs = date.getSeconds();
-                } else {
-                    date = new Date(this.work.timeOfEnd - startTime);
-                    secs = date.getSeconds();
-                }
-                let secPrint : string;
-                if (secs < 10) {
-                    secPrint = "0" + secs.toString();
-                } else {
-                    secPrint = secs.toString();
-                }
-                let print = date.getMinutes().toString() + ':' + secPrint;
-                this.timeSinceStart = print;
-            }, 1000);
-        },
-        async startWorkout () {
-            let a = [];
-            for (let i of  this.work.exerciseList) {
-                a.push(i.id);
-            }
-            if ( this.apiInstance != undefined || this.jwtData != '') {
-                try {
-                    let res = await this.apiInstance.post('/workout_history', {
-                        workoutId : this.work._id,
-                        exerciseList : a
-                    });
-                    this.work.historyId = res.data;
-                }
-                catch (err) {
-                    console.trace();
-                    console.log(err);
-                }
-            }
-        },
-        async sendRep(data : any){
-            let ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
-            if ( ex != undefined) {
-                for (let set of ex.set) {
-                    if ((set.completed == undefined || set.completed == false )
-                        && ( this.apiInstance != undefined || this.jwtData )) {
-                        try {
-                            await this.apiInstance.post('/workout_history/send_rep', {
-                                historyId : this.work.historyId,
-                                exerciseId : data.exerciseId,
-                                repetitions : data.set.repetitions,
-                                weight : data.set.weight
-                            }); 
-                        }
-                        catch (err) {
-                            console.trace();
-                            console.log(err);
-                        }
-                        break;
-                    } 
-                }
-            }
-        },
-        async skippedExercise(data : any ) {
-            let ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
-            if ( ele != undefined && this.apiInstance != undefined && this.jwtData ) {
-                ele.skipped = true;
-                try {
-                    await this.apiInstance.put('/workout_history/skip_exercise', {
-                        historyId : this.work.historyId,
-                        exerciseId : data.exerciseId
-                    });
-                }
-                catch (err) {
-                    console.trace();
-                    console.log(err);
-                }
-            }
-        },
-        changeSet(data : any) {
-            let ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId);
-            if ( ex != undefined ) {
-                ex.set[data.index] = data.newSet;
-            }
-        },
-        async showEndCard() {
-            if (this.apiInstance != undefined || this.jwtData) {
-                try {
-                    let res = await this.apiInstance.put('/workout_history/end_exercise', {
-                        historyId: this.work.historyId
-                    });
-                    this.work.timeOfEnd = res.data;
-                    (this as any).emitter.emit('workout-completed', {
-                        timeOfStart : this.work.timeOfStart,
-                        timeOfEnd : res.data,
-                        workout : this.work
-                    });
-                }
-                catch (err) {
-                    console.trace();
-                    console.log(err);
-                }
-            }
-        },
-        endWorkout() {
-            localStorage.removeItem('onGoingWorkout');
-            //this.work = {};
-            this.$emit('back');
-        },
-        returnToFront() {
-            localStorage.setItem('onGoingWorkout', JSON.stringify(this.work));
-            this.$emit('back');
-        },
-        createInstance() {
-            /**
+    async showEndCard () {
+      if (this.apiInstance != undefined || this.jwtData) {
+        try {
+          const res = await this.apiInstance.put('/workout_history/end_exercise', {
+            historyId: this.work.historyId
+          })
+          this.work.timeOfEnd = res.data;
+          (this as any).emitter.emit('workout-completed', {
+            timeOfStart: this.work.timeOfStart,
+            timeOfEnd: res.data,
+            workout: this.work
+          })
+        } catch (err) {
+          console.trace()
+          console.log(err)
+        }
+      }
+    },
+    endWorkout () {
+      localStorage.removeItem('onGoingWorkout')
+      // this.work = {};
+      this.$emit('back')
+    },
+    returnToFront () {
+      localStorage.setItem('onGoingWorkout', JSON.stringify(this.work))
+      this.$emit('back')
+    },
+    createInstance () {
+      /**
                 Saves an instance of the API connection, as not to repeat the
                 Bearer Token
             */
-            return axios.create({
-                baseURL: process.env.VUE_APP_API_URL,
-                headers : {
-                    Authorization : `Bearer ${this.jwtData}`
-                }
-            });
-        },
-    },
-    mounted() {
-        this.apiInstance = this.createInstance();
-        let onGoingWorkout = localStorage.getItem('onGoingWorkout');
-        if (onGoingWorkout != undefined) {
-            this.work  = (JSON.parse(onGoingWorkout) as IWorkout);
-        } else {
-            if (this.workout != undefined) {
-                let tempWork : IWorkout | undefined = this.workout;
-                if (tempWork != undefined && tempWork.exerciseList != undefined) {
-                    tempWork.timeOfStart = undefined;
-                    for (let ex of tempWork.exerciseList) {
-                        for (let set of ex.set) {
-                            set.completed = undefined;
-                        }
-                    }
-                    this.work = (tempWork as IWorkout);
-                }
-            }
+      return axios.create({
+        baseURL: process.env.VUE_APP_API_URL,
+        headers: {
+          Authorization: `Bearer ${this.jwtData}`
         }
-        this.calcTime();
-        this.startWorkout();
-    },
-    updated() {
+      })
     }
-});
+  },
+  mounted () {
+    this.apiInstance = this.createInstance()
+    const onGoingWorkout = localStorage.getItem('onGoingWorkout')
+    if (onGoingWorkout != undefined) {
+      this.work = (JSON.parse(onGoingWorkout) as IWorkout)
+    } else {
+      if (this.workout != undefined) {
+        const tempWork : IWorkout | undefined = this.workout
+        if (tempWork != undefined && tempWork.exerciseList != undefined) {
+          tempWork.timeOfStart = undefined
+          for (const ex of tempWork.exerciseList) {
+            for (const set of ex.set) {
+              set.completed = undefined
+            }
+          }
+          this.work = (tempWork as IWorkout)
+        }
+      }
+    }
+    this.calcTime()
+    this.startWorkout()
+  },
+  updated () {
+  }
+})
 </script>
-
-
 
 <style scoped lang="scss">
 @import "../assets/variables.scss";
@@ -253,7 +245,6 @@ export default defineComponent ({
     height: 0.5rem;
     background: $accent-color;
 }
-
 
 .top-bar {
     width: 100%;
@@ -299,12 +290,12 @@ export default defineComponent ({
 
         .stop-button {
             @include button;
-            background-color: $delete-color; 
+            background-color: $delete-color;
             color: white;
             border-color: $delete-color;
             font-weight: 600;
             padding:  0.35rem 0.5rem;
-            
+
             &:hover {
                 background-color: darken($delete-color, 5%)
             }

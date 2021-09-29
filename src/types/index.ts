@@ -1,5 +1,5 @@
 export interface repData {
-    workoutId :  string,
+    workoutId : string,
     exerciseId : string,
     repItem : IRepetition
 }

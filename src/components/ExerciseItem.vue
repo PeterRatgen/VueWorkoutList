@@ -1,7 +1,7 @@
-<template> 
+<template>
     <div class="divder"></div>
-    <div class="name" 
-        @mouseover="displayEdit" 
+    <div class="name"
+        @mouseover="displayEdit"
         @mouseleave="isHover = false"
         @click.stop="contracted = !contracted"
     >
@@ -11,19 +11,19 @@
                     The ExerciseItem is contracted.
                 -->
                 <div class="item-header">
-                    <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>    
-                    <span test-data="set-counter" >  
-                            <span 
-                                class="icon-container"  
-                                @click.stop="delExercise" 
+                    <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>
+                    <span test-data="set-counter" >
+                            <span
+                                class="icon-container"
+                                @click.stop="delExercise"
                                 v-if="isHover"
                             >
-                                <fa 
-                                    class="edit-icon" 
+                                <fa
+                                    class="edit-icon"
                                     icon="trash-alt" >
-                                </fa> 
+                                </fa>
                             </span>
-                            {{ exerciseItem.set.length }} sæt 
+                            {{ exerciseItem.set.length }} sæt
                     </span>
                 </div>
             </div>
@@ -40,18 +40,18 @@
                         v-on:result="titleSubmitEdit"
                         @click.stop
                     />
-                    <span test-data="set-counter" >  
-                        <span 
-                            class="icon-container" 
-                            @click.stop="delExercise" 
+                    <span test-data="set-counter" >
+                        <span
+                            class="icon-container"
+                            @click.stop="delExercise"
                             v-if="isHover"
                         >
-                            <fa 
-                                class="edit-icon" v-bind:class="{ editiconactive : isHover }" 
+                            <fa
+                                class="edit-icon" v-bind:class="{ editiconactive : isHover }"
                                 icon="trash-alt" >
-                            </fa> 
+                            </fa>
                         </span>
-                        {{ exerciseItem.set.length }} sæt 
+                        {{ exerciseItem.set.length }} sæt
                     </span>
                 </div>
                 <div class="repetition-container">
@@ -59,13 +59,13 @@
                         In here all the repetitions are displayed
                     -->
                     <div class="repetition" @click.stop v-for="rep in exerciseItem.set" v-bind:key="rep">
-                        <Repetition  
+                        <Repetition
                             :workoutId="workoutId"
                             :exerciseId="exerciseItem.id"
                             v-bind:repetition="rep"
                         />
                     </div>
-                    <div class="repetition add-repetition"> 
+                    <div class="repetition add-repetition">
                         <NewRepetition
                             :workoutId="workoutId"
                             :exerciseId="exerciseItem.id"
@@ -78,76 +78,74 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import Repetition from './Repetition.vue';
-import InputField from "./InputField.vue";
-import NewRepetition from "./repetitions/NewRepetition.vue";
+import Repetition from './Repetition.vue'
+import InputField from './InputField.vue'
+import NewRepetition from './repetitions/NewRepetition.vue'
 
-import { IExercise } from '../types';
-import { mapActions }  from '../../node_modules/vuex';
+import { IExercise } from '../types'
+import { mapActions } from '../../node_modules/vuex'
 
 export default defineComponent({
-    /*
+  /*
         Displays an exercise, and its repetitions.
     */
-    name: "ExerciseItem",
-    props: {
-        ["workoutId"] : String,
-        ["exerciseItem"] : Object as () => IExercise, 
-        ["edit"] : Boolean,
-    },
-    components: {
-        Repetition,
-        InputField,
-        NewRepetition
-    },
-    data () {
-        return {
-            showWeight: false,
-            contracted: true,
-            isHover : false
-        };
-    }, 
-    methods : {
-        ...mapActions([
-            'changeExerciseName',
-            'deleteExercise'
-        ]),
-        titleSubmitEdit(result : string) {
-            /*
+  name: 'ExerciseItem',
+  props: {
+    workoutId: String,
+    exerciseItem: Object as () => IExercise,
+    edit: Boolean
+  },
+  components: {
+    Repetition,
+    InputField,
+    NewRepetition
+  },
+  data () {
+    return {
+      showWeight: false,
+      contracted: true,
+      isHover: false
+    }
+  },
+  methods: {
+    ...mapActions([
+      'changeExerciseName',
+      'deleteExercise'
+    ]),
+    titleSubmitEdit (result : string) {
+      /*
                 Submit the new title of a workout.
             */
-            if (this.exerciseItem != undefined) {
-                this.changeExerciseName({
-                    workoutId : this.workoutId,
-                    exerciseId : this.exerciseItem.id, 
-                    name : result 
-                    }
-                );
-            }
-        },
-        displayEdit() {
-            this.isHover = true;        
-        },
-        delExercise() {
-            if (this.exerciseItem != undefined) {
-                this.deleteExercise({exerciseId : this.exerciseItem.id});
-            }
-        },
-    },
-    mounted() {
-        if (this.exerciseItem != undefined) {
-            if (this.exerciseItem.name === '') {
-                this.contracted = false;
-            }
+      if (this.exerciseItem != undefined) {
+        this.changeExerciseName({
+          workoutId: this.workoutId,
+          exerciseId: this.exerciseItem.id,
+          name: result
         }
+        )
+      }
+    },
+    displayEdit () {
+      this.isHover = true
+    },
+    delExercise () {
+      if (this.exerciseItem != undefined) {
+        this.deleteExercise({ exerciseId: this.exerciseItem.id })
+      }
     }
-});
-  
+  },
+  mounted () {
+    if (this.exerciseItem != undefined) {
+      if (this.exerciseItem.name === '') {
+        this.contracted = false
+      }
+    }
+  }
+})
 
 </script>
-
 
 <style lang="scss" scoped>
 @import '../assets/variables.scss';
@@ -204,7 +202,6 @@ export default defineComponent({
         display: inline;
     }
 }
-
 
 .button {
     @include button;
@@ -280,7 +277,5 @@ h4 {
         width: calc(50% - 0.3rem * 2)
     }
 }
-  
+
 </style>
-
-

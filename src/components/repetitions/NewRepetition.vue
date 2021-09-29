@@ -4,29 +4,27 @@
     </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-export default defineComponent ({
-    name: "NewRepetition",
-    props : {
-        workoutId : {
-            required : true,
-            type : String
-        },
-        exerciseId : {
-            required : true,
-            type : String,
-        }
-    }, 
-    methodss : {
-
+export default defineComponent({
+  name: 'NewRepetition',
+  props: {
+    workoutId: {
+      required: true,
+      type: String
+    },
+    exerciseId: {
+      required: true,
+      type: String
     }
-});
+  },
+  methodss: {
+
+  }
+})
 
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../assets/variables.scss';
@@ -36,7 +34,7 @@ export default defineComponent ({
   }
 
   .add-exercise-button {
-    background-color: lighten($accent-color, 5%); 
+    background-color: lighten($accent-color, 5%);
     width: 100%;
     border-radius: 3px;
     display: block;
@@ -47,7 +45,7 @@ export default defineComponent ({
     padding: 0.35rem;
 
     &:hover {
-      background-color: lighten($accent-color, 20%); 
+      background-color: lighten($accent-color, 20%);
     }
   }
 </style>

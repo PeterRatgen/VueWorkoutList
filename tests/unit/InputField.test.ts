@@ -1,32 +1,31 @@
-import 'jest';
-import { shallowMount } from '@vue/test-utils';
+import 'jest'
+import { shallowMount } from '@vue/test-utils'
 
-import InputField from '../../src/components/InputField.vue';
-
+import InputField from '../../src/components/InputField.vue'
 
 const wrapper = shallowMount(InputField, {
-    props : {
-        initialValue : "Hej, Peter"
-    }
-});
+  props: {
+    initialValue: 'Hej, Peter'
+  }
+})
 
-it("displays the value", async () => {
-    let input = wrapper.find('[class="header-input"]');
-    expect((input.element as any).value).toBe("Hej, Peter");
-});
+it('displays the value', async () => {
+  const input = wrapper.find('[class="header-input"]')
+  expect((input.element as any).value).toBe('Hej, Peter')
+})
 
-it("can set the value of the input field", async() => {
-    let input = wrapper.find('[class="header-input"]');
-    await input.setValue("Hej, untitled");
+it('can set the value of the input field', async () => {
+  let input = wrapper.find('[class="header-input"]')
+  await input.setValue('Hej, untitled')
 
-    input = wrapper.find('[class="header-input"]');
-    expect((input.element as any).value).toBe("Hej, untitled");
-});
+  input = wrapper.find('[class="header-input"]')
+  expect((input.element as any).value).toBe('Hej, untitled')
+})
 
-it("emits on blur", async() => {
-    let input = wrapper.find('[class="header-input"]');
-    
-    await input.trigger('blur');
+it('emits on blur', async () => {
+  const input = wrapper.find('[class="header-input"]')
 
-    expect(wrapper.emitted()).toHaveProperty("result");
-});
+  await input.trigger('blur')
+
+  expect(wrapper.emitted()).toHaveProperty('result')
+})

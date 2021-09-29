@@ -1,7 +1,7 @@
 <template>
-    <div class="add-card" 
-        v-bind:style="{backgroundColor: addCardColor}" 
-        @click="createCard">  
+    <div class="add-card"
+        v-bind:style="{backgroundColor: addCardColor}"
+        @click="createCard">
         <transition name="cardTransition" mode="out-in">
             <div v-if="createButton">
                 <fa class="plus-icon" icon="plus"></fa>
@@ -15,11 +15,11 @@
                     v-on:workout-header="newHeader"
                 />
                 <div class="divider"></div>
-                <button 
-                    class="button" 
+                <button
+                    class="button"
                     data-test="collapseBtn"
                     @click="collapseCard">Cancel</button>
-                <button 
+                <button
                     class="button"
                     data-test="saveBtn"
                     @click="submitWorkout">Save</button>
@@ -29,106 +29,107 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
-import WorkoutFormAdder from './WorkoutFormAdder.vue';
+import { defineComponent, inject } from 'vue'
+import WorkoutFormAdder from './WorkoutFormAdder.vue'
 
-
-import { IExercise } from '../types';
+import { IExercise } from '../types'
 
 export default defineComponent({
-    name: "AddTodo",
-    components : {
-        WorkoutFormAdder
-    },
-    emits: {
-        ["new-workout"] : Object
-    },
-    setup () {
-        const emitter = inject('emitter');
-        return {
-            emitter
-        };
-    },
-    data() {
-        return {
-            title: '',
-            createButton: true,
-            addCardColor : '#efefef',
-            exerciseList: [] as IExercise[]
-
-        };
-    },
-    methods: {
-        createCard() {
-            if(this.createButton) {
-                this.createButton = false;
-                this.addCardColor = "#fff";
-            }
-        },
-        collapseCard() {
-            if(!this.createButton) {
-                this.createButton = true;
-                this.addCardColor = "#fff";
-            }
-        },
-        newRepetition(data : any ){
-            console.log("finding id " + data.exerciseId);
-            let exercise : IExercise | undefined = this.exerciseList.find(ele => ele.id == data.exerciseId);
-            if ( exercise != undefined ) {
-                const length = exercise["set"].length;
-                if (length > 0) {
-                    const weight = exercise["set"][length - 1]["weight"];
-                    const reps = exercise["set"][length - 1]["repetitions"];
-                    exercise["set"].push({repetitions : reps, weight : weight});
-                } else {
-                    exercise["set"].push({repetitions : 0, weight : 0});
-                }
-            }
-        },
-        addExercise() {
-            let identifier = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-            let newExercise = {
-                id: identifier,  
-                name: "", 
-                set: []
-            };
-            console.log("The new exercise");
-            console.log(newExercise);
-            this.exerciseList.push(newExercise);
-        },
-        addName(data : any) {
-            if(this.createButton == false) {
-                let ele : IExercise | undefined = this.exerciseList.find(element => element.id == data["exerciseId"]);
-                if ( ele != undefined) {
-                    ele.name = data["name"]; 
-                }
-            }
-        },
-        submitWorkout() {
-            if (this.title != '' && this.exerciseList != []) {
-                this.$emit('new-workout', {title : this.title,
-                exerciseList: this.exerciseList});
-                this.title = '';
-                this.exerciseList = [];
-                this.createButton = true;
-            }
-        },
-        titleEditEnd(id : string) {
-            let ex : IExercise | undefined = this.exerciseList.find(ele => ele.id == id);
-            if (ex != undefined) {
-                let index = this.exerciseList.indexOf(ex);
-                this.exerciseList.splice(index, 1);
-            }
-        },
-        newHeader(data : string ) {
-            this.title = data;
-        }
+  name: 'AddTodo',
+  components: {
+    WorkoutFormAdder
   },
-    mounted() {
-        (this as any).emitter.on('exercise-name', this.addName);
-        (this as any).emitter.on('title-edit-end', this.titleEditEnd);
+  emits: {
+    'new-workout': Object
+  },
+  setup () {
+    const emitter = inject('emitter')
+    return {
+      emitter
     }
-});
+  },
+  data () {
+    return {
+      title: '',
+      createButton: true,
+      addCardColor: '#efefef',
+      exerciseList: [] as IExercise[]
+
+    }
+  },
+  methods: {
+    createCard () {
+      if (this.createButton) {
+        this.createButton = false
+        this.addCardColor = '#fff'
+      }
+    },
+    collapseCard () {
+      if (!this.createButton) {
+        this.createButton = true
+        this.addCardColor = '#fff'
+      }
+    },
+    newRepetition (data : any) {
+      console.log('finding id ' + data.exerciseId)
+      const exercise : IExercise | undefined = this.exerciseList.find(ele => ele.id == data.exerciseId)
+      if (exercise != undefined) {
+        const length = exercise.set.length
+        if (length > 0) {
+          const weight = exercise.set[length - 1].weight
+          const reps = exercise.set[length - 1].repetitions
+          exercise.set.push({ repetitions: reps, weight: weight })
+        } else {
+          exercise.set.push({ repetitions: 0, weight: 0 })
+        }
+      }
+    },
+    addExercise () {
+      const identifier = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+      const newExercise = {
+        id: identifier,
+        name: '',
+        set: []
+      }
+      console.log('The new exercise')
+      console.log(newExercise)
+      this.exerciseList.push(newExercise)
+    },
+    addName (data : any) {
+      if (this.createButton == false) {
+        const ele : IExercise | undefined = this.exerciseList.find(element => element.id == data.exerciseId)
+        if (ele != undefined) {
+          ele.name = data.name
+        }
+      }
+    },
+    submitWorkout () {
+      if (this.title != '' && this.exerciseList != []) {
+        this.$emit('new-workout', {
+          title: this.title,
+          exerciseList: this.exerciseList
+        })
+        this.title = ''
+        this.exerciseList = []
+        this.createButton = true
+      }
+    },
+    titleEditEnd (id : string) {
+      const ex : IExercise | undefined = this.exerciseList.find(ele => ele.id == id)
+      if (ex != undefined) {
+        const index = this.exerciseList.indexOf(ex)
+        this.exerciseList.splice(index, 1)
+      }
+    },
+    newHeader (data : string) {
+      this.title = data
+    }
+  },
+  mounted () {
+    (this as any).emitter.on('exercise-name', this.addName);
+    (this as any).emitter.on('title-edit-end', this.titleEditEnd)
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -154,7 +155,7 @@ export default defineComponent({
     @include button;
     width: 4rem;
   }
-    
+
   .cardTransition-enter-active {
     animation: move-list 0.6s linear;
   }
