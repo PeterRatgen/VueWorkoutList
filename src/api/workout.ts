@@ -9,12 +9,10 @@ export async function getWorkout (apiInstance : AxiosInstance) : Promise<IWorkou
 
 export async function deleteWorkout (apiInstance : AxiosInstance, data : {
     workoutId : string
-}) {
+}) : Promise<void> {
   apiInstance.delete('/workout/' + data.workoutId).then((res) => {
-    if (res.status == 200) {
-
-    } else {
-      new Error('Error with response ' + res.status)
+    if (res.status !== 200) {
+      Error('Error with response ' + res.status)
     }
   }).catch((err) => {
     console.trace()
@@ -25,16 +23,14 @@ export async function deleteWorkout (apiInstance : AxiosInstance, data : {
 export async function renameWorkout (apiInstance : AxiosInstance, data : {
     workoutId : string,
     title : string
-}) {
+}) : Promise<void> {
   apiInstance.post('/workout/rename', {
     id: data.workoutId,
     title: data.title
   }
   ).then((res) => {
-    if (res.status == 200) {
-
-    } else {
-      new Error('API Error')
+    if (res.status !== 200) {
+      Error('API Error')
     }
   }).catch((err) => {
     console.trace()
@@ -45,10 +41,10 @@ export async function renameWorkout (apiInstance : AxiosInstance, data : {
 export async function addWorkout (apiInstance : AxiosInstance, data : IWorkout) : Promise<{ id : string} | undefined> {
   apiInstance.post('/workout', data)
     .then((res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         return { id: res.data }
       } else {
-        new Error('API Error')
+        Error('API Error')
         return undefined
       }
     })
