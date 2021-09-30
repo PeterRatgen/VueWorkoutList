@@ -7,9 +7,7 @@ import NewRepetition from '../../src/components/repetitions/NewRepetition.vue'
 import InputField from '../../src/components/InputField.vue'
 
 import { exercise } from '../testData'
-import store from '../../src/store/index'
-
-import mitt from 'mitt'
+import { store } from '../../src/store/index'
 
 const wrapper = shallowMount(ExerciseItem, {
   data () {
@@ -21,15 +19,12 @@ const wrapper = shallowMount(ExerciseItem, {
     exerciseItem: exercise
   },
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa'],
     plugins: [store]
   }
 })
 
-function delEx (length : number) {
+function delEx () {
   it('displays trashcan when hovering', async () => {
     const nameHover = wrapper.find('[class="name"]')
     await nameHover.trigger('mouseover')
@@ -61,7 +56,7 @@ describe('The closed exerciseItem', () => {
     expect(iconContainer.exists()).toBeFalsy()
   })
 
-  delEx(1)
+  delEx()
 
   it('does not have an input field', async () => {
     const input = wrapper.findComponent(InputField)
@@ -78,10 +73,10 @@ describe('The expanded Exercise component', () => {
     const nameHover = wrapper.find('[class="name"]')
     await nameHover.trigger('click')
 
-    expect((wrapper.vm.$data as any).contracted).toBeFalsy()
+    expect((wrapper.vm.$data as {contracted : boolean}).contracted).toBeFalsy()
   })
 
-  delEx(2)
+  delEx()
 
   it('has an input field', async () => {
     const input = wrapper.findComponent(InputField)
