@@ -1,7 +1,13 @@
-import { State } from './state_type'
+import { State, UserData } from './state_type'
 import { AxiosInstance } from 'axios'
 
 import { IWorkout, IExercise, IRepetition, repData } from '../types'
+
+interface ExerciseLocator {
+    workoutId : string,
+    exerciseId : string
+    repetitionId? : string
+}
 
 export const mutations = {
   setLoading (state : State, status : boolean) : void {
@@ -12,7 +18,7 @@ export const mutations = {
     state.apiInstance = instance
   },
 
-  setUserData (state : State, userData : Object) : void {
+  setUserData (state : State, userData : UserData) : void {
     state.userData = userData
   },
   addRepetition (state : State, data : repData) : void {
@@ -22,7 +28,7 @@ export const mutations = {
       if (workout !== undefined) {
         const exercise: IExercise | undefined =
                     workout.exerciseList.find(
-                      (element: any) => element.id === data.exerciseId
+                      (element: IExercise) => element.id === data.exerciseId
                     )
         if (exercise !== undefined) {
           exercise.set.push(data.repItem)
@@ -122,7 +128,7 @@ export const mutations = {
       console.warn('state.workouts undefined')
     }
   },
-  deleteExercise (state : State, data : any) : void {
+  deleteExercise (state : State, data : ExerciseLocator) : void {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined =
                 state.workouts.find(element => element._id === data.workoutId)
@@ -141,7 +147,7 @@ export const mutations = {
   setWorkouts (state : State, workouts : IWorkout[]) : void {
     state.workouts = workouts
   },
-  deleteRepetition (state : State, data : any) : void {
+  deleteRepetition (state : State, data : ExerciseLocator) : void {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined =
                 state.workouts.find(element => element._id === data.workoutId)
