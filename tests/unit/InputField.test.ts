@@ -11,7 +11,7 @@ const wrapper = shallowMount(InputField, {
 
 it('displays the value', async () => {
   const input = wrapper.find('[class="header-input"]')
-  expect((input.element as any).value).toBe('Hej, Peter')
+  expect((input.element as HTMLInputElement).value).toBe('Hej, Peter')
 })
 
 it('can set the value of the input field', async () => {
@@ -19,7 +19,7 @@ it('can set the value of the input field', async () => {
   await input.setValue('Hej, untitled')
 
   input = wrapper.find('[class="header-input"]')
-  expect((input.element as any).value).toBe('Hej, untitled')
+  expect((input.element as HTMLInputElement).value).toBe('Hej, untitled')
 })
 
 it('emits on blur', async () => {
