@@ -110,7 +110,7 @@ export default defineComponent({
   computed: {
     avgWeight () : number {
       let amount = 0
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         for (const set of this.exercise.set) {
           amount = amount + set.weight
         }
@@ -122,9 +122,9 @@ export default defineComponent({
   methods: {
     approveWorkout (set : IRepetition, index : number, exerciseId : string) {
       let allApproved = true
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         for (let i = 0; i < index; i++) {
-          if (this.exercise.set[i].completed != true) {
+          if (this.exercise.set[i].completed !== true) {
             allApproved = false
             break
           }
@@ -132,7 +132,7 @@ export default defineComponent({
         if (allApproved) {
           set.completed = true
           this.$emit('send-rep', { set: set, exerciseId: exerciseId })
-          if (index == this.exercise.set.length - 1) {
+          if (index === this.exercise.set.length - 1) {
             this.contracted = true
             this.allApproved = true
           }
@@ -151,10 +151,13 @@ export default defineComponent({
       })
     },
     weightPicker (index : number, set : IRepetition) {
+      this.displayPicker(set.weight, 'kg', 2.5)
+    },
+    displayPicker(num : number, unit : string, step: number) : void {
       (this as any).emitter.emit('picker', {
-        number: set.weight,
-        unit: 'kg',
-        steps: 2.5
+        number: num,
+        unit: unit,
+        steps:step
       });
       (this as any).emitter.on('picker-completed', (data : any) => {
         this.onCompleteWeight(data, index);
@@ -165,7 +168,7 @@ export default defineComponent({
       /*
                 Handle the option clicked in the HoverMenu component.
             */
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         switch (item) {
           case this.hovMen[0]:
             this.contracted = true
@@ -175,10 +178,10 @@ export default defineComponent({
       }
     },
     checkAllApproved () {
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         let allApproved = true
         for (let i = 0; i < this.exercise.set.length - 1; i++) {
-          if (this.exercise.set[i].completed != true) {
+          if (this.exercise.set[i].completed !== true) {
             allApproved = false
             break
           }
@@ -187,7 +190,7 @@ export default defineComponent({
       }
     },
     onCompleteWeight (data : number, index : number) {
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         const set = this.exercise.set[index]
         set.weight = data
         this.$emit('change-set', {
@@ -198,7 +201,7 @@ export default defineComponent({
       }
     },
     onCompleteReps (data : number, index : number) {
-      if (this.exercise != undefined) {
+      if (this.exercise !== undefined) {
         const set = this.exercise.set[index]
         set.repetitions = data
         this.$emit('change-set', {
@@ -212,12 +215,9 @@ export default defineComponent({
   updated () {
     this.contracted = !this.expand
     const allApp : boolean | undefined = this.checkAllApproved()
-    if (allApp != undefined) {
+    if (allApp !== undefined) {
       this.allApproved = allApp
     }
-  },
-  mounted () {
-
   }
 })
 </script>

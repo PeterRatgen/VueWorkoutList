@@ -55,7 +55,7 @@ export default defineComponent({
     }
   },
   mounted () {
-    (this as any).emitter.on('picker', this.showPicker)
+    //(this as any).emitter.on('picker', this.showPicker)
   }
 })
 
