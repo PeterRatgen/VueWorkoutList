@@ -70,10 +70,10 @@ export default defineComponent({
         this.addCardColor = '#fff'
       }
     },
-    newRepetition (data : any) {
+    newRepetition (data : {exerciseId : string}) {
       console.log('finding id ' + data.exerciseId)
-      const exercise : IExercise | undefined = this.exerciseList.find(ele => ele.id == data.exerciseId)
-      if (exercise != undefined) {
+      const exercise : IExercise | undefined = this.exerciseList.find(ele => ele.id === data.exerciseId)
+      if (exercise !== undefined) {
         const length = exercise.set.length
         if (length > 0) {
           const weight = exercise.set[length - 1].weight
@@ -95,16 +95,16 @@ export default defineComponent({
       console.log(newExercise)
       this.exerciseList.push(newExercise)
     },
-    addName (data : any) {
-      if (this.createButton == false) {
-        const ele : IExercise | undefined = this.exerciseList.find(element => element.id == data.exerciseId)
-        if (ele != undefined) {
+    addName (data : {exerciseId : string, name : string}) {
+      if (this.createButton === false) {
+        const ele : IExercise | undefined = this.exerciseList.find(element => element.id === data.exerciseId)
+        if (ele !== undefined) {
           ele.name = data.name
         }
       }
     },
     submitWorkout () {
-      if (this.title != '' && this.exerciseList != []) {
+      if (this.title !== '' && this.exerciseList !== []) {
         this.$emit('new-workout', {
           title: this.title,
           exerciseList: this.exerciseList
@@ -115,8 +115,8 @@ export default defineComponent({
       }
     },
     titleEditEnd (id : string) {
-      const ex : IExercise | undefined = this.exerciseList.find(ele => ele.id == id)
-      if (ex != undefined) {
+      const ex : IExercise | undefined = this.exerciseList.find(ele => ele.id === id)
+      if (ex !== undefined) {
         const index = this.exerciseList.indexOf(ex)
         this.exerciseList.splice(index, 1)
       }
@@ -124,10 +124,6 @@ export default defineComponent({
     newHeader (data : string) {
       this.title = data
     }
-  },
-  mounted () {
-    (this as any).emitter.on('exercise-name', this.addName);
-    (this as any).emitter.on('title-edit-end', this.titleEditEnd)
   }
 })
 </script>
