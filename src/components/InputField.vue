@@ -18,10 +18,10 @@ export default defineComponent({
     }
   },
   mounted () {
-    const title_input = this.$refs.titleInput
-    title_input.style.fontSize = this.fontSize
-    title_input.style.fontWeight = this.fontWeight
-    title_input.value = this.initialValue
+    const titleInput = this.$refs.titleInput
+    titleInput.style.fontSize = this.fontSize
+    titleInput.style.fontWeight = this.fontWeight
+    titleInput.value = this.initialValue
   }
 })
 </script>
