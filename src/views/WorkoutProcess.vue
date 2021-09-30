@@ -145,7 +145,7 @@ export default defineComponent({
       }
     },
     async skippedExercise (data : any) {
-      const ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id == data.exerciseId)
+      const ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
       if (ele !== undefined && this.apiInstance !== undefined && this.jwtData) {
         ele.skipped = true
         try {
