@@ -18,7 +18,7 @@ describe('The WorkoutFormAdder component', () => {
     const input = wrapper.find('[class="header-input"]')
     await input.setValue('Exercise title')
 
-    expect((input.element as any).value).toBe('Exercise title')
+    expect((input.element as HTMLInputElement).value).toBe('Exercise title')
   })
 
   it('can trigger input, and emits event', async () => {
