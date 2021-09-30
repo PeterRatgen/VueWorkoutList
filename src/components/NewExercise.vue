@@ -18,8 +18,6 @@ export default defineComponent({
     addExercise () {
       this.$emit('add-exercise')
     }
-  },
-  mounted () {
   }
 })
 </script>
