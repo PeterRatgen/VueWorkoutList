@@ -1,17 +1,24 @@
 import 'jest'
+/*
 import { shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 
-import WorkoutView from '../../src/views/WorkoutView.vue'
 import Workout from '../../src/components/Workout.vue'
 import HelloHeader from '../../src/components/HelloHeader.vue'
 import AddWorkout from '../../src/components/AddWorkout.vue'
 import BeginWorkout from '../../src/components/BeginWorkout.vue'
 import WorkoutProcess from '../../src/views/WorkoutProcess.vue'
 import store from '../../src/store/index'
+*/
+import WorkoutView from '../../src/views/WorkoutView.vue'
 
-import mitt from 'mitt'
+describe('WorkoutView', () => {
+  it('has-data', () => {
+    expect(typeof WorkoutView.data).toBe('undefined')
+  })
+})
 
+/*
 import { workout } from '../../tests/testData'
 
 const wrapper = shallowMount(WorkoutView, {
@@ -29,13 +36,6 @@ const wrapper = shallowMount(WorkoutView, {
   }
 })
 
-describe('WorkoutView', () => {
-  it('has-data', () => {
-    expect(typeof WorkoutView.data).toBe('undefined')
-  })
-})
-
-/*
 describe('WorkoutView data', () => {
     test('token exists', async () => {
         //We need to await for two promises.
