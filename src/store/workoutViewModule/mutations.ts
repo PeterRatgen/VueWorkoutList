@@ -1,7 +1,7 @@
 import { State, UserData } from './state_type'
 import { AxiosInstance } from 'axios'
 
-import { IWorkout, IExercise, IRepetition, repData } from '../types'
+import { IWorkout, IExercise, IRepetition, repData } from '../../types'
 
 interface ExerciseLocator {
     workoutId : string,

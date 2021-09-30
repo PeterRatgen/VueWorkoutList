@@ -1,13 +1,13 @@
-import { Commit } from '../../node_modules/vuex'
-import { State } from './state_type'
-import * as user from './../api/user'
-import * as workout from '../api/workout'
-import * as repetition from '../api/repetition'
-import * as exercise from '../api/exercise'
+import { Commit } from '../../../node_modules/vuex'
+import { State } from '../state_type'
+import * as user from '../../api/user'
+import * as workout from '../../api/workout'
+import * as repetition from '../../api/repetition'
+import * as exercise from '../../api/exercise'
 
-import { IWorkout, IRepetition, repData } from '../types/index'
+import { IWorkout, IRepetition, repData } from '../../types/index'
 
-import * as types from './mutation_types'
+import * as types from '../mutation_types'
 
 export const actions = {
   async login ({ commit, state } : { commit : Commit, state : State}) : Promise<void> {

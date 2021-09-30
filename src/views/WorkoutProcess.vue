@@ -16,11 +16,7 @@
     <div class="workout-section" v-for="exercise in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
       <WorkoutDisplay
           v-bind:exercise="exercise"
-          v-on:send-rep="sendRep"
-          v-on:change-set="changeSet"
-          @skipped="skippedExercise"
           />
-      <!---v-bind:expand="currentExercise == index"-->
     </div>
   </div>
   <Picker/>
@@ -30,14 +26,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { mapGetters, mapActions } from '../../node_modules/vuex'
 
 import WorkoutDisplay from '../components/WorkoutDisplay.vue'
 import WorkoutResult from '../components/WorkoutResult.vue'
 import Picker from '../components/Picker.vue'
 
-import { IWorkout, IExercise } from '../types'
-import axios, { AxiosInstance } from 'axios'
+import { IWorkout } from '../types'
 
 export interface workoutDone {
   timeOfEnd : number,
@@ -53,45 +49,43 @@ export default defineComponent({
     Picker
   },
   props: {
-    workout: Object as () => IWorkout,
+    workout: {
+      type: Object as PropType<IWorkout>
+    },
     jwtData: String
   },
   emits: {
     back: null,
-    'workout-completed': (
-      payload: workoutDone
-    ) => {
-      console.log(payload)
-      return true
+    workoutCompleted (payload: workoutDone) {
+      return payload.timeOfStart > 0
     }
+  },
+  computed: {
+    ...mapGetters([
+      'getStartTime',
+      'getEndTime'
+    ])
   },
   data () {
     return {
-      timeSinceStart: '',
-      work: {} as IWorkout,
-      currentExercise: 0,
-      apiInstance: {} as AxiosInstance
+      timeSinceStart: ''
     }
   },
   methods: {
     calcTime () {
-      let startTime = 0
-      if (this.work.timeOfStart === undefined) {
+      if (this.getStartTime() === undefined) {
         const time = new Date()
-        this.work.timeOfStart = time.getTime()
-        startTime = time.getTime()
-      } else {
-        startTime = this.work.timeOfStart
+        this.setStartTime(time.getTime())
       }
       setInterval(() => {
         let date : Date
         let secs : number
-        if (this.work.timeOfEnd === undefined) {
+        if (this.getEndTime() === undefined) {
           const now = new Date().getTime()
-          date = new Date(now - startTime)
+          date = new Date(now - this.getStartTime())
           secs = date.getSeconds()
         } else {
-          date = new Date(this.work.timeOfEnd - startTime)
+          date = new Date(this.getEndTime() - this.getStartTime())
           secs = date.getSeconds()
         }
         let secPrint : string
@@ -104,128 +98,40 @@ export default defineComponent({
         this.timeSinceStart = print
       }, 1000)
     },
-    async startWorkout () {
-      const a = []
-      for (const i of this.work.exerciseList) {
-        a.push(i.id)
-      }
-      if (this.apiInstance !== undefined || this.jwtData !== '') {
-        try {
-          const res = await this.apiInstance.post('/workout_history', {
-            workoutId: this.work._id,
-            exerciseList: a
-          })
-          this.work.historyId = res.data
-        } catch (err) {
-          console.trace()
-          console.log(err)
-        }
-      }
-    },
-    async sendRep (data : any) {
-      const ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
-      if (ex !== undefined) {
-        for (const set of ex.set) {
-          if ((set.completed === undefined || set.completed === false) &&
-            (this.apiInstance !== undefined || this.jwtData)) {
-            try {
-              await this.apiInstance.post('/workout_history/send_rep', {
-                historyId: this.work.historyId,
-                exerciseId: data.exerciseId,
-                repetitions: data.set.repetitions,
-                weight: data.set.weight
-              })
-            } catch (err) {
-              console.trace()
-              console.log(err)
-            }
-            break
-          }
-        }
-      }
-    },
-    async skippedExercise (data : any) {
-      const ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
-      if (ele !== undefined && this.apiInstance !== undefined && this.jwtData) {
-        ele.skipped = true
-        try {
-          await this.apiInstance.put('/workout_history/skip_exercise', {
-            historyId: this.work.historyId,
-            exerciseId: data.exerciseId
-          })
-        } catch (err) {
-          console.trace()
-          console.log(err)
-        }
-      }
-    },
-    changeSet (data : any) {
-      const ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
-      if (ex !== undefined) {
-        ex.set[data.index] = data.newSet
-      }
-    },
-    async showEndCard () {
-      if (this.apiInstance !== undefined || this.jwtData) {
-        try {
-          const res = await this.apiInstance.put('/workout_history/end_exercise', {
-            historyId: this.work.historyId
-          })
-          this.work.timeOfEnd = res.data
-          this.$emit('workout-completed', {
-            timeOfStart: this.work.timeOfStart,
-            timeOfEnd: res.data,
-            workout: this.work
-          } as workoutDone)
-        } catch (err) {
-          console.trace()
-          console.log(err)
-        }
-      }
-    },
+    ...mapActions([
+      'setStartTime',
+      'startWorkout',
+      'getOngoingWorkout'
+    ]),
     endWorkout () {
       localStorage.removeItem('onGoingWorkout')
-      // this.work = {};
       this.$emit('back')
     },
     returnToFront () {
-      localStorage.setItem('onGoingWorkout', JSON.stringify(this.work))
+      localStorage.setItem('onGoingWorkout', JSON.stringify(this.getOngoingWorkout()))
       this.$emit('back')
-    },
-    createInstance () {
-      /**
-                Saves an instance of the API connection, as not to repeat the
-                Bearer Token
-       */
-      return axios.create({
-        baseURL: process.env.VUE_APP_API_URL,
-        headers: {
-          Authorization: `Bearer ${this.jwtData}`
-        }
-      })
     }
   },
   mounted () {
-    this.apiInstance = this.createInstance()
+    let tempWorkout : IWorkout
     const onGoingWorkout = localStorage.getItem('onGoingWorkout')
     if (onGoingWorkout !== null) {
-      this.work = (JSON.parse(onGoingWorkout) as IWorkout)
+      tempWorkout = (JSON.parse(onGoingWorkout) as IWorkout)
+      this.calcTime()
+      this.startWorkout(tempWorkout)
     } else {
       if (this.workout !== undefined) {
-        const tempWork : IWorkout | undefined = this.workout
-        if (tempWork !== undefined && tempWork.exerciseList !== undefined) {
-          tempWork.timeOfStart = undefined
-          for (const ex of tempWork.exerciseList) {
-            for (const set of ex.set) {
-              set.completed = undefined
-            }
+        tempWorkout = this.workout
+        tempWorkout.timeOfStart = undefined
+        for (const ex of tempWorkout.exerciseList) {
+          for (const set of ex.set) {
+            set.completed = undefined
           }
-          this.work = (tempWork as IWorkout)
         }
+        this.calcTime()
+        this.startWorkout(tempWorkout)
       }
     }
-    this.calcTime()
-    this.startWorkout()
   }
 })
 </script>
