@@ -27,7 +27,7 @@ export default defineComponent({
     this.items = this.menuItems
   },
   methods: {
-    emitOption (item : any) {
+    emitOption (item : string) {
       this.$emit('option', item)
     }
   }
