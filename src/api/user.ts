@@ -7,9 +7,9 @@ interface valiDate {
 export async function validateToken (apiInstance : AxiosInstance) : Promise<valiDate | undefined> {
   try {
     const response = await apiInstance.get('/user_validateToken')
-    if (response.status == 200) {
+    if (response.status === 200) {
       return { validated: true }
-    } else if (response.status == 401) {
+    } else if (response.status === 401) {
       return { validated: false }
     }
   } catch (err) {
@@ -17,7 +17,7 @@ export async function validateToken (apiInstance : AxiosInstance) : Promise<vali
   }
 }
 
-export async function login (apiInstance : AxiosInstance, data : { email : string, password : string}) {
+export async function login (apiInstance : AxiosInstance, data : { email : string, password : string}) : Promise<void> {
   try {
     const response = await apiInstance.post('/login',
       {
@@ -25,10 +25,8 @@ export async function login (apiInstance : AxiosInstance, data : { email : strin
         password: data.password
       })
 
-    if (response.status == 200) {
-      return
-    } else {
-      new Error('eeorr')
+    if (response.status !== 200) {
+      Error('eror')
     }
   } catch (err) {
     console.trace()
