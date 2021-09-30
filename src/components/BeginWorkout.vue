@@ -35,14 +35,20 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import { IWorkout } from '../types/index'
+
 export default defineComponent({
   name: 'BeginWorkout',
   props: {
     workouts: Object
   },
   emits: {
-    'select-workout': Object as any,
-    'continue-workout': Object as any
+    'select-workout': (data : IWorkout) => {
+      if (data._id.length > 0) {
+        return true
+      }
+    },
+    'continue-workout': null
   },
   data () {
     return {
@@ -54,7 +60,7 @@ export default defineComponent({
     startWorkout () {
       this.displayPicker = true
     },
-    workoutPicker (workout : any) {
+    workoutPicker (workout : IWorkout) {
       this.$emit('select-workout', workout)
     },
     continueWorkout () {
@@ -63,7 +69,7 @@ export default defineComponent({
   },
   computed: {
     onGoingWorkout () {
-      if (localStorage.getItem('onGoingWorkout') != undefined) {
+      if (localStorage.getItem('onGoingWorkout') !== undefined) {
         return true
       }
       return false
