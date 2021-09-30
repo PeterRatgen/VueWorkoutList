@@ -33,8 +33,6 @@ export default defineComponent({
   },
   props: ['exerciseList'],
   emits: ['add-exercise', 'new-repetition', 'exercise-name', 'workout-header'],
-  created () {
-  },
   data () {
     return {
       workoutHeader: '',
