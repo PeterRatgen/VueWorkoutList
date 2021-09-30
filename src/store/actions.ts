@@ -10,7 +10,7 @@ import { IWorkout, IRepetition, repData } from '../types/index'
 import * as types from './mutation_types'
 
 export const actions = {
-  async login ({ commit, state } : { commit : Commit, state : State}) {
+  async login ({ commit, state } : { commit : Commit, state : State}) : Promise<void> {
     /**
             Logs in with the stored credentials, and stores the JSON Web
             Token returned by the endpoint
@@ -20,7 +20,7 @@ export const actions = {
             validated : boolean
             payload? : string
         } | undefined) => {
-      if (status != undefined) {
+      if (status !== undefined) {
         if (status.validated) {
 
         } else {
@@ -29,7 +29,7 @@ export const actions = {
             password: state.password
           }).then(() => {
             user.validateToken(state.apiInstance).then((status) => {
-              if (status != undefined) {
+              if (status !== undefined) {
                 if (status.validated) {
 
                 }
@@ -47,13 +47,13 @@ export const actions = {
     })
     commit(types.SET_LOADING, true)
   },
-  async getWorkout ({ commit, state } : { commit : Commit, state : State}) {
+  async getWorkout ({ commit, state } : { commit : Commit, state : State}) : Promise<void> {
     /**
             Retrieve the workouts of the user, and save the response.
         */
     commit(types.SET_LOADING, true)
     workout.getWorkout(state.apiInstance).then((workouts : IWorkout[] | undefined) => {
-      if (workouts != undefined) {
+      if (workouts !== undefined) {
         commit(types.SET_WORKOUTS, workouts)
         commit(types.SET_LOADING, false)
       }
@@ -63,7 +63,7 @@ export const actions = {
       commit(types.SET_LOADING, false)
     })
   },
-  async titleChange ({ commit, state } : { commit : Commit, state : State}, data : any) {
+  async titleChange ({ commit, state } : { commit : Commit, state : State}, data : any) : Promise<void> {
     /**
             Change the title of a workout.
         */
@@ -75,7 +75,7 @@ export const actions = {
   },
   deleteWorkout ({ commit, state } : { commit : Commit, state : State}, data : {
         workoutId : string
-    }) {
+    }) : void {
     /**
             Delete one workout. First on the database, and then in the data
             stores locally.
@@ -89,7 +89,7 @@ export const actions = {
                 getters : any,
                 commit : Commit,
                 state : State
-            }, data : repData) {
+            }, data : repData) : Promise<void> {
     /**
             Add a repetition to a workout. If another repetition exists
             before it, then add the same weight and reps to the new one.
@@ -112,7 +112,7 @@ export const actions = {
     data.repItem = repItem
     repetition.addRepetition(state.apiInstance, data)
       .then((data : {repetitionId : string} | undefined) => {
-        if (data != undefined) {
+        if (data !== undefined) {
           commit(types.ADD_REPETITION, data)
         }
       })
@@ -125,7 +125,7 @@ export const actions = {
             {
                 commit : Commit,
                 state : State
-            }, data : repData) {
+            }, data : repData) : Promise<void> {
     /**
             Change a rep of the workout. First in the local data, then in
             the database.
@@ -138,13 +138,13 @@ export const actions = {
             {
                 commit : Commit,
                 state : State
-            }, data : IWorkout) {
+            }, data : IWorkout) : Promise<void> {
     /**
             Add a new workout to the user.
         */
     workout.addWorkout(state.apiInstance, data)
       .then((da : {id : string} | undefined) => {
-        if (da != undefined) {
+        if (da !== undefined) {
           data._id = da.id
           commit(types.ADD_WORKOUT, data)
         }
@@ -162,7 +162,7 @@ export const actions = {
                 workoutId : string,
                 exerciseId : string,
                 name : string
-            }) {
+            }) : Promise<void> {
     /**
             Change the name of an exercise.
         */
@@ -177,7 +177,7 @@ export const actions = {
             }, data : {
                 workoutId : string,
                 exerciseId : string
-            }) {
+            }) : Promise<void> {
     /*
             Delete an exercise.
         */
@@ -192,20 +192,20 @@ export const actions = {
                 workoutId : string,
                 exerciseId : string,
                 repetitionId : string
-    }) {
+    }) : Promise<void> {
     repetition.deleteRepetition(state.apiInstance, data).then(() => {
       commit(types.DELETE_REPETITION, data)
     })
   },
-  setWorkingOut ({ commit, state } : {
+  setWorkingOut ({ commit } : {
         commit : Commit,
         state : State
-    }, bool : boolean) {
+    }, bool : boolean) : void {
     commit(types.SET_WORKINGOUT, bool)
   },
   currentWorkout ({ commit } : {
         commit : Commit
-    }, workout : IWorkout) {
+    }, workout : IWorkout) : void {
     commit(types.SET_CURRENTWORKOUT, workout)
   }
 
