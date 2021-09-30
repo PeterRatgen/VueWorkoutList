@@ -1,27 +1,26 @@
 <template>
-    <div @click="backgroundPressed()"  v-if="!workingOut">
-
-        <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
-        <div class="todo-block">
-            <div class="todo">
-                <div v-bind:key="workout" v-for="(workout) in workouts" >
-                    <Workout
-                        :workout="workout"
-                    />
-                </div>
-                <AddWorkout/>
-            </div>
+  <div @click="backgroundPressed()"  v-if="!workingOut">
+    <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
+    <div class="todo-block">
+      <div class="todo">
+        <div v-bind:key="workout" v-for="(workout) in workouts" >
+          <Workout
+              :workout="workout"
+              />
         </div>
-        <BeginWorkout
-            :workouts="workouts"
-            @select-workout="selectedWorkout"
-            @continue-workout="continueWorkout"
-        />
+          <AddWorkout/>
+      </div>
     </div>
-    <WorkoutProcess v-else
-        :workout="currentWorkout"
-        :jwtData="token"
-        v-on:back="workingOut = false"
+    <BeginWorkout
+        :workouts="workouts"
+        @select-workout="selectedWorkout"
+        @continue-workout="continueWorkout"
+        />
+  </div>
+  <WorkoutProcess v-else
+    :workout="currentWorkout"
+    :jwtData="token"
+    v-on:back="workingOut = false"
     />
 </template>
 
@@ -40,7 +39,7 @@ import WorkoutProcess from '../views/WorkoutProcess.vue'
 export default defineComponent({
   /**
         View of the workouts.
-    */
+   */
   name: 'WorkoutView',
   components: {
     Workout,
@@ -73,7 +72,7 @@ export default defineComponent({
   mounted () {
     /**
             Receiving emitted events
-        */
+     */
     this.login().then(() => {
       this.getWorkout()
     })
@@ -119,8 +118,8 @@ body {
 }
 
 .hello-header {
-    width: calc(#{$content-width} - 2%);
-    margin: 0 auto;
+  width: calc(#{$content-width} - 2%);
+  margin: 0 auto;
 }
 
 @media only screen and (max-width: 1400px) {
@@ -133,28 +132,28 @@ body {
 }
 
 @media only screen and (max-width: 1000px) {
-    .todo-block {
-        width: 80%;
-    }
-    .hello-header {
-        width: 80%;
-    }
-    .start-workout {
-        width: 40%;
-        left: calc((100% - 40%) / 2);
-    }
+  .todo-block {
+    width: 80%;
+  }
+  .hello-header {
+    width: 80%;
+  }
+  .start-workout {
+    width: 40%;
+    left: calc((100% - 40%) / 2);
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .todo-block {
-   width: 100%;
+    width: 100%;
   }
   .hello-header {
     width: 95%;
   }
   .start-workout {
-        width: 90%;
-        left: 5%;
+    width: 90%;
+    left: 5%;
   }
 }
 
