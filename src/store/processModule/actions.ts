@@ -21,6 +21,7 @@ const actions = {
       })
       if (res.status === 200) {
         state.workout.historyId = res.data
+        commit(types.START_WORKOUT)
       }
     } catch (err) {
       console.trace()
@@ -29,7 +30,7 @@ const actions = {
   },
   async sendRep ({ state, commit } : {state : State, commit : Commit}, data : {
       exerciseId : string,
-      set : IRepetition}) : Promise<void> {
+      repetition : IRepetition}) : Promise<void> {
     const ex : IExercise | undefined = state.workout.exerciseList.find((ele : IExercise) => ele.id === data.exerciseId)
     if (ex !== undefined) {
       for (const set of ex.set) {
@@ -38,10 +39,10 @@ const actions = {
             await state.apiInstance.post('/workout_history/send_rep', {
               historyId: state.workout.historyId,
               exerciseId: data.exerciseId,
-              repetitions: data.set.repetitions,
-              weight: data.set.weight
+              repetitions: data.repetition.repetitions,
+              weight: data.repetition.weight
             })
-            commit(types.APPEND_COMPLETED_REPETITION, data)
+            commit(types.SEND_REP, data)
           } catch (err) {
             console.trace()
             console.log(err)
@@ -51,23 +52,26 @@ const actions = {
       }
     }
   },
-  async skippedExercise (data : any) {
-    const ele : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
-    if (ele !== undefined && this.apiInstance !== undefined && this.jwtData) {
-      ele.skipped = true
-      try {
-        await this.apiInstance.put('/workout_history/skip_exercise', {
-          historyId: this.work.historyId,
-          exerciseId: data.exerciseId
-        })
-      } catch (err) {
-        console.trace()
-        console.log(err)
-      }
+  async skippedExercise ({ state, commit } : {state : State, commit : Commit}, data : {
+    exerciseId : string
+  }) : Promise<void> {
+    try {
+      await state.apiInstance.put('/workout_history/skip_exercise', {
+        historyId: state.workout.historyId,
+        exerciseId: data.exerciseId
+      })
+      commit(types.SKIP_EXERCISE, data)
+    } catch (err) {
+      console.trace()
+      console.log(err)
     }
   },
-  changeSet (data : any) {
-    const ex : IExercise | undefined = this.work.exerciseList.find(ele => ele.id === data.exerciseId)
+  changeSet ({ state, commit } : {state : State, commit : Commit}, data : {
+    exerciseId : string
+    index : number
+    newset : IRepetition
+  }) {
+    const ex : IExercise | undefined = state.workout.exerciseList.find((ele : IExercise) => ele.id === data.exerciseId)
     if (ex !== undefined) {
       ex.set[data.index] = data.newSet
     }

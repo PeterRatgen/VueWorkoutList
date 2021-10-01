@@ -126,7 +126,8 @@ export default defineComponent({
   },
   methods: {
     ...mapActions([
-      'sendRep'
+      'sendRep',
+      'changeSet'
     ]),
     approveWorkout (set : IRepetition, index : number, exerciseId : string) {
       let allApproved = true
@@ -191,7 +192,7 @@ export default defineComponent({
       if (this.exercise !== undefined) {
         const set = this.exercise.set[index]
         set.weight = data
-        this.$emit('change-set', {
+        this.changeSet({
           newSet: set,
           index: index,
           exerciseId: this.exercise.id
@@ -202,7 +203,7 @@ export default defineComponent({
       if (this.exercise !== undefined) {
         const set = this.exercise.set[index]
         set.repetitions = data
-        this.$emit('change-set', {
+        this.changeSet({
           newSet: set,
           index: index,
           exerciseId: this.exercise.id
