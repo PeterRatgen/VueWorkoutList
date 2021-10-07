@@ -17,6 +17,7 @@ const instance : AxiosInstance = axios.create({
 
 const state : State = {
   currentWorkout: 0,
+  completed: false,
   workout: {} as IWorkout,
   apiInstance: instance
 }

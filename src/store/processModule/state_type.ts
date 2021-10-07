@@ -4,6 +4,7 @@ import { AxiosInstance } from 'axios'
 export interface State {
   workout : IWorkout,
   currentWorkout : number,
+  completed : boolean,
   apiInstance : AxiosInstance
 }
 

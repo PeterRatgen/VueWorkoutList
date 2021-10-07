@@ -66,34 +66,27 @@ const actions = {
       console.log(err)
     }
   },
-  changeSet ({ state, commit } : {state : State, commit : Commit}, data : {
+  changeSet ({ commit } : { commit : Commit}, data : {
     exerciseId : string
     index : number
-    newset : IRepetition
-  }) {
-    const ex : IExercise | undefined = state.workout.exerciseList.find((ele : IExercise) => ele.id === data.exerciseId)
-    if (ex !== undefined) {
-      ex.set[data.index] = data.newSet
-    }
+    newSet : IRepetition
+  }) : void {
+    commit(types.CHANGE_SET, data)
   },
-  async showEndCard () {
-    if (this.apiInstance !== undefined || this.jwtData) {
+  async showEndCard ({ state, commit } : { state : State, commit : Commit}) : Promise<void> {
+    if (state.apiInstance !== undefined) {
       try {
-        const res = await this.apiInstance.put('/workout_history/end_exercise', {
-          historyId: this.work.historyId
+        const res = await state.apiInstance.put('/workout_history/end_exercise', {
+          historyId: state.workout.historyId
         })
-        this.work.timeOfEnd = res.data
-        this.$emit('workout-completed', {
-          timeOfStart: this.work.timeOfStart,
-          timeOfEnd: res.data,
-          workout: this.work
-        } as workoutDone)
+        commit(types.SET_END_TIME, res.data)
+        commit(types.SET_COMPLETED, true)
       } catch (err) {
         console.trace()
         console.log(err)
       }
     }
-  },
+  }
 }
 
 export default actions

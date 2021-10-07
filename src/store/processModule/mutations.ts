@@ -25,6 +25,22 @@ const mutations = {
     if (ele !== undefined) {
       ele.skipped = true
     }
+  },
+  changeSet (state : State, data : {
+        exerciseId : string
+        index : number
+        newSet : IRepetition
+    }) : void {
+    const ex : IExercise | undefined = state.workout.exerciseList.find((ele : IExercise) => ele.id === data.exerciseId)
+    if (ex !== undefined) {
+      ex.set[data.index] = data.newSet
+    }
+  },
+  setCompleted (state : State, status : boolean) : void {
+    state.completed = status
+  },
+  setEndTime (state : State, time : number) : void {
+    state.workout.timeOfEnd = time
   }
 }
 
