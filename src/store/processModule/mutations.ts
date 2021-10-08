@@ -41,6 +41,19 @@ const mutations = {
   },
   setEndTime (state : State, time : number) : void {
     state.workout.timeOfEnd = time
+  },
+  setPickerVisiblility (state : State, pickerState : boolean) : void {
+    state.pickerState.visible = pickerState
+  },
+  setPickerDisplayData (state : State, data : {
+    unit: string,
+    steps: number,
+    number: number
+  }) : void {
+    state.pickerState.pickerData = data
+  },
+  setPickerData (state : State, data : number) : void {
+    state.pickerState.data = data
   }
 }
 

@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { inject, defineComponent } from 'vue'
+import { mapActions } from '../../node_modules/vuex'
 
 export default defineComponent({
   name: 'Picker',
@@ -34,14 +35,18 @@ export default defineComponent({
     }
   },
   methods: {
-    showPicker (data : any) {
-      (this.$refs.picker as any).style.display = 'block'
+    showPicker (data : {
+      number: number,
+      unit: string,
+      steps: number
+    }) {
+      (this.$refs.picker as HTMLElement).style.display = 'block'
       this.data = data.number
       this.unit = data.unit
       this.steps = data.steps
     },
     cancel () {
-      (this.$refs.picker as any).style.display = 'none'
+      (this.$refs.picker as HTMLElement).style.display = 'none'
     },
     inc () {
       this.data = this.data + this.steps
@@ -50,9 +55,13 @@ export default defineComponent({
       this.data = this.data - this.steps
     },
     submit () {
-      (this as any).emitter.emit('picker-completed', this.data);
-      (this.$refs.picker as any).style.display = 'none'
-    }
+      const num = this.data
+      this.setPickerData(num)
+      (this.$refs.picker as HTMLElement).style.display = 'none'
+    },
+    ...mapActions([
+      ':/setPickerData'
+    ])
   },
   mounted () {
     //(this as any).emitter.on('picker', this.showPicker)

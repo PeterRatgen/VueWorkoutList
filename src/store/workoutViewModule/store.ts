@@ -28,6 +28,7 @@ const state = {
 }
 
 export const workoutViewModule = {
+  namespaced: true,
   state,
   mutations,
   actions,

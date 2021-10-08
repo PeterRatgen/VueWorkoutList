@@ -4,8 +4,17 @@ import { AxiosInstance } from 'axios'
 export interface State {
   workout : IWorkout,
   currentWorkout : number,
+  apiInstance : AxiosInstance,
   completed : boolean,
-  apiInstance : AxiosInstance
+  pickerState : {
+    visible: boolean,
+    pickerData: {
+      unit: string,
+      steps: number,
+      number: number // the number to change in the picker
+    } | undefined,
+    data : number | undefined
+  }
 }
 
 export default State

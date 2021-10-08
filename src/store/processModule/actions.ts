@@ -86,6 +86,19 @@ const actions = {
         console.log(err)
       }
     }
+  },
+  showPicker ({ commit } : { commit : Commit }, bool : boolean) : void {
+    commit(types.SET_PICKER_VISIBILITY, bool)
+  },
+  setPickerDisplayData ({ commit } : { commit : Commit }, data : {
+    unit: string,
+    steps: number,
+    number: number
+  }) : void {
+    commit(types.SET_PICKER_DISPLAY, data)
+  },
+  setPickerData ({ commit } : { commit : Commit }, data : number) : void {
+    commit(types.SET_PICKER_DATA, data)
   }
 }
 

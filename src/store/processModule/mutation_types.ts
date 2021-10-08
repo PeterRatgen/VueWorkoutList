@@ -6,3 +6,7 @@ export const CHANGE_EXERCISE = 'changeExercise'
 export const CHANGE_SET = 'changeSet'
 export const SET_COMPLETED = 'setCompleted'
 export const SET_END_TIME = 'setEndTime'
+
+export const SET_PICKER_VISIBILITY = 'setPickerVisibility'
+export const SET_PICKER_DISPLAY = 'setPickerDisplayData'
+export const SET_PICKER_DATA = 'setPickerData'

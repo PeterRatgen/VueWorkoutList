@@ -19,10 +19,16 @@ const state : State = {
   currentWorkout: 0,
   completed: false,
   workout: {} as IWorkout,
-  apiInstance: instance
+  apiInstance: instance,
+  pickerState: {
+    visible: false,
+    pickerData: undefined,
+    data: undefined
+  }
 }
 
 export const processModule = {
+  namespaced: true,
   state,
   mutations,
   actions,
