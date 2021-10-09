@@ -1,4 +1,4 @@
-import { Commit, GetterTree } from '../../../node_modules/vuex'
+import { Commit, Getter } from '../../../node_modules/vuex'
 import { State } from './state_type'
 import * as user from '../../api/user'
 import * as workout from '../../api/workout'
@@ -89,7 +89,7 @@ export const actions = {
   },
   async addRepetition ({ getters, commit, state } :
             {
-                getters : GetterTree<State, any>,
+                getters : Getter<State>,
                 commit : Commit,
                 state : State
             }, data : repData) : Promise<void> {

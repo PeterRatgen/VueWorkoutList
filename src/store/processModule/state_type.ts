@@ -1,7 +1,7 @@
 import { IWorkout } from '@/types'
 import { AxiosInstance } from 'axios'
 
-export interface State {
+export interface WorkoutProcessState {
   workout : IWorkout,
   currentWorkout : number,
   apiInstance : AxiosInstance,
@@ -17,4 +17,4 @@ export interface State {
   }
 }
 
-export default State
+export default WorkoutProcessState
