@@ -60,10 +60,10 @@ export default defineComponent({
     submit () {
       this.setPickerData({ tod: this.data})
       (this.$refs.picker as HTMLElement).style.display = 'none'
-    }
-  },
-  mounted () {
-    // (this as any).emitter.on('picker', this.showPicker)
+    },
+    ...mapActions([
+      'setPickerData'
+    ])
   }
 })
 

@@ -28,7 +28,6 @@ const state : State = {
 }
 
 export const processModule = {
-  namespaced: true,
   state,
   mutations,
   actions,

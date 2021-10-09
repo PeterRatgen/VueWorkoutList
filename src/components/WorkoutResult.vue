@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 
 import { Stat } from '../types'
 
@@ -35,18 +35,15 @@ export default defineComponent({
       statArr: [] as Stat[]
     }
   },
-  mounted () {
-    const emitter : any = inject('emitter') // Inject `emitter`
-    emitter.on('workout-completed', (data : any) => {
-      this.stats(data)
-    })
-  },
   methods: {
     removeEndCard () {
       this.$emit('ended')
     },
-    stats (data : any) {
-      (this.$refs.endCard as any).style.display = 'block'
+    stats (data : {
+      timeOfStart : number,
+      timeOfEnd : number
+    }) {
+      (this.$refs.endCard as HTMLElement).style.display = 'block'
       const timeVal = data.timeOfEnd - data.timeOfStart
       let date = new Date(timeVal)
       const secs = date.getSeconds()

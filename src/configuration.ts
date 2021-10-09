@@ -1,10 +1,10 @@
 let serverUrl = ''
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV === 'production') {
   serverUrl = 'RUN_TIME_API_URL'
 } else {
   const url = process.env.VUE_APP_API_URL
-  if (url != undefined) {
+  if (url !== undefined) {
     serverUrl = url
   }
 }
