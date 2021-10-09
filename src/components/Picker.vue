@@ -35,6 +35,9 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions([
+      'setPickerData'
+    ]),
     showPicker (data : {
       number: number,
       unit: string,
@@ -55,16 +58,12 @@ export default defineComponent({
       this.data = this.data - this.steps
     },
     submit () {
-      const num = this.data
-      this.setPickerData(num)
+      this.setPickerData({ tod: this.data})
       (this.$refs.picker as HTMLElement).style.display = 'none'
-    },
-    ...mapActions([
-      ':/setPickerData'
-    ])
+    }
   },
   mounted () {
-    //(this as any).emitter.on('picker', this.showPicker)
+    // (this as any).emitter.on('picker', this.showPicker)
   }
 })
 

@@ -97,8 +97,8 @@ const actions = {
   }) : void {
     commit(types.SET_PICKER_DISPLAY, data)
   },
-  setPickerData ({ commit } : { commit : Commit }, data : number) : void {
-    commit(types.SET_PICKER_DATA, data)
+  setPickerData ({ commit } : { commit : Commit }, data : {tod : number}) : void {
+    commit(types.SET_PICKER_DATA, data.tod)
   }
 }
 
