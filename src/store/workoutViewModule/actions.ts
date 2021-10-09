@@ -1,5 +1,5 @@
-import { Commit } from '../../../node_modules/vuex'
-import { State } from '../state_type'
+import { Commit, GetterTree } from '../../../node_modules/vuex'
+import { State } from './state_type'
 import * as user from '../../api/user'
 import * as workout from '../../api/workout'
 import * as repetition from '../../api/repetition'
@@ -63,7 +63,10 @@ export const actions = {
       commit(types.SET_LOADING, false)
     })
   },
-  async titleChange ({ commit, state } : { commit : Commit, state : State}, data : any) : Promise<void> {
+  async titleChange ({ commit, state } : { commit : Commit, state : State}, data : {
+    workoutId : string,
+    title : string
+  }) : Promise<void> {
     /**
             Change the title of a workout.
         */
@@ -86,7 +89,7 @@ export const actions = {
   },
   async addRepetition ({ getters, commit, state } :
             {
-                getters : any,
+                getters : GetterTree<State, any>,
                 commit : Commit,
                 state : State
             }, data : repData) : Promise<void> {

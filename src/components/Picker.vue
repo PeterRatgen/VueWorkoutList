@@ -55,16 +55,12 @@ export default defineComponent({
       this.data = this.data - this.steps
     },
     submit () {
-      const num = this.data
-      this.setPickerData(num)
+      this.setPickerData(this.data)
       (this.$refs.picker as HTMLElement).style.display = 'none'
     },
     ...mapActions([
-      ':/setPickerData'
+      'setPickerData'
     ])
-  },
-  mounted () {
-    //(this as any).emitter.on('picker', this.showPicker)
   }
 })
 

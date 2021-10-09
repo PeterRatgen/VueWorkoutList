@@ -43,12 +43,6 @@ export default defineComponent({
     checkHeader () {
       this.$emit('workout-header', this.workoutHeader)
     },
-    newRepetition (data : any) {
-      this.$emit('new-repetition', data)
-    },
-    changeExerciseName (data : any) {
-      this.$emit('exercise-name', data)
-    },
     addExercise () {
       this.$emit('add-exercise')
     }
