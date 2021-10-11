@@ -61,7 +61,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState('workoutProcess', ['workout']),
-    ...mapGetters('workoutProcess', ['getStartTime', 'getEndTime'])
+    ...mapGetters('workoutProcess', ['getStartTime', 'getEndTime', 'getOngoingWorkout'])
   },
   data () {
     return {
@@ -97,15 +97,14 @@ export default defineComponent({
     },
     ...mapActions('workoutProcess', [
       'setStartTime',
-      'startWorkout',
-      'getOngoingWorkout'
+      'startWorkout'
     ]),
     endWorkout () {
       localStorage.removeItem('onGoingWorkout')
       this.$emit('back')
     },
     returnToFront () {
-      localStorage.setItem('onGoingWorkout', JSON.stringify(this.getOngoingWorkout()))
+      localStorage.setItem('onGoingWorkout', JSON.stringify(this.getOngoingWorkout))
       this.$emit('back')
     }
   },

@@ -1,5 +1,6 @@
 import 'jest'
 import { shallowMount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 
 import WorkoutProcess from '../../src/views/WorkoutProcess.vue'
 import WorkoutDisplay from '../../src/components/WorkoutDisplay.vue'
@@ -17,7 +18,9 @@ const wrapper = shallowMount(WorkoutProcess, {
 })
 
 describe('The WorkoutProcess component', () => {
-  it('contains WorkoutDisplay', () => {
+  it('contains WorkoutDisplay', async () => {
+    wrapper.vm.$store.state.workoutProcess.workout = workout // .mutations.startWorkout(workout)
+    await nextTick()
     expect(wrapper.findComponent(WorkoutDisplay).exists()).toBeTruthy()
   })
 

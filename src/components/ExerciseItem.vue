@@ -110,21 +110,13 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions([
-      'changeExerciseName',
-      'deleteExercise'
-    ]),
     titleSubmitEdit (result : string) {
-      /*
-                Submit the new title of a workout.
-       */
       if (this.exerciseItem !== undefined) {
         this.changeExerciseName({
           workoutId: this.workoutId,
           exerciseId: this.exerciseItem.id,
           name: result
-        }
-        )
+        })
       }
     },
     displayEdit () {
@@ -134,14 +126,8 @@ export default defineComponent({
       if (this.exerciseItem !== undefined) {
         this.deleteExercise({ exerciseId: this.exerciseItem.id })
       }
-    }
-  },
-  mounted () {
-    if (this.exerciseItem !== undefined) {
-      if (this.exerciseItem.name === '') {
-        this.contracted = false
-      }
-    }
+    },
+    ...mapActions('workoutView', ['changeExerciseName', 'deleteExercise'])
   }
 })
 
