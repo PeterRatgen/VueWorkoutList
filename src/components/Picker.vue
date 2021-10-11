@@ -58,8 +58,8 @@ export default defineComponent({
       this.data = this.data - this.steps
     },
     submit () {
-      this.setPickerData( { tod: this.data} )
-      (this.$refs.picker as HTMLElement).style.display = 'none'
+      // this.setPickerData({ tod: this.data })
+      // (this.$refs.picker as HTMLElement).style.display = 'none'
     },
     ...mapActions([
       'setPickerData'
