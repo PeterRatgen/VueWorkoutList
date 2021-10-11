@@ -125,7 +125,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions([
+    ...mapActions('workoutProcess', [
       'sendRep',
       'changeSet'
     ]),
