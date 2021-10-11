@@ -27,6 +27,7 @@ const state : WorkoutProcessState = {
 }
 
 export const processModule = {
+  namespaced: true,
   state,
   mutations,
   actions,

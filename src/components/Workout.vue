@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 import { mapActions } from '../../node_modules/vuex'
 
 import ExerciseItem from './ExerciseItem.vue'
@@ -85,13 +85,6 @@ export default defineComponent({
         existing workout, though the child components.
    */
   name: 'Workout',
-  setup () {
-    const emitter = inject('emitter')
-
-    return {
-      emitter
-    }
-  },
   props: {
     /*
             The workout to be displayed in this component

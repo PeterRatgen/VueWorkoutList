@@ -29,24 +29,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent } from 'vue'
 import WorkoutFormAdder from './WorkoutFormAdder.vue'
 
 import { IExercise } from '../types'
 
 export default defineComponent({
-  name: 'AddTodo',
+  name: 'AddWorkout',
   components: {
     WorkoutFormAdder
   },
   emits: {
     'new-workout': Object
-  },
-  setup () {
-    const emitter = inject('emitter')
-    return {
-      emitter
-    }
   },
   data () {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <div @click="backgroundPressed()"  v-if="!workingOut">
+  <div v-if="!workingOut">
     <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
     <div class="todo-block">
       <div class="todo">
@@ -48,13 +48,11 @@ export default defineComponent({
     BeginWorkout,
     WorkoutProcess
   },
-  computed: mapState([
-    'workouts',
-    'workingOut',
-    'name'
-  ]),
+  computed: {
+    ...mapState('workoutView', ['workouts', 'workingOut', 'name'])
+  },
   methods: {
-    ...mapActions([
+    ...mapActions('workoutView', [
       'login',
       'getWorkout',
       'setWorkingOut',

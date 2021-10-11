@@ -1,16 +1,22 @@
 <template>
     <div>
-        <h1>Hej, {{ header.split(" ")[0] }} </h1>
+        <h1>Hej, {{ getFirstName }} </h1>
         <div class="accent-divider"></div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapGetters } from '../../node_modules/vuex'
 
 export default defineComponent({
   name: 'HelloHeader',
-  props: ['header']
+  props: ['header'],
+  computed: {
+    ...mapGetters('workoutView', [
+      'getFirstName'
+    ])
+  }
 })
 
 </script>

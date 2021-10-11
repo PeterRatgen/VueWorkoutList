@@ -1,16 +1,16 @@
-import { Commit, Getter } from '../../../node_modules/vuex'
-import { State } from './state_type'
+import { Commit } from '../../../node_modules/vuex'
+import { WorkoutViewState } from './state_type'
 import * as user from '../../api/user'
 import * as workout from '../../api/workout'
 import * as repetition from '../../api/repetition'
 import * as exercise from '../../api/exercise'
 
-import { IWorkout, IRepetition, repData } from '../../types/index'
+import { IWorkout, IExercise, IRepetition, repData } from '../../types/index'
 
-import * as types from '../mutation_types'
+import * as types from './mutation_types'
 
 export const actions = {
-  async login ({ commit, state } : { commit : Commit, state : State}) : Promise<void> {
+  async login ({ commit, state } : { commit : Commit, state : WorkoutViewState}) : Promise<void> {
     /**
             Logs in with the stored credentials, and stores the JSON Web
             Token returned by the endpoint
@@ -21,17 +21,15 @@ export const actions = {
             payload? : string
         } | undefined) => {
       if (status !== undefined) {
-        if (status.validated) {
-
-        } else {
+        if (!status.validated) {
           user.login(state.apiInstance, {
-            email: state.email,
-            password: state.password
+            email: state.userData.email,
+            password: state.userData.password
           }).then(() => {
             user.validateToken(state.apiInstance).then((status) => {
               if (status !== undefined) {
-                if (status.validated) {
-
+                if (!status.validated) {
+                  Error('still not validated')
                 }
               }
             })
@@ -47,7 +45,7 @@ export const actions = {
     })
     commit(types.SET_LOADING, true)
   },
-  async getWorkout ({ commit, state } : { commit : Commit, state : State}) : Promise<void> {
+  async getWorkout ({ commit, state } : { commit : Commit, state : WorkoutViewState}) : Promise<void> {
     /**
             Retrieve the workouts of the user, and save the response.
         */
@@ -63,7 +61,7 @@ export const actions = {
       commit(types.SET_LOADING, false)
     })
   },
-  async titleChange ({ commit, state } : { commit : Commit, state : State}, data : {
+  async titleChange ({ commit, state } : { commit : Commit, state : WorkoutViewState}, data : {
     workoutId : string,
     title : string
   }) : Promise<void> {
@@ -76,7 +74,7 @@ export const actions = {
       commit(types.SET_LOADING, false)
     })
   },
-  deleteWorkout ({ commit, state } : { commit : Commit, state : State}, data : {
+  deleteWorkout ({ commit, state } : { commit : Commit, state : WorkoutViewState}, data : {
         workoutId : string
     }) : void {
     /**
@@ -87,11 +85,10 @@ export const actions = {
       commit(types.DELETE_WORKOUT, data)
     })
   },
-  async addRepetition ({ getters, commit, state } :
+  async addRepetition ({ commit, state } :
             {
-                getters : Getter<State>,
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : repData) : Promise<void> {
     /**
             Add a repetition to a workout. If another repetition exists
@@ -100,34 +97,41 @@ export const actions = {
             @exerciseId - id of the exercise
             @workout Id - id of the workout
         */
-    const exercise = getters.getExercise(data)
-    const length = exercise.set.length
-    let weight = 0
-    let repetitions = 0
-    if (length > 0) {
-      weight = exercise.set[length - 1].weight
-      repetitions = exercise.set[length - 1].repetitions
-    }
-    const repItem : IRepetition = {
-      weight: weight,
-      repetitions: repetitions
-    }
-    data.repItem = repItem
-    repetition.addRepetition(state.apiInstance, data)
-      .then((data : {repetitionId : string} | undefined) => {
-        if (data !== undefined) {
-          commit(types.ADD_REPETITION, data)
+    if (state.workouts !== undefined) {
+      const workout: IWorkout | undefined = state.workouts.find((element : IWorkout) => element._id === data.workoutId)
+      if (workout !== undefined) {
+        const exercise: IExercise | undefined = (workout as IWorkout).exerciseList.find((element: IExercise) => element.id === data.exerciseId)
+        if (exercise !== undefined) {
+          const length = exercise.set.length
+          let weight = 0
+          let repetitions = 0
+          if (length > 0) {
+            weight = exercise.set[length - 1].weight
+            repetitions = exercise.set[length - 1].repetitions
+          }
+          const repItem : IRepetition = {
+            weight: weight,
+            repetitions: repetitions
+          }
+          data.repItem = repItem
+          repetition.addRepetition(state.apiInstance, data)
+            .then((data : {repetitionId : string} | undefined) => {
+              if (data !== undefined) {
+                commit(types.ADD_REPETITION, data)
+              }
+            })
+            .catch((err) => {
+              console.trace()
+              console.log(err)
+            })
         }
-      })
-      .catch((err) => {
-        console.trace()
-        console.log(err)
-      })
+      }
+    }
   },
   async changeRep ({ commit, state } :
             {
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : repData) : Promise<void> {
     /**
             Change a rep of the workout. First in the local data, then in
@@ -140,7 +144,7 @@ export const actions = {
   async submitWorkout ({ commit, state } :
             {
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : IWorkout) : Promise<void> {
     /**
             Add a new workout to the user.
@@ -160,7 +164,7 @@ export const actions = {
   async changeExerciseName ({ commit, state } :
             {
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : {
                 workoutId : string,
                 exerciseId : string,
@@ -176,7 +180,7 @@ export const actions = {
   async deleteExercise ({ commit, state } :
             {
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : {
                 workoutId : string,
                 exerciseId : string
@@ -190,7 +194,7 @@ export const actions = {
   },
   async deleteRep ({ commit, state } : {
                 commit : Commit,
-                state : State
+                state : WorkoutViewState
             }, data : {
                 workoutId : string,
                 exerciseId : string,
@@ -202,7 +206,7 @@ export const actions = {
   },
   setWorkingOut ({ commit } : {
         commit : Commit,
-        state : State
+        state : WorkoutViewState
     }, bool : boolean) : void {
     commit(types.SET_WORKINGOUT, bool)
   },

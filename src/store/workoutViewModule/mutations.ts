@@ -1,4 +1,4 @@
-import { State, UserData } from './state_type'
+import { WorkoutViewState, UserData } from './state_type'
 import { AxiosInstance } from 'axios'
 
 import { IWorkout, IExercise, IRepetition, repData } from '../../types'
@@ -10,21 +10,21 @@ interface ExerciseLocator {
 }
 
 export const mutations = {
-  setLoading (state : State, status : boolean) : void {
+  setLoading (state : WorkoutViewState, status : boolean) : void {
     state.loading = status
   },
 
-  setApiInstance (state : State, instance : AxiosInstance) : void {
+  setApiInstance (state : WorkoutViewState, instance : AxiosInstance) : void {
     state.apiInstance = instance
   },
 
-  setUserData (state : State, userData : UserData) : void {
+  setUserData (state : WorkoutViewState, userData : UserData) : void {
     state.userData = userData
   },
-  addRepetition (state : State, data : repData) : void {
+  addRepetition (state : WorkoutViewState, data : repData) : void {
     if (state.workouts !== undefined) {
       const workout: IWorkout | undefined =
-                state.workouts.find(element => element._id === data.workoutId)
+                state.workouts.find((element : IWorkout) => element._id === data.workoutId)
       if (workout !== undefined) {
         const exercise: IExercise | undefined =
                     workout.exerciseList.find(
@@ -36,7 +36,7 @@ export const mutations = {
       }
     }
   },
-  changeRepetition (state : State, data : repData) : void {
+  changeRepetition (state : WorkoutViewState, data : repData) : void {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined =
                 state.workouts.find(
@@ -62,7 +62,7 @@ export const mutations = {
       return undefined
     }
   },
-  deleteWorkout (state : State, data : {
+  deleteWorkout (state : WorkoutViewState, data : {
         workoutId : string
     }) : void {
     if (state.workouts !== undefined) {
@@ -76,12 +76,12 @@ export const mutations = {
       }
     }
   },
-  addWorkout (state : State, data : IWorkout) : void {
+  addWorkout (state : WorkoutViewState, data : IWorkout) : void {
     if (state.workouts !== undefined) {
       state.workouts.push(data)
     }
   },
-  changeExerciseName (state : State, data : {
+  changeExerciseName (state : WorkoutViewState, data : {
         workoutId : string,
         exerciseId : string,
         name : string
@@ -108,7 +108,7 @@ export const mutations = {
       console.warn('state.workouts undefined')
     }
   },
-  changeWorkoutTitle (state : State, data : {
+  changeWorkoutTitle (state : WorkoutViewState, data : {
         workoutId : string,
         title : string
     }) : void {
@@ -128,7 +128,7 @@ export const mutations = {
       console.warn('state.workouts undefined')
     }
   },
-  deleteExercise (state : State, data : ExerciseLocator) : void {
+  deleteExercise (state : WorkoutViewState, data : ExerciseLocator) : void {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined =
                 state.workouts.find(element => element._id === data.workoutId)
@@ -144,10 +144,11 @@ export const mutations = {
       }
     }
   },
-  setWorkouts (state : State, workouts : IWorkout[]) : void {
+  setWorkouts (state : WorkoutViewState, workouts : IWorkout[]) : void {
+    console.log(workouts)
     state.workouts = workouts
   },
-  deleteRepetition (state : State, data : ExerciseLocator) : void {
+  deleteRepetition (state : WorkoutViewState, data : ExerciseLocator) : void {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined =
                 state.workouts.find(element => element._id === data.workoutId)
@@ -166,10 +167,10 @@ export const mutations = {
       }
     }
   },
-  setWorkingOut (state : State, bool : boolean) : void {
+  setWorkingOut (state : WorkoutViewState, bool : boolean) : void {
     state.workingOut = bool
   },
-  setCurrentWorkout (state : State, workout : IWorkout) : void {
+  setCurrentWorkout (state : WorkoutViewState, workout : IWorkout) : void {
     state.currentWorkout = workout
   }
 }

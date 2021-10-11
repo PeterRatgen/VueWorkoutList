@@ -1,9 +1,9 @@
-import { State } from './state_type'
+import { WorkoutViewState } from './state_type'
 
 import { IWorkout, IExercise, IRepetition, repData } from '../../types/index'
 
 export const getters = {
-  getWorkout (state : State, data : {
+  getWorkout (state : WorkoutViewState, data : {
         workoutId : string,
     }) : IWorkout | undefined {
     if (state.workouts !== undefined) {
@@ -11,7 +11,7 @@ export const getters = {
       return workout
     }
   },
-  getExercise (state : State, data : {
+  getExercise (state : WorkoutViewState, data : {
         workoutId : string,
         exerciseId : string
     }) : IExercise | undefined {
@@ -23,7 +23,7 @@ export const getters = {
       }
     }
   },
-  getRepetition (state : State, data : repData) : IRepetition | undefined {
+  getRepetition (state : WorkoutViewState, data : repData) : IRepetition | undefined {
     if (state.workouts !== undefined) {
       const workout : IWorkout | undefined = state.workouts.find((element : IWorkout) => element._id === data.workoutId)
       if (workout !== undefined) {
@@ -39,6 +39,12 @@ export const getters = {
       }
       return undefined
     }
+  },
+  getFirstName (state : WorkoutViewState) : string {
+    if (state.userData.name !== undefined) {
+      return state.userData.name.split(' ')[0]
+    }
+    return ' '
   }
 }
 

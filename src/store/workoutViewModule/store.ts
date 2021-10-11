@@ -20,14 +20,15 @@ const state : WorkoutViewState = {
   currentWorkout: undefined,
   apiInstance: instance,
   userData: {
-    name: 'Peter Ratgen'
+    name: 'Peter Ratgen',
+    email: 'peter@pratgen.dk',
+    password: 'safe'
   },
-  email: 'peter@pratgen.dk',
-  password: 'safe',
   loading: false
 }
 
 export const workoutViewModule = {
+  namespaced: true,
   state,
   mutations,
   actions,
