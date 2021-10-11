@@ -5,13 +5,13 @@ import WorkoutViewState from './src/store/workoutViewModule/state_type'
 
 declare module '@vue/runtime-core' {
   // declare your own store states
-  interface tsss {
+  interface RootStore {
     workoutView: WorkoutViewState
     workoutProcess: WorkoutProcessState
   }
 
   // provide typings for `this.$store`
   interface ComponentCustomProperties {
-    $store: Store<tsss>
+    $store: Store<RootStore>
   }
 }
