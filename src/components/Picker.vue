@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { inject, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 import { mapActions } from '../../node_modules/vuex'
 
 export default defineComponent({
@@ -25,13 +25,6 @@ export default defineComponent({
       data: 0,
       unit: '',
       steps: 1
-    }
-  },
-  setup () {
-    const emitter = inject('emitter')
-
-    return {
-      emitter
     }
   },
   methods: {

@@ -69,7 +69,7 @@ export default defineComponent({
   },
   computed: {
     onGoingWorkout () {
-      if (localStorage.getItem('onGoingWorkout') !== undefined) {
+      if (localStorage.getItem('onGoingWorkout') !== null) {
         return true
       }
       return false

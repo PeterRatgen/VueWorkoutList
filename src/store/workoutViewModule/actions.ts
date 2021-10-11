@@ -210,7 +210,7 @@ export const actions = {
     }, bool : boolean) : void {
     commit(types.SET_WORKINGOUT, bool)
   },
-  currentWorkout ({ commit } : {
+  setCurrentWorkout ({ commit } : {
         commit : Commit
     }, workout : IWorkout) : void {
     commit(types.SET_CURRENTWORKOUT, workout)

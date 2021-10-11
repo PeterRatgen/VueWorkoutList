@@ -1,6 +1,6 @@
 <template>
   <div v-if="!workingOut">
-    <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
+    <HelloHeader class="hello-header"/>
     <div class="todo-block">
       <div class="todo">
         <div v-bind:key="workout" v-for="(workout) in workouts" >
@@ -18,8 +18,7 @@
         />
   </div>
   <WorkoutProcess v-else
-    :workout="currentWorkout"
-    :jwtData="token"
+    :workoutData="currentWorkout"
     v-on:back="workingOut = false"
     />
 </template>
@@ -49,21 +48,21 @@ export default defineComponent({
     WorkoutProcess
   },
   computed: {
-    ...mapState('workoutView', ['workouts', 'workingOut', 'name'])
+    ...mapState('workoutView', ['workouts', 'workingOut', 'name', 'currentWorkout'])
   },
   methods: {
     ...mapActions('workoutView', [
       'login',
       'getWorkout',
       'setWorkingOut',
-      'currentWorkout'
+      'setCurrentWorkout'
     ]),
     selectedWorkout (workout : IWorkout) {
       this.setWorkingOut(true)
-      this.currentWorkout(workout)
+      this.setCurrentWorkout(workout)
     },
     continueWorkout () {
-      this.currentWorkout({})
+      this.setCurrentWorkout({})
       this.setWorkingOut(true)
     }
   },

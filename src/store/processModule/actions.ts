@@ -1,7 +1,7 @@
 import { Commit } from '../../../node_modules/vuex'
 import * as types from './mutation_types'
 
-import { IExercise, IRepetition } from '@/types'
+import { IWorkout, IExercise, IRepetition } from '@/types'
 
 import State from './state_type'
 
@@ -9,9 +9,9 @@ const actions = {
   setStartTime ({ commit } : { commit : Commit }, time : number) : void {
     commit(types.SET_START_TIME, time)
   },
-  async startWorkout ({ state, commit } : {state : State, commit : Commit}) : Promise<void> {
+  async startWorkout ({ state, commit } : {state : State, commit : Commit}, workout : IWorkout) : Promise<void> {
     const a = []
-    for (const i of state.workout.exerciseList) {
+    for (const i of workout.exerciseList) {
       a.push(i.id)
     }
     try {
@@ -21,7 +21,8 @@ const actions = {
       })
       if (res.status === 200) {
         state.workout.historyId = res.data
-        commit(types.START_WORKOUT)
+        workout.timeOfStart = new Date().getTime()
+        commit(types.START_WORKOUT, workout)
       }
     } catch (err) {
       console.trace()

@@ -43,7 +43,7 @@ $menu-width: 13rem;
     position: absolute;
     background-color: lighten($background-color, 5%);
     width: $menu-width;
-    z-index: 5;
+    z-index: 2;
     top: 1.5rem;
     right: -0.5rem;
     box-shadow: 4px 2px 8px #b2b2b2;

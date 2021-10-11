@@ -5,13 +5,13 @@
       <span class="icon-container" @click.stop="displayHover = !displayHover">
         <fa class="dots" icon="ellipsis-v"></fa>
       </span>
-      <HoverMenu
-          :menuItems=hovMen
-          :display=displayHover
-          @option="handleOption"
-          @minimize="displayHover = false"
-          @click.stop
-          />
+        <HoverMenu
+            :menuItems=hovMen
+            :display=displayHover
+            @option="handleOption"
+            v-if="displayHover"
+            @click.stop
+            />
     </div>
     <transition name="fade" mode="out-in">
       <div class="rep-table" v-if="!contracted">

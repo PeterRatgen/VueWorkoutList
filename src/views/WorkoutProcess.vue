@@ -10,10 +10,10 @@
   </div>
   <div class="workout-block">
     <div class="header-container"> <!-- Header -->
-      <h1 class="header">{{ work.title }}</h1>
+      <h1 class="header">{{ workout.title }}</h1>
       <div class="accent-divider"></div>
     </div>
-    <div class="workout-section" v-for="exercise in work.exerciseList" :key="exercise.id"> <!-- Exercise section -->
+    <div class="workout-section" v-for="exercise in workout.exerciseList" :key="exercise.id"> <!-- Exercise section -->
       <WorkoutDisplay
           v-bind:exercise="exercise"
           />
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { mapGetters, mapActions } from '../../node_modules/vuex'
+import { mapGetters, mapActions, mapState } from '../../node_modules/vuex'
 
 import WorkoutDisplay from '../components/WorkoutDisplay.vue'
 import WorkoutResult from '../components/WorkoutResult.vue'
@@ -37,7 +37,7 @@ import { IWorkout } from '../types'
 
 export interface workoutDone {
   timeOfEnd : number,
-    timeOfStart: number
+  timeOfStart: number
   workout: IWorkout
 }
 
@@ -49,10 +49,9 @@ export default defineComponent({
     Picker
   },
   props: {
-    workout: {
+    workoutData: {
       type: Object as PropType<IWorkout>
-    },
-    jwtData: String
+    }
   },
   emits: {
     back: null,
@@ -61,10 +60,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters([
-      'getStartTime',
-      'getEndTime'
-    ])
+    ...mapState('workoutProcess', ['workout']),
+    ...mapGetters('workoutProcess', ['getStartTime', 'getEndTime'])
   },
   data () {
     return {
@@ -73,19 +70,19 @@ export default defineComponent({
   },
   methods: {
     calcTime () {
-      if (this.getStartTime() === undefined) {
+      if (this.getStartTime === undefined) {
         const time = new Date()
         this.setStartTime(time.getTime())
       }
       setInterval(() => {
         let date : Date
         let secs : number
-        if (this.getEndTime() === undefined) {
+        if (this.getEndTime === undefined) {
           const now = new Date().getTime()
-          date = new Date(now - this.getStartTime())
+          date = new Date(now - this.getStartTime)
           secs = date.getSeconds()
         } else {
-          date = new Date(this.getEndTime() - this.getStartTime())
+          date = new Date(this.getEndTime - this.getStartTime)
           secs = date.getSeconds()
         }
         let secPrint : string
@@ -98,7 +95,7 @@ export default defineComponent({
         this.timeSinceStart = print
       }, 1000)
     },
-    ...mapActions([
+    ...mapActions('workoutProcess', [
       'setStartTime',
       'startWorkout',
       'getOngoingWorkout'
@@ -117,19 +114,19 @@ export default defineComponent({
     const onGoingWorkout = localStorage.getItem('onGoingWorkout')
     if (onGoingWorkout !== null) {
       tempWorkout = (JSON.parse(onGoingWorkout) as IWorkout)
-      this.calcTime()
       this.startWorkout(tempWorkout)
+      this.calcTime()
     } else {
-      if (this.workout !== undefined) {
-        tempWorkout = this.workout
-        tempWorkout.timeOfStart = undefined
+      if (this.workoutData !== undefined) {
+        tempWorkout = this.workoutData
         for (const ex of tempWorkout.exerciseList) {
           for (const set of ex.set) {
             set.completed = undefined
           }
         }
-        this.calcTime()
+        tempWorkout.timeOfStart = undefined
         this.startWorkout(tempWorkout)
+        this.calcTime()
       }
     }
   }
