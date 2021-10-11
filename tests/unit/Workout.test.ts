@@ -9,8 +9,6 @@ import InputField from '../../src/components/InputField.vue'
 import NewExercise from '../../src/components/NewExercise.vue'
 import store from '../../src/store/index'
 
-import mitt from 'mitt'
-
 import HoverMenu from '../../src/components/HoverMenu.vue'
 
 const wrapper = shallowMount(Workout, {
@@ -23,9 +21,6 @@ const wrapper = shallowMount(Workout, {
     }
   },
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa'],
     plugins: [store]
   }

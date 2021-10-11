@@ -15,9 +15,6 @@ const wrapper = shallowMount(ExerciseItem, {
       contracted: true
     }
   },
-  props: {
-    exerciseItem: exercise
-  },
   global: {
     stubs: ['fa'],
     plugins: [store]

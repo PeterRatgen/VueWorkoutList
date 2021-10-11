@@ -4,7 +4,6 @@ import { shallowMount } from '@vue/test-utils'
 import Repetition from '../../src/components/Repetition.vue'
 
 import { repetition } from '../testData'
-import mitt from 'mitt'
 import store from '../../src/store/index'
 
 const wrapper = shallowMount(Repetition, {
@@ -12,9 +11,6 @@ const wrapper = shallowMount(Repetition, {
     repetition: repetition
   },
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa'],
     plugins: [store]
   }
@@ -119,9 +115,6 @@ describe('Repetition editing', () => {
         repetition: repetition
       },
       global: {
-        provide: {
-          emitter: mitt()
-        },
         stubs: ['fa']
       }
     })

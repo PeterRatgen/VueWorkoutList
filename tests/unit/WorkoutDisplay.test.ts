@@ -6,17 +6,12 @@ import { workout } from '../testData'
 import WorkoutDisplay from '../../src/components/WorkoutDisplay.vue'
 import HoverMenu from '../../src/components/HoverMenu.vue'
 
-import mitt from 'mitt'
-
 const wrapper = shallowMount(WorkoutDisplay, {
   props: {
     exercise: workout.exerciseList[0]
   },
   global: {
-    stubs: ['fa'],
-    provide: {
-      emitter: mitt()
-    }
+    stubs: ['fa']
   }
 })
 
@@ -27,8 +22,10 @@ describe('The WorkoutDisplay component', () => {
   })
 
   it('contains the Hover Menu component', async () => {
-    expect(wrapper.findComponent(HoverMenu).exists()).toBeTruthy()
+    expect(wrapper.findComponent(HoverMenu).exists()).toBeFalsy()
   })
+
+  it('can display the HoverMenu element')
 
   const repRows = wrapper.findAll('[class="repetition-row"]')
 

@@ -3,13 +3,8 @@ import { shallowMount } from '@vue/test-utils'
 
 import WorkoutResult from '../../src/components/WorkoutResult.vue'
 
-import mitt from 'mitt'
-
 const wrapper = shallowMount(WorkoutResult, {
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa']
   }
 })

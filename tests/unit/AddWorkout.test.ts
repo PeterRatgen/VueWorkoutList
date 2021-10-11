@@ -4,7 +4,6 @@ import { shallowMount } from '@vue/test-utils'
 import AddWorkout from '../../src/components/AddWorkout.vue'
 
 import { workout } from '../testData'
-import mitt from 'mitt'
 
 const wrapper = shallowMount(AddWorkout, {
   data () {
@@ -14,9 +13,6 @@ const wrapper = shallowMount(AddWorkout, {
     }
   },
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa']
   }
 })

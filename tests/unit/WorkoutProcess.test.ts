@@ -7,18 +7,12 @@ import Picker from '../../src/components/Picker.vue'
 import WorkoutResult from '../../src/components/WorkoutResult.vue'
 
 import { workout } from '../testData'
-
-import mitt from 'mitt'
+import store from '../../src/store/index'
 
 const wrapper = shallowMount(WorkoutProcess, {
-  props: {
-    workout: workout
-  },
   global: {
-    provide: {
-      emitter: mitt()
-    },
-    stubs: ['fa']
+    stubs: ['fa'],
+    plugins: [store]
   }
 })
 

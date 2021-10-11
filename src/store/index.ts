@@ -11,3 +11,5 @@ export const store = createStore({
     workoutProcess: processModule
   }
 })
+
+export default store

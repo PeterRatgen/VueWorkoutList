@@ -3,8 +3,6 @@ import { shallowMount } from '@vue/test-utils'
 
 import Picker from '../../src/components/Picker.vue'
 
-import mitt from 'mitt'
-
 const wrapper = shallowMount(Picker, {
   data () {
     return {
@@ -14,9 +12,6 @@ const wrapper = shallowMount(Picker, {
     }
   },
   global: {
-    provide: {
-      emitter: mitt()
-    },
     stubs: ['fa']
   }
 })
