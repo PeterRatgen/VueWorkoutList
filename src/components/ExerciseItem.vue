@@ -134,6 +134,7 @@ export default defineComponent({
       }
     },
     ...mapActions('workoutView', ['changeExerciseName', 'deleteExercise'])
+
   }
 })
 
