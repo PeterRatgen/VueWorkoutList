@@ -12,27 +12,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent} from 'vue';
+import { defineComponent } from 'vue'
 
-export default defineComponent ({
-    name: "HoverMenu",
-    props: [ "menuItems"], 
-    emits: [ "option" , "minimize"],
-    data () {
-        return {
-            items: []
-        };
-    },
-    created() {
-        this.items = this.menuItems;
-
-    }, 
-    methods: {
-        emitOption(item : any) {
-            this.$emit("option", item);
-        }
+export default defineComponent({
+  name: 'HoverMenu',
+  props: ['menuItems'],
+  emits: ['option', 'minimize'],
+  data () {
+    return {
+      items: []
     }
-});
+  },
+  created () {
+    this.items = this.menuItems
+  },
+  methods: {
+    emitOption (item : string) {
+      this.$emit('option', item)
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -44,7 +43,7 @@ $menu-width: 13rem;
     position: absolute;
     background-color: lighten($background-color, 5%);
     width: $menu-width;
-    z-index: 5;
+    z-index: 2;
     top: 1.5rem;
     right: -0.5rem;
     box-shadow: 4px 2px 8px #b2b2b2;
@@ -76,12 +75,10 @@ $menu-width: 13rem;
     background-color: black;
 }
 
-
 @media only screen and (max-width: 600px) {
     .hover-menu{
         right: 1rem;
     }
 }
-
 
 </style>

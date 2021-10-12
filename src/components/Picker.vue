@@ -14,52 +14,52 @@
     </div>
 </template>
 
-
 <script lang="ts">
-import { inject, defineComponent } from 'vue';
+import { defineComponent } from 'vue'
+import { mapActions } from '../../node_modules/vuex'
 
 export default defineComponent({
-    name : "Picker",
-    data() {
-        return { 
-            data : 0,
-            unit : "",
-            steps : 1
-        };
-    },
-    setup () {
-        const emitter = inject('emitter');
-
-        return {
-            emitter
-        };
-    },
-    methods : {
-        showPicker(data : any) {
-            (this.$refs.picker as any).style.display = "block";
-            this.data = data.number;
-            this.unit = data.unit;
-            this.steps = data.steps;
-        },
-        cancel() {
-            (this.$refs.picker as any).style.display = "none";
-        },
-        inc() {
-            this.data = this.data + this.steps;
-        },
-        dec () {
-            this.data = this.data - this.steps;
-        },
-        submit() {
-            (this as any).emitter.emit('picker-completed', this.data);
-            (this.$refs.picker as any).style.display = "none";
-        }
-    },
-    mounted() {
-        (this as any).emitter.on('picker', this.showPicker);
+  name: 'Picker',
+  data () {
+    return {
+      data: 0,
+      unit: '',
+      steps: 1
     }
-});
-    
+  },
+  methods: {
+    ...mapActions([
+      'setPickerData'
+    ]),
+    showPicker (data : {
+      number: number,
+      unit: string,
+      steps: number
+    }) {
+      (this.$refs.picker as HTMLElement).style.display = 'block'
+      this.data = data.number
+      this.unit = data.unit
+      this.steps = data.steps
+    },
+    cancel () {
+      (this.$refs.picker as HTMLElement).style.display = 'none'
+    },
+    inc () {
+      this.data = this.data + this.steps
+    },
+    dec () {
+      this.data = this.data - this.steps
+    },
+    submit () {
+      // this.setPickerData({ tod: this.data })
+      // (this.$refs.picker as HTMLElement).style.display = 'none'
+    },
+    ...mapActions([
+      'setPickerData'
+    ])
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -71,7 +71,7 @@ export default defineComponent({
     top: 50%;
     transform: translate(0, -50%);
     left: 25%;
-    width: 50%; 
+    width: 50%;
     display: none;
 
     .button {
@@ -103,6 +103,5 @@ export default defineComponent({
         }
     }
 }
-
 
 </style>

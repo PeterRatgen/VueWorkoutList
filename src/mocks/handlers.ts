@@ -1,32 +1,37 @@
-import { rest } from 'msw';
+import { rest } from 'msw'
 
-import { token, testData } from '../../tests/testData';
+import { token, testData } from '../../tests/testData'
 
-const baseURL = "http://localhost";
+const baseURL = 'http://localhost'
 
 export const handlers = [
-    rest.post(baseURL + '/login', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.text( 
-                token
-            )
-        );
-    }),
-    rest.post(baseURL + '/workout_history', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                 "fdajidjf23lklviu"
-            )
-        );
-    }),
-    rest.get(baseURL + '/workout', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                testData 
-            )
-        );
-    }),
-];
+  rest.post(baseURL + '/login', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.text(
+        token
+      )
+    )
+  }),
+  rest.post(baseURL + '/workout_history', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json(
+        'fdajidjf23lklviu'
+      )
+    )
+  }),
+  rest.get(baseURL + '/workout', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json(
+        testData
+      )
+    )
+  }),
+  rest.put(baseURL + '/workout/delete_exercise', (req, res, ctx) => {
+    return res(
+      ctx.status(200)
+    )
+  })
+]

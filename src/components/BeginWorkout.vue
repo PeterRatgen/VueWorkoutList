@@ -14,11 +14,11 @@
                 <h3>Vælg en træning</h3>
                 <div class="workout-title" v-bind:key="workout.id" v-for="workout in workouts" >
                     <div class="divder"></div>
-                    <p 
+                    <p
                         @click="workoutPicker(workout)"
                         data-test="workoutTitle"
-                    >  
-                        {{ workout.title }} 
+                    >
+                        {{ workout.title }}
                     </p>
                 </div>
             </div>
@@ -33,43 +33,49 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-export default defineComponent ({
-    name : 'BeginWorkout',
-    props : {
-        ["workouts"] : Object
+import { IWorkout } from '../types/index'
+
+export default defineComponent({
+  name: 'BeginWorkout',
+  props: {
+    workouts: Object
+  },
+  emits: {
+    'select-workout': (data : IWorkout) => {
+      if (data._id.length > 0) {
+        return true
+      }
     },
-    emits : {
-       ["select-workout"] : Object as any,
-       ["continue-workout"] : Object as any
-    },
-    data() {
-        return {
-            displayPicker : false,
-            chosenWorkout: ""
-        };
-    },
-    methods: {
-        startWorkout() {
-            this.displayPicker = true;    
-        },
-        workoutPicker(workout : any) {
-            this.$emit("select-workout", workout);
-        },
-        continueWorkout() {
-            this.$emit("continue-workout");
-        }
-    },
-    computed : {
-        onGoingWorkout() {
-            if (localStorage.getItem('onGoingWorkout') != undefined){
-                return true;
-            }
-            return false;
-        }
+    'continue-workout': null
+  },
+  data () {
+    return {
+      displayPicker: false,
+      chosenWorkout: ''
     }
-});
+  },
+  methods: {
+    startWorkout () {
+      this.displayPicker = true
+    },
+    workoutPicker (workout : IWorkout) {
+      this.$emit('select-workout', workout)
+    },
+    continueWorkout () {
+      this.$emit('continue-workout')
+    }
+  },
+  computed: {
+    onGoingWorkout () {
+      if (localStorage.getItem('onGoingWorkout') !== null) {
+        return true
+      }
+      return false
+    }
+  }
+})
 
 </script>
 
@@ -98,7 +104,6 @@ export default defineComponent ({
     max-height: 75%;
     left: calc(75% / 2);
     box-shadow: none;
-
 
     .workout-selector {
         position: relative;
@@ -129,10 +134,10 @@ export default defineComponent ({
 .plus-icon {
     transform: rotate(45deg) scale(1.2);
 }
- 
+
 .start-workout {
     @include workout-card;
-    position: fixed;  
+    position: fixed;
     bottom: 2rem;
     height: 3rem;
     width: 30%;
@@ -156,7 +161,6 @@ export default defineComponent ({
     color: white;
     margin: auto;
 }
-
 
 .fade-enter-active {
   animation: move-list 0.1s linear;
@@ -208,6 +212,5 @@ export default defineComponent ({
         left: 5%;
   }
 }
-    
-</style>
 
+</style>

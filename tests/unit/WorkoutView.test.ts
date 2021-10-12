@@ -1,44 +1,41 @@
-import 'jest';
-import { shallowMount, flushPromises, VueWrapper } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import 'jest'
+/*
+import { shallowMount, flushPromises, VueWrapper } from '@vue/test-utils'
+import { nextTick } from 'vue'
 
-import WorkoutView from '../../src/views/WorkoutView.vue';
-import Workout from '../../src/components/Workout.vue';
-import HelloHeader from '../../src/components/HelloHeader.vue';
-import AddWorkout from '../../src/components/AddWorkout.vue';
-import BeginWorkout from '../../src/components/BeginWorkout.vue';
-import WorkoutProcess from '../../src/views/WorkoutProcess.vue';
-import store from '../../src/store/index';
-
-import mitt from 'mitt';
-
-import { workout} from '../../tests/testData';
-
-const wrapper = shallowMount(WorkoutView, {
-    data () {
-        return {
-            currentWorkout : workout
-        };
-    },
-    global: {
-        provide :  {
-            emitter: mitt()
-        },
-        stubs : ['fa'],
-        plugins : [store]
-    }
-});
-
-
+import Workout from '../../src/components/Workout.vue'
+import HelloHeader from '../../src/components/HelloHeader.vue'
+import AddWorkout from '../../src/components/AddWorkout.vue'
+import BeginWorkout from '../../src/components/BeginWorkout.vue'
+import WorkoutProcess from '../../src/views/WorkoutProcess.vue'
+import store from '../../src/store/index'
+*/
+import WorkoutView from '../../src/views/WorkoutView.vue'
 
 describe('WorkoutView', () => {
-    it('has-data', () => {
-        expect(typeof WorkoutView.data).toBe('undefined');
-    });
-});
+  it('has-data', () => {
+    expect(typeof WorkoutView.data).toBe('undefined')
+  })
+})
 
+/*
+import { workout } from '../../tests/testData'
 
-/*     
+const wrapper = shallowMount(WorkoutView, {
+  data () {
+    return {
+      currentWorkout: workout
+    }
+  },
+  global: {
+    provide: {
+      emitter: mitt()
+    },
+    stubs: ['fa'],
+    plugins: [store]
+  }
+})
+
 describe('WorkoutView data', () => {
     test('token exists', async () => {
         //We need to await for two promises.
@@ -75,7 +72,6 @@ describe('WorkoutView contains', () => {
         expect(wrapper.getComponent(BeginWorkout)).toBeTruthy();
     });
 });
-
 
 describe('When starting a workout', () => {
 

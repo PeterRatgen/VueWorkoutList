@@ -1,103 +1,81 @@
 <template>
-    <div @click="backgroundPressed()"  v-if="!workingOut">
-
-        <HelloHeader class="hello-header" v-bind:header="name" v-on:click="getWorkout"/>
-        <div class="todo-block">
-            <div class="todo">
-                <div v-bind:key="workout" v-for="(workout) in workouts" >
-                    <Workout 
-                        :workout="workout" 
-                    />
-                </div>
-                <AddWorkout/>
-            </div>
+  <div v-if="!workingOut">
+    <HelloHeader class="hello-header"/>
+    <div class="todo-block">
+      <div class="todo">
+        <div v-bind:key="workout" v-for="(workout) in workouts" >
+          <Workout
+              :workout="workout"
+              />
         </div>
-        <BeginWorkout 
-            :workouts="workouts"
-            @select-workout="selectedWorkout"
-            @continue-workout="continueWorkout"
-        />
+          <AddWorkout/>
+      </div>
     </div>
-    <WorkoutProcess v-else 
-        :workout="currentWorkout"  
-        :jwtData="token"
-        v-on:back="workingOut = false"
+    <BeginWorkout
+        :workouts="workouts"
+        @select-workout="selectedWorkout"
+        @continue-workout="continueWorkout"
+        />
+  </div>
+  <WorkoutProcess v-else
+    :workoutData="currentWorkout"
+    v-on:back="workingOut = false"
     />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapActions, mapState }  from '../../node_modules/vuex';
+import { defineComponent } from 'vue'
+import { mapActions, mapState } from '../../node_modules/vuex'
 
-import { IWorkout } from '../types/index';
+import { IWorkout } from '../types/index'
 
-import AddWorkout from '../components/AddWorkout.vue';
-import HelloHeader from '../components/HelloHeader.vue';
-import Workout from '../components/Workout.vue';
-
-import BeginWorkout from '../components/BeginWorkout.vue';
-import WorkoutProcess from '../views/WorkoutProcess.vue';
-
-import mitt, { Emitter } from 'mitt';
-
-
-type Events = {
-  foo: string;
-  bar?: number;
-};
-
-let mittInstance  : Emitter<Events>= mitt<Events>();
+import AddWorkout from '../components/AddWorkout.vue'
+import HelloHeader from '../components/HelloHeader.vue'
+import Workout from '../components/Workout.vue'
+import BeginWorkout from '../components/BeginWorkout.vue'
+import WorkoutProcess from '../views/WorkoutProcess.vue'
 
 export default defineComponent({
-    /**
+  /**
         View of the workouts.
-    */
-    name: 'WorkoutView',
-    components: {
-        Workout,
-        HelloHeader,
-        AddWorkout,
-        BeginWorkout,
-        WorkoutProcess
-    },
-    provide : {
-        emitter : mittInstance
-    },
-    computed : mapState([
-        'workouts',
-        'workingOut',
-        'name'
+   */
+  name: 'WorkoutView',
+  components: {
+    Workout,
+    HelloHeader,
+    AddWorkout,
+    BeginWorkout,
+    WorkoutProcess
+  },
+  computed: {
+    ...mapState('workoutView', ['workouts', 'workingOut', 'name', 'currentWorkout'])
+  },
+  methods: {
+    ...mapActions('workoutView', [
+      'login',
+      'getWorkout',
+      'setWorkingOut',
+      'setCurrentWorkout'
     ]),
-    methods: {
-        ...mapActions([
-            'login',
-            'getWorkout',
-            'setWorkingOut',
-            'currentWorkout'
-        ]),
-        backgroundPressed() {
-            (mittInstance as any).emit('pressed-background');
-        },
-        selectedWorkout(workout : IWorkout) {
-            this.setWorkingOut(true);
-            this.currentWorkout(workout);
-        },
-        continueWorkout() {
-            this.currentWorkout({});
-            this.setWorkingOut(true);
-        }
+    selectedWorkout (workout : IWorkout) {
+      this.setWorkingOut(true)
+      this.setCurrentWorkout(workout)
     },
-    mounted() {
-        /**
-            Receiving emitted events
-        */
-        this.login().then(() => {
-            this.getWorkout();
-        });
+    continueWorkout () {
+      this.setCurrentWorkout({})
+      this.setWorkingOut(true)
     }
-});
+  },
+  mounted () {
+    /**
+            Receiving emitted events
+     */
+    this.login().then(() => {
+      this.getWorkout()
+    })
+  }
+})
 </script>
-
 
 <style lang="scss" >
 @import "../assets/variables.scss";
@@ -107,7 +85,6 @@ export default defineComponent({
   margin: 0;
   padding: 0;
 }
-
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -138,10 +115,9 @@ body {
 }
 
 .hello-header {
-    width: calc(#{$content-width} - 2%);
-    margin: 0 auto;
+  width: calc(#{$content-width} - 2%);
+  margin: 0 auto;
 }
-
 
 @media only screen and (max-width: 1400px) {
   .todo-block {
@@ -152,32 +128,30 @@ body {
   }
 }
 
-
 @media only screen and (max-width: 1000px) {
-    .todo-block {
-        width: 80%;
-    }
-    .hello-header {
-        width: 80%;
-    }
-    .start-workout {
-        width: 40%;
-        left: calc((100% - 40%) / 2);
-    }
+  .todo-block {
+    width: 80%;
+  }
+  .hello-header {
+    width: 80%;
+  }
+  .start-workout {
+    width: 40%;
+    left: calc((100% - 40%) / 2);
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .todo-block {
-   width: 100%;
+    width: 100%;
   }
   .hello-header {
     width: 95%;
   }
   .start-workout {
-        width: 90%;
-        left: 5%;
+    width: 90%;
+    left: 5%;
   }
 }
 
 </style>
-

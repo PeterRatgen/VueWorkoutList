@@ -1,12 +1,13 @@
 {
-    "name": "todo",
+    "name": "liftlog-frontend",
     "version": "0.1.0",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "test": "jest",
+        "test:unit": "vue-cli-service test:unit",
+        "test:e2e": "vue-cli-service test:e2e",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
         "docs:serve": "vitepress serve docs"
@@ -15,13 +16,9 @@
         "@fortawesome/fontawesome-svg-core": "^1.2.34",
         "@fortawesome/free-solid-svg-icons": "^5.15.2",
         "@fortawesome/vue-fontawesome": "^3.0.0-3",
-        "@vue/cli-plugin-typescript": "^4.5.13",
-        "@vue/cli-plugin-unit-jest": "^4.5.13",
-        "@vue/cli-service": "^4.5.13",
         "axios": "^0.21.0",
+        "core-js": "^3.17.3",
         "dotenv": "^8.6.0",
-        "mitt": "^3.0.0",
-        "sass-loader": "^10.2.0",
         "vue": "^3.2.11",
         "vue-router": "^4.0.0-0",
         "vuex": "^4.0.2"
@@ -51,21 +48,32 @@
     },
     "devDependencies": {
         "@mermaid-js/mermaid-cli": "^8.12.1",
-        "@types/jest": "^27.0.1",
-        "@types/node": "^16.9.1",
-        "@typescript-eslint/parser": "^2.34.0",
-        "@vue/eslint-config-typescript": "^5.1.0",
-        "@vue/test-utils": "^2.0.0-rc.14",
-        "core-js": "^3.17.3",
-        "eslint": "^6.8.0",
-        "eslint-plugin-vue": "^7.0.0-0",
-        "jest": "^26.6.3",
+        "@types/jest": "^24.0.19",
+        "@typescript-eslint/eslint-plugin": "^4.18.0",
+        "@typescript-eslint/parser": "^4.18.0",
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-e2e-cypress": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-router": "~4.5.0",
+        "@vue/cli-plugin-typescript": "~4.5.0",
+        "@vue/cli-plugin-unit-jest": "~4.5.0",
+        "@vue/cli-plugin-vuex": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/compiler-sfc": "^3.0.0",
+        "@vue/eslint-config-standard": "^5.1.2",
+        "@vue/eslint-config-typescript": "^7.0.0",
+        "@vue/test-utils": "^2.0.0-0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.0",
+        "eslint-plugin-vue": "^7.0.0",
         "msw": "^0.35.0",
-        "prettier": "^2.3.2",
-        "ts-jest": "^26.5.6",
-        "ts-node": "^10.2.1",
+        "sass": "^1.26.5",
+        "sass-loader": "^8.0.2",
         "typescript": "4.4.2",
-        "vue-jest": "^5.0.0-alpha.10"
+        "vue-jest": "^5.0.0-0"
     },
     "eslintConfig": {
         "root": true,
@@ -74,11 +82,11 @@
         },
         "extends": [
             "plugin:vue/vue3-essential",
-            "eslint:recommended",
-            "@vue/typescript"
+            "@vue/standard",
+            "@vue/typescript/recommended"
         ],
         "parserOptions": {
-            "parser": "@typescript-eslint/parser"
+            "ecmaVersion": 2020
         },
         "rules": {}
     },

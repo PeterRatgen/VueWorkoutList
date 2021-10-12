@@ -1,103 +1,94 @@
-import 'jest';
-import { shallowMount } from '@vue/test-utils';
+import 'jest'
+import { shallowMount } from '@vue/test-utils'
 
-import ExerciseItem from '../../src/components/ExerciseItem.vue';
-import Repetition from '../../src/components/Repetition.vue';
-import NewRepetition from '../../src/components/repetitions/NewRepetition.vue';
-import InputField from '../../src/components/InputField.vue';
+import ExerciseItem from '../../src/components/ExerciseItem.vue'
+import Repetition from '../../src/components/Repetition.vue'
+import NewRepetition from '../../src/components/repetitions/NewRepetition.vue'
+import InputField from '../../src/components/InputField.vue'
 
-import { exercise } from '../testData';
-import store from '../../src/store/index';
-
-import mitt from 'mitt';
-
+import { exercise } from '../testData'
+import { store } from '../../src/store/index'
 
 const wrapper = shallowMount(ExerciseItem, {
-    data() {
-        return {
-            contracted : true
-        };
-    },
-    props : {
-        exerciseItem : exercise 
-    },
-    global: {
-        provide :  {
-            emitter: mitt()
-        },
-        stubs : ['fa'],
-        plugins : [store]
+  props: {
+    exerciseItem: exercise,
+    workoutId: 'trisadf2'
+  },
+  data () {
+    return {
+      contracted: true
     }
-});
+  },
+  global: {
+    stubs: ['fa'],
+    plugins: [store]
+  }
+})
 
-function delEx(length : number) {
-    it('displays trashcan when hovering', async () => {
-        const nameHover =  wrapper.find('[class="name"]');
-        await nameHover.trigger('mouseover');
-        const iconContainer =  wrapper.find('[class="icon-container"]');
-        expect(iconContainer.exists()).toBeTruthy();
-    });
+function delEx () {
+  it('displays trashcan when hovering', async () => {
+    const nameHover = wrapper.find('[class="name"]')
+    await nameHover.trigger('mouseover')
+    const iconContainer = wrapper.find('[class="icon-container"]')
+    expect(iconContainer.exists()).toBeTruthy()
+  })
 
-    it('emits delete-exercise on click of trashcan', async() => {
-        const iconContainer =  wrapper.find('[class="icon-container"]');
-        await iconContainer.trigger('click');
+  it('emits delete-exercise on click of trashcan', async () => {
+    const iconContainer = wrapper.find('[class="icon-container"]')
+    await iconContainer.trigger('click')
+  })
 
-    });
-
-    it('has a set counter', async() => {
-        const iconContainer =  wrapper.find('[test-data="set-counter"]');
-        const correctText = "3 sæt";
-        expect(iconContainer.text()).toBe(correctText);
-    });
+  it('has a set counter', async () => {
+    const iconContainer = wrapper.find('[test-data="set-counter"]')
+    const correctText = '3 sæt'
+    expect(iconContainer.text()).toBe(correctText)
+  })
 }
 
 describe('The closed exerciseItem', () => {
-    const header =  wrapper.find('[class="clickable-header"]');
-    it('has a header with contents', () => {
-        expect(header.exists()).toBeTruthy();
-        expect(header.text()).toBe(exercise.name);
-    });  
+  const header = wrapper.find('[class="clickable-header"]')
+  it('has a header with contents', () => {
+    expect(header.exists()).toBeTruthy()
+    expect(header.text()).toBe(exercise.name)
+  })
 
-    it('does not display when not hovering', () => {
-        const iconContainer =  wrapper.find('[class="icon-container"]');
-        expect(iconContainer.exists()).toBeFalsy();
-    });
+  it('does not display when not hovering', () => {
+    const iconContainer = wrapper.find('[class="icon-container"]')
+    expect(iconContainer.exists()).toBeFalsy()
+  })
 
-    delEx(1);
+  delEx()
 
-    it('does not have an input field', async () => {
-        const input = wrapper.findComponent(InputField);
-        expect(input.exists()).toBeFalsy();
-    });
+  it('does not have an input field', async () => {
+    const input = wrapper.findComponent(InputField)
+    expect(input.exists()).toBeFalsy()
+  })
 
-
-
-    it('has no Repetition component', () => {
-        expect(wrapper.findComponent(Repetition).exists()).toBeFalsy();
-    });
-});
+  it('has no Repetition component', () => {
+    expect(wrapper.findComponent(Repetition).exists()).toBeFalsy()
+  })
+})
 
 describe('The expanded Exercise component', () => {
-    it('expands when clicked upon', async () => {
-        const nameHover =  wrapper.find('[class="name"]');
-        await nameHover.trigger('click');
+  it('expands when clicked upon', async () => {
+    const nameHover = wrapper.find('[class="name"]')
+    await nameHover.trigger('click')
 
-        expect((wrapper.vm.$data as any).contracted).toBeFalsy();
-    });
-    
-    delEx(2);
+    expect((wrapper.vm.$data as {contracted : boolean}).contracted).toBeFalsy()
+  })
 
-    it('has an input field', async () => {
-        const input = wrapper.findComponent(InputField);
-        expect(input.exists()).toBeTruthy();
-    });
+  delEx()
 
-    it('has repetition component', async () => {
-        expect(wrapper.getComponent(Repetition)).toBeTruthy();
-    });
+  it('has an input field', async () => {
+    const input = wrapper.findComponent(InputField)
+    expect(input.exists()).toBeTruthy()
+  })
 
-    it('has the NewRepetition', async() => {
-        expect(wrapper.getComponent(NewRepetition)).toBeTruthy();
-    });
-});
+  it('has repetition component', async () => {
+    expect(wrapper.getComponent(Repetition)).toBeTruthy()
+  })
 
+  it('has the NewRepetition', async () => {
+    expect(wrapper.getComponent(NewRepetition)).toBeTruthy()
+  })
+})

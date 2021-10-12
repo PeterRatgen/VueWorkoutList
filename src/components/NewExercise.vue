@@ -5,23 +5,21 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-export default defineComponent ({
-    name: "NewExercise",
-    components : {
-    },
-    emits: {
-        ['add-exercise'] : null
-    },
-    methods: {
-        addExercise() {
-            this.$emit('add-exercise');
-        }
-    },
-  mounted() {
+export default defineComponent({
+  name: 'NewExercise',
+  components: {
+  },
+  emits: {
+    'add-exercise': null
+  },
+  methods: {
+    addExercise () {
+      this.$emit('add-exercise')
+    }
   }
-});
+})
 </script>
 
 <style lang="scss" scoped>
@@ -47,5 +45,5 @@ export default defineComponent ({
     transform: scale(1.6);
     color: lighten($accent-color, 5%);
 }
-    
+
 </style>

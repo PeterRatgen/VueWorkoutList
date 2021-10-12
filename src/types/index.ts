@@ -1,8 +1,3 @@
-export interface repData {
-    workoutId :  string,
-    exerciseId : string,
-    repItem : IRepetition
-}
 
 export interface IRepetition {
     id? : string,
@@ -32,4 +27,10 @@ export interface IWorkout {
 export interface Stat {
     title : string,
     value : string
+}
+
+export interface repData {
+    workoutId : string,
+    exerciseId : string,
+    repItem : IRepetition
 }
