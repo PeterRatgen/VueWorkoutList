@@ -15,13 +15,12 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v2
       
-      - name: Cache multiple paths
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         with:
-          path: |
-            ~/cache
-            !~/cache/exclude
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Set up node 
         uses: actions/setup-node@v2
