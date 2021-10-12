@@ -70,7 +70,6 @@ export default defineComponent({
       type: String
     }
   },
-  inject: ['emitter'],
   data () {
     return {
       showWeight: false,
@@ -92,7 +91,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions([
+    ...mapActions('workoutView', [
       'changeRep',
       'deleteRep'
     ]),

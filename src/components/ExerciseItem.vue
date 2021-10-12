@@ -11,7 +11,7 @@
            The ExerciseItem is contracted.
          -->
         <div class="item-header">
-          <h4 class="clickable-header"> {{ exerciseItem.name }}</h4>
+          <h4 class="clickable-header">{{ exerciseItem.name }}</h4>
             <span test-data="set-counter" >
               <span
                 class="icon-container"
@@ -93,8 +93,14 @@ export default defineComponent({
    */
   name: 'ExerciseItem',
   props: {
-    workoutId: String,
-    exerciseItem: Object as () => IExercise,
+    workoutId: {
+      type: String,
+      required: true
+    },
+    exerciseItem: {
+      type: Object as () => IExercise,
+      required: true
+    },
     edit: Boolean
   },
   components: {

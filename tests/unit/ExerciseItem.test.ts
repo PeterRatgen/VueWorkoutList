@@ -10,6 +10,10 @@ import { exercise } from '../testData'
 import { store } from '../../src/store/index'
 
 const wrapper = shallowMount(ExerciseItem, {
+  props: {
+    exerciseItem: exercise,
+    workoutId: 'trisadf2'
+  },
   data () {
     return {
       contracted: true

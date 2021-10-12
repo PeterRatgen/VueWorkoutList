@@ -4,6 +4,10 @@ import { shallowMount } from '@vue/test-utils'
 import NewRepetition from '../../src/components/repetitions/NewRepetition.vue'
 
 const wrapper = shallowMount(NewRepetition, {
+  props: {
+    workoutId: '12409fj',
+    exerciseId: '123jkdfs'
+  },
   global: {
     stubs: ['fa']
   }
