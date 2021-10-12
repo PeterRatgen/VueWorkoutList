@@ -32,6 +32,9 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: list files
+        run: /bin/ls -la .
 
       - name: Build and push
         id: docker_build
