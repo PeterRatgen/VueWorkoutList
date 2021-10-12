@@ -28,5 +28,10 @@ export const handlers = [
         testData
       )
     )
+  }),
+  rest.put(baseURL + '/workout/delete_exercise', (req, res, ctx) => {
+    return res(
+      ctx.status(200)
+    )
   })
 ]
